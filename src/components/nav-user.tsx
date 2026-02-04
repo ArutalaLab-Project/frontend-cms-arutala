@@ -5,6 +5,7 @@ import { IconLogout } from "@tabler/icons-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
+import { logoutAction } from "@/app/actions/auth";
 
 export function NavUser({
   user,
@@ -15,6 +16,9 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const handleLogout = async () => {
+    await logoutAction();
+  };
   return (
     <SidebarMenu>
       <SidebarMenuItem>
@@ -41,7 +45,7 @@ export function NavUser({
               </div>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={handleLogout}>
               <IconLogout />
               Log out
             </DropdownMenuItem>
