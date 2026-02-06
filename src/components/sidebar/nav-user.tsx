@@ -6,6 +6,8 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import { logoutAction } from "@/app/sign-in/action";
+import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 export function NavUser({
   user,
@@ -16,8 +18,16 @@ export function NavUser({
     avatar: string;
   };
 }) {
+  const router = useRouter();
+
   const handleLogout = async () => {
-    await logoutAction();
+    const result = await logoutAction();
+    if (!result.success) {
+      toast.error(result.message, { position: "top-center" });
+      return;
+    }
+    toast.success(result.message, { position: "top-center" });
+    router.push("/sign-in");
   };
   return (
     <SidebarMenu>

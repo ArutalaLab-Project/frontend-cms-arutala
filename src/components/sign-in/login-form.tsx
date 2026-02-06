@@ -8,6 +8,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Field, FieldDescription, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { useFormStatus } from "react-dom";
+import { toast } from "sonner";
 
 function SubmitButton() {
   const { pending } = useFormStatus();
@@ -24,17 +25,16 @@ export function SignInForm() {
 
   const [state, action] = useActionState<AuthState, FormData>(loginAction, {});
 
-  // kalau tidak ada error → login sukses
   useEffect(() => {
-    if (!state.error) return;
+    if (!state) return;
 
-    // error ada → stay di form
-  }, [state]);
+    if (state.success === false) {
+      toast.error(state.message, { position: "top-center" });
+    }
 
-  useEffect(() => {
-    if (state && !state.error) {
+    if (state.success === true) {
+      toast.success(state.message, { position: "top-center" });
       router.push("/general/dashboard");
-      router.refresh();
     }
   }, [state, router]);
 
@@ -48,7 +48,7 @@ export function SignInForm() {
       <CardContent>
         <form action={action}>
           <FieldGroup>
-            {state.error && <div className="bg-destructive/15 text-destructive rounded-md px-4 py-3 text-sm">{state.error}</div>}
+            {state?.success === false && <div className="bg-destructive/15 text-destructive rounded-md px-4 py-3 text-sm">{state.message}</div>}
 
             <Field>
               <FieldLabel htmlFor="username">Username</FieldLabel>

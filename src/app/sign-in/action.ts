@@ -1,61 +1,29 @@
-"use server";
-
-import { cookies } from "next/headers";
-import { login, logout } from "@/lib/api/auth.api";
-import { redirect } from "next/navigation";
+import { ApiResponse } from "@/types/api";
+import { SignInResponse } from "../api/auth/route";
 
 export type AuthState = {
-  error?: string;
+  success?: boolean;
+  message?: string;
 };
 
 export async function loginAction(_prevState: AuthState, formData: FormData): Promise<AuthState> {
-  const username = formData.get("username") as string | null;
-  const password = formData.get("password") as string | null;
+  const username = formData.get("username");
+  const password = formData.get("password");
 
   if (!username || !password) {
-    return { error: "Username dan password wajib diisi" };
+    return { success: false, message: "Username dan password wajib diisi" };
   }
 
-  const response = await login(username, password);
-
-  if (!response.success || !response.data) {
-    return { error: response.message ?? "Login gagal" };
-  }
-
-  const cookieStore = await cookies();
-  cookieStore.set("accessToken", response.data.access_token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60,
-    path: "/",
+  const res = await fetch("/api/auth", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ username, password }),
   });
 
-  cookieStore.set("refreshToken", response.data.refresh_token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === "production",
-    sameSite: "lax",
-    maxAge: 60 * 60,
-    path: "/",
-  });
-
-  return {};
+  return (await res.json()) as ApiResponse<SignInResponse>;
 }
 
-export async function logoutAction() {
-  const cookieStore = await cookies();
-
-  try {
-    const token = cookieStore.get("refreshToken")?.value;
-    const response = await logout(token);
-    if (!response.success) {
-      console.warn("Logout API Erorr", response.message);
-    }
-  } catch (error) {
-    console.error("Logout Network Error", error);
-  } finally {
-    cookieStore.delete("accessToken");
-    cookieStore.delete("refreshToken");
-    redirect("/sign-in");
-  }
+export async function logoutAction(): Promise<AuthState> {
+  const res = await fetch("/api/auth", { method: "DELETE" });
+  return res.json();
 }
