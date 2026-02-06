@@ -2,13 +2,13 @@ import { NextRequest, NextResponse } from "next/server";
 import { ApiResponse } from "@/types/api";
 import { Message } from "@/types/message";
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL!;
+const { NEXT_API_EXTERNAL } = process.env;
 
 export async function GET(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken")?.value;
   // console.log(accessToken);
 
-  const res = await fetch(`${API_URL}/messages`, {
+  const res = await fetch(`${NEXT_API_EXTERNAL!}/messages`, {
     headers: {
       "Content-Type": "application/json",
       ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
@@ -24,7 +24,7 @@ export async function DELETE(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken")?.value;
   const { messageId } = await req.json();
 
-  const res = await fetch(`${API_URL}/messages/${messageId}`, {
+  const res = await fetch(`${NEXT_API_EXTERNAL!}/messages/${messageId}`, {
     method: "DELETE",
     headers: {
       "Content-Type": "application/json",
