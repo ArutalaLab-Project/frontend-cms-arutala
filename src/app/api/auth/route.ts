@@ -1,6 +1,8 @@
 import { ApiResponse } from "@/types/api";
 import { NextRequest, NextResponse } from "next/server";
 
+const { NEXT_API_EXTERNAL } = process.env;
+
 export type SignInResponse = {
   access_token: string;
   refresh_token: string;
@@ -9,7 +11,7 @@ export type SignInResponse = {
 export async function POST(req: NextRequest) {
   const body = await req.json();
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/sign-in`, {
+  const res = await fetch(`${NEXT_API_EXTERNAL!}/auth/sign-in`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(body),
@@ -44,7 +46,7 @@ export async function POST(req: NextRequest) {
 export async function DELETE(req: NextRequest) {
   const refreshToken = req.cookies.get("refreshToken")?.value;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/sign-out`, {
+  const res = await fetch(`${NEXT_API_EXTERNAL}/auth/sign-out`, {
     method: "DELETE",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ refresh_token: refreshToken }),
