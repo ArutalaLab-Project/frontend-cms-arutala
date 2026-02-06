@@ -1,4 +1,3 @@
-"use client";
 import { SignInForm } from "@/components/sign-in/login-form";
 import Image from "next/image";
 

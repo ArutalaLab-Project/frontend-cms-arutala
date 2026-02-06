@@ -4,9 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
 import { Checkbox } from "../ui/checkbox";
-import { ArrowUpDown, TrashIcon } from "lucide-react";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { IconDotsVertical, IconListDetails } from "@tabler/icons-react";
+import { ArrowUpDown } from "lucide-react";
 import { MessageActions } from "./message-action";
 
 export const statusColor: Record<MessageStatus, string> = {
@@ -88,23 +86,6 @@ export const columns: ColumnDef<Message>[] = [
   {
     id: "actions",
     header: "Action",
-    cell: ({ row }) => (
-      // <DropdownMenu>
-      //   <DropdownMenuTrigger asChild>
-      //     <Button variant="ghost" size="icon">
-      //       <IconDotsVertical className="size-4" />
-      //     </Button>
-      //   </DropdownMenuTrigger>
-      //   <DropdownMenuContent align="end">
-      //     <DropdownMenuItem>
-      //       <IconListDetails /> Detail
-      //     </DropdownMenuItem>
-      //     <DropdownMenuItem variant="destructive">
-      //       <TrashIcon /> Delete
-      //     </DropdownMenuItem>
-      //   </DropdownMenuContent>
-      // </DropdownMenu>
-      <MessageActions message={row.original} />
-    ),
+    cell: ({ row }) => <MessageActions message={row.original} />,
   },
 ];

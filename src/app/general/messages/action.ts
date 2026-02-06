@@ -1,41 +1,22 @@
-// app/actions/messages.ts
-"use server";
+import { ApiResponse } from "@/types/api";
+import { Message } from "@/types/message";
 
-import { deleteMessageById, getAllMessages } from "@/lib/api/message.api";
-import { messagesSchema } from "@/types/message";
+export async function getAllMessagesAction(): Promise<ApiResponse<Message[]>> {
+  const res = await fetch("http://localhost:3000/api/messages", {
+    method: "GET",
+    cache: "no-store",
+    credentials: "include",
+  });
 
-export async function getAllMessagesAction() {
-  const response = await getAllMessages();
-  if (!response.success) {
-    return {
-      success: response.success,
-      message: response.message,
-      data: [],
-    };
-  }
-
-  const parsed = messagesSchema.safeParse(response.data);
-
-  if (!parsed.success) {
-    return {
-      success: false,
-      statusCode: "500 INVALID_RESPONSE",
-      message: "Invalid messages data structure",
-    };
-  }
-
-  return {
-    success: true,
-    message: response.message,
-    data: parsed.data,
-  };
+  return res.json();
 }
 
-export async function deleteMessageByIdAction(messageId: string) {
-  const response = await deleteMessageById(messageId);
+export async function deleteMessageByIdAction(messageId: string): Promise<ApiResponse<null>> {
+  const res = await fetch("http://localhost:3000/api/messages", {
+    method: "DELETE",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ messageId }),
+  });
 
-  return {
-    success: response.success,
-    message: response.message,
-  };
+  return res.json();
 }

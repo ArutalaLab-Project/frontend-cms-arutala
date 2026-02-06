@@ -1,4 +1,3 @@
-// src/types/message.ts
 import { z } from "zod";
 
 export const messageStatusEnum = z.enum(["NEW", "CONTACTED", "QUALIFIED", "PROPOSAL_SENT", "NEGOTIATION", "VERBAL_COMMITMENT", "CLOSED_WON", "CLOSED_LOSS", "ON_HOLD"]);

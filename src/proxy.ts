@@ -1,27 +1,21 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
-const protectedRoutes = ["/general", "/profile", "/admin"];
-const publicRoutes = ["/login", "/register", "/"];
+import { NextRequest, NextResponse } from "next/server";
 
-export async function proxy(request: NextRequest) {
-  const path = request.nextUrl.pathname;
-  const isProtectedRoute = protectedRoutes.some((route) => path.startsWith(route));
-  const isPublicRoute = publicRoutes.includes(path);
+export function proxy(req: NextRequest) {
+  const token = req.cookies.get("accessToken")?.value;
 
-  const token = request.cookies.get("accessToken")?.value;
+  const isAuthPage = req.nextUrl.pathname.startsWith("/sign-in");
 
-  // Verify token dengan API
-  if (isProtectedRoute && !token) {
-    return NextResponse.redirect(new URL("/sign-in", request.url));
+  if (!token && !isAuthPage) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
-  if (isPublicRoute && token && path === "/sign-in") {
-    return NextResponse.redirect(new URL("/general", request.url));
+  if (token && isAuthPage) {
+    return NextResponse.redirect(new URL("/general/dashboard", req.url));
   }
 
   return NextResponse.next();
 }
 
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/general/:path*", "/sign-in"],
 };
