@@ -1,10 +1,10 @@
 import { User } from "@/types/user";
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "../ui/checkbox";
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuTrigger } from "../ui/dropdown-menu";
-import { IconDotsVertical } from "@tabler/icons-react";
-import { Button } from "../ui/button";
-import { Avatar, AvatarBadge, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Checkbox } from "../../../../components/ui/checkbox";
+import { Avatar, AvatarFallback, AvatarImage } from "../../../../components/ui/avatar";
+import { ActionTable } from "@/components/action-table";
+import { UserDetailSheet } from "./user-detail";
+import { UserDeleteDialog } from "./user-delete";
 
 export const column: ColumnDef<User>[] = [
   {
@@ -33,19 +33,11 @@ export const column: ColumnDef<User>[] = [
   {
     id: "actions",
     header: "Action",
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon">
-            <IconDotsVertical className="size-4" />
-          </Button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>Edit Status</DropdownMenuItem>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem className="text-red-500">Delete</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+    cell: ({ row }) => (
+      <ActionTable>
+        <UserDetailSheet />
+        <UserDeleteDialog userId={row.original.user_id} />
+      </ActionTable>
     ),
   },
 ];
