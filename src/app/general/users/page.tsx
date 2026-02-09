@@ -1,4 +1,4 @@
-import { UserTable } from "@/components/users/user-table";
+import { UserTable } from "@/app/general/users/component/user-table";
 
 export default async function Page() {
   return (

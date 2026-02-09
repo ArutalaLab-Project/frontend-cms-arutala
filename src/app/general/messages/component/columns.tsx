@@ -1,11 +1,13 @@
 "use client";
 import { Message, MessageStatus } from "@/types/message";
 import { ColumnDef } from "@tanstack/react-table";
-import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
-import { Checkbox } from "../ui/checkbox";
 import { ArrowUpDown } from "lucide-react";
-import { MessageActions } from "./message-action";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { ActionTable } from "@/components/action-table";
+import { MessageDetailSheet } from "./message-detail";
+import { MessageDeleteDialog } from "./message-delete";
 
 export const statusColor: Record<MessageStatus, string> = {
   NEW: "bg-blue-500",
@@ -86,6 +88,11 @@ export const columns: ColumnDef<Message>[] = [
   {
     id: "actions",
     header: "Action",
-    cell: ({ row }) => <MessageActions message={row.original} />,
+    cell: ({ row }) => (
+      <ActionTable>
+        <MessageDetailSheet message={row.original} />
+        <MessageDeleteDialog messageId={row.original.message_id} />
+      </ActionTable>
+    ),
   },
 ];

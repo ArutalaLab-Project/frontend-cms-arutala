@@ -17,7 +17,8 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify(body),
   });
 
-  const resJson = (await res.json()) as ApiResponse<SignInResponse>;
+  // const resJson = (await res.json()) as ApiResponse<SignInResponse>;
+  const resJson = await res.json();
 
   if (resJson.success === false) {
     return NextResponse.json(resJson, { status: res.status });

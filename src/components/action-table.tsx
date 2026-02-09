@@ -1,11 +1,13 @@
-import { Message } from "@/types/message";
+import { ReactNode } from "react";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { IconDotsVertical } from "@tabler/icons-react";
-import { MessageDetailSheet } from "./message-detail";
-import { MessageDeleteDialog } from "./message-delete";
 
-export function MessageActions({ message }: { message: Message }) {
+type ActionTableProps = {
+  children: ReactNode;
+};
+
+export function ActionTable({ children }: ActionTableProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -14,10 +16,7 @@ export function MessageActions({ message }: { message: Message }) {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end">
-        <MessageDetailSheet message={message} />
-        <MessageDeleteDialog messageId={message.message_id} />
-      </DropdownMenuContent>
+      <DropdownMenuContent>{children}</DropdownMenuContent>
     </DropdownMenu>
   );
 }

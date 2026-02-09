@@ -3,8 +3,8 @@ import { User } from "@/types/user";
 import { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 import React from "react";
 import { column } from "./column";
-import { DataTable } from "../data-table";
-import { Input } from "../ui/input";
+import { DataTable } from "../../../../components/data-table";
+import { Input } from "../../../../components/ui/input";
 
 export function UserTable({ data }: { data: User[] }) {
   const [sorting, setSorting] = React.useState<SortingState>([]);
