@@ -1,48 +1,56 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useEffect, useState } from "react";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { Contributor, ContributorType, CreateContributorInput, createContributorSchema } from "@/types/contributor";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { PlusCircle, X } from "lucide-react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
 import Image from "next/image";
-import { IconListDetails } from "@tabler/icons-react";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useUpdateContributor } from "@/hooks/use-contributor";
 import { toast } from "sonner";
+import { ContributorType, CreateContributorInput, createContributorSchema } from "@/types/contributor";
+import { useCreateContributor } from "@/hooks/use-contributor";
+import { Badge } from "@/components/ui/badge";
 
-export function ContributorDetailDialog({ contributor }: { contributor: Contributor }) {
+export function ContributorAddDialog() {
   const [open, setOpen] = useState(false);
-  const [previewProfile, setPreviewProfile] = useState<string | null>(contributor.contributor_profile_url);
+  const [previewProfile, setPreviewProfile] = useState<string | null>(null);
   const contributorTypeOptions = Object.values(ContributorType);
-  const { mutateAsync, isPending } = useUpdateContributor();
 
-  const handleUpdate = async (values: CreateContributorInput) => {
-    toast.promise(
-      mutateAsync({
-        id: contributor.contributor_id,
-        data: values,
-      }),
-      {
-        loading: "Updating contributor...",
-        success: (res) => {
-          if (!res.success) {
-            throw new Error(res.message);
-          }
-          return res.message;
-        },
-        error: (err) => {
-          return err.message || "Failed to update contributor";
-        },
+  const { mutateAsync, isPending } = useCreateContributor();
+
+  const handleCreate = async (values: CreateContributorInput) => {
+    const formData = new FormData();
+    formData.append("contributorName", values.contributorName);
+    formData.append("jobTitle", values.jobTitle);
+    formData.append("companyName", values.companyName);
+    formData.append("contributorType", values.contributorType);
+
+    for (const item of values.expertise) {
+      formData.append("expertise", item.value);
+    }
+
+    if (values.profile) {
+      formData.append("profile", values.profile);
+    }
+
+    toast.promise(mutateAsync(formData), {
+      loading: "Membuat contributors ...",
+      success: (res) => {
+        if (!res.success) throw new Error(res.message);
+        setOpen(false);
+        return res.message;
       },
-    );
-
-    setOpen(false);
+      error: (err) => err.message || "Gagal membuat contributors",
+    });
   };
+
+  useEffect(() => {
+    return () => {
+      if (previewProfile) URL.revokeObjectURL(previewProfile);
+    };
+  }, [previewProfile]);
 
   const form = useForm<CreateContributorInput>({
     resolver: zodResolver(createContributorSchema),
@@ -64,37 +72,21 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
     control: form.control,
     name: "expertise",
   });
-
-  useEffect(() => {
-    if (open) {
-      form.reset({
-        contributorName: contributor.contributor_name,
-        jobTitle: contributor.contributor_job_title,
-        companyName: contributor.contributor_company_name,
-        contributorType: contributor.contributor_type,
-        expertise: contributor.contributor_expertise.map((e) => ({ value: e })),
-        profile: undefined,
-      });
-      // setPreviewProfile(contributor.contributor_profile_url);
-    }
-  }, [open, contributor, form]);
-
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger */}
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <IconListDetails className="mr-2 size-4" />
-          Detail
-        </DropdownMenuItem>
+        <Button size="sm">
+          Tambah Contributor <PlusCircle />
+        </Button>
       </DialogTrigger>
 
       {/* Content */}
       <DialogContent className="max-h-[90vh] flex flex-col sm:max-w-3xl">
-        <form onSubmit={form.handleSubmit(handleUpdate)} className="flex flex-col h-full">
+        <form onSubmit={form.handleSubmit(handleCreate)} className="flex flex-col h-full">
           {/* Header */}
           <DialogHeader className="shrink-0">
-            <DialogTitle>Contributor Detail</DialogTitle>
+            <DialogTitle>Tambah Contributor</DialogTitle>
             <DialogDescription>Make changes here. Click save when you&apos;re done</DialogDescription>
           </DialogHeader>
 
@@ -166,6 +158,17 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
                   </Field>
                 )}
               />
+              {/* <Controller
+                name="expertise"
+                control={form.control}
+                render={({ field, fieldState }) => (
+                  <Field className="grid gap-1" data-invalid={fieldState.invalid}>
+                    <FieldLabel htmlFor="expertise">Expertise</FieldLabel>
+                    <Input {...field} id="expertise" aria-invalid={fieldState.invalid} autoComplete="off" />
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                  </Field>
+                )}
+              /> */}
               <Controller
                 name="contributorType"
                 control={form.control}
@@ -243,11 +246,8 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
               </Button>
             </DialogClose>
             <Button type="submit" disabled={isPending}>
-              {isPending ? "Updating..." : "Update"}
-            </Button>
-            {/* <Button type="submit" disabled={isPending}>
               Create
-            </Button> */}
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

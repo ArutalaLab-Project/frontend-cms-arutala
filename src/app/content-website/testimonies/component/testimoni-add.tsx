@@ -4,40 +4,43 @@ import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectVa
 import { useEffect, useState } from "react";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { CreateUserInput, createUserSchema, USER_ROLES } from "@/types/user";
 import { PlusCircle } from "lucide-react";
-import { useCreateUser } from "@/hooks/use-user";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
 import { toast } from "sonner";
+import { CreateTestimoniInput, createTestimoniSchema, TestimoniType } from "@/types/testimoni";
+import { useCreateTestimoni } from "@/hooks/use-testimoni";
+import { Textarea } from "@/components/ui/textarea";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-export function UserAddDialog() {
+export function TestimoniAddDialog() {
   const [open, setOpen] = useState(false);
   const [previewProfile, setPreviewProfile] = useState<string | null>(null);
-  const roleOptions = Object.values(USER_ROLES);
+  const testimoniCategoryOptions = Object.values(TestimoniType);
 
-  const { mutateAsync, isPending } = useCreateUser();
+  const { mutateAsync, isPending } = useCreateTestimoni();
 
-  const handleCreate = async (values: CreateUserInput) => {
+  const handleCreate = async (values: CreateTestimoniInput) => {
     const formData = new FormData();
-    formData.append("fullName", values.fullName);
-    formData.append("username", values.username);
-    formData.append("password", values.password);
-    formData.append("userRole", values.userRole);
+    formData.append("authorName", values.authorName);
+    formData.append("authorJobTitle", values.authorJobTitle);
+    formData.append("authorCompanyName", values.authorCompanyName);
+    formData.append("testimoniContent", values.testimoniContent);
+    formData.append("testimoniCategory", values.testimoniCategory);
 
-    if (values.profile) {
-      formData.append("Profile", values.profile);
+    if (values.authorProfile) {
+      formData.append("authorProfile", values.authorProfile);
     }
 
     toast.promise(mutateAsync(formData), {
-      loading: "Membuat user…",
+      loading: "Membuat testimoni ...",
       success: (res) => {
         if (!res.success) throw new Error(res.message);
         setOpen(false);
         return res.message;
       },
-      error: (err) => err.message || "Gagal membuat user",
+      error: (err) => err.message || "Gagal membuat testimoni",
     });
   };
 
@@ -47,15 +50,15 @@ export function UserAddDialog() {
     };
   }, [previewProfile]);
 
-  const form = useForm<CreateUserInput>({
-    resolver: zodResolver(createUserSchema),
+  const form = useForm<CreateTestimoniInput>({
+    resolver: zodResolver(createTestimoniSchema),
     defaultValues: {
-      fullName: "",
-      username: "",
-      password: "",
-      confirmPassword: "",
-      userRole: USER_ROLES.ADMIN,
-      profile: undefined,
+      authorName: "",
+      authorJobTitle: "",
+      authorCompanyName: "",
+      testimoniContent: "",
+      testimoniCategory: undefined,
+      authorProfile: undefined,
     },
   });
 
@@ -64,27 +67,27 @@ export function UserAddDialog() {
       {/* Trigger */}
       <DialogTrigger asChild>
         <Button size="sm">
-          Tambah User <PlusCircle />
+          Tambah Testimoni <PlusCircle />
         </Button>
       </DialogTrigger>
 
       {/* Content */}
-      <DialogContent className="max-h-[90vh] flex flex-col sm:max-w-3xl">
+      <DialogContent className="max-h-[120vh] flex flex-col sm:max-w-3xl">
         <form onSubmit={form.handleSubmit(handleCreate)} className="flex flex-col h-full">
           {/* Header */}
           <DialogHeader className="shrink-0">
-            <DialogTitle>Tambah User</DialogTitle>
+            <DialogTitle>Tambah Testimoni</DialogTitle>
             <DialogDescription>Make changes here. Click save when you&apos;re done</DialogDescription>
           </DialogHeader>
 
-          <div className="flex-1 overflow-y-auto px-4 py-4 gap-4  ">
+          <div className="flex-1 overflow-y-auto px-4 py-4 ">
             <Controller
-              name="profile"
+              name="authorProfile"
               control={form.control}
               render={({ field, fieldState }) => {
                 return (
                   <div className="">
-                    <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start mb-2 w-fit">
+                    <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] items-start w-fit">
                       <FieldLabel htmlFor="profile">Profile</FieldLabel>
                       <Input
                         id="profile"
@@ -99,10 +102,10 @@ export function UserAddDialog() {
                       />
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                       {previewProfile && (
-                        <div className="flex items-center">
-                          <div className="flex items-center relative h-36 w-36 rounded-md overflow-hidden border">
-                            <Image src={previewProfile} alt="user-profile" fill unoptimized className="object-cover" />
-                          </div>
+                        <div className="w-full p-2 max-w-sm ">
+                          <AspectRatio ratio={4 / 2} className="bg-accent rounded-lg border">
+                            <Image src={previewProfile} alt="testimoni-profile" fill className="object-contain p-2" />
+                          </AspectRatio>
                         </div>
                       )}
                     </Field>
@@ -111,66 +114,56 @@ export function UserAddDialog() {
               }}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
               <Controller
-                name="fullName"
+                name="authorName"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field className="grid gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="full-name">Full Name</FieldLabel>
-                    <Input {...field} id="full-name" aria-invalid={fieldState.invalid} autoComplete="off" />
+                    <FieldLabel htmlFor="authorName">Name</FieldLabel>
+                    <Input {...field} id="authorName" aria-invalid={fieldState.invalid} autoComplete="off" />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
               <Controller
-                name="username"
+                name="authorJobTitle"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field className="grid gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="username">Username</FieldLabel>
-                    <Input {...field} id="username" aria-invalid={fieldState.invalid} autoComplete="off" />
+                    <FieldLabel htmlFor="authorJobTitle">Job Title</FieldLabel>
+                    <Input {...field} id="authorJobTitle" aria-invalid={fieldState.invalid} autoComplete="off" />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
               <Controller
-                name="password"
+                name="authorCompanyName"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field className="grid gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="password">Password</FieldLabel>
-                    <Input {...field} id="password" aria-invalid={fieldState.invalid} autoComplete="off" />
+                    <FieldLabel htmlFor="authorCompanyName">Company Name</FieldLabel>
+                    <Input {...field} id="authorCompanyName" aria-invalid={fieldState.invalid} autoComplete="off" />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
+
               <Controller
-                name="confirmPassword"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field className="grid gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-                    <Input {...field} id="confirm-password" aria-invalid={fieldState.invalid} autoComplete="off" />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
-              <Controller
-                name="userRole"
+                name="testimoniCategory"
                 control={form.control}
                 render={({ field }) => (
                   <Field className="gap-1">
-                    <FieldLabel>Role</FieldLabel>
+                    <FieldLabel>Type</FieldLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Role" />
+                        <SelectValue placeholder="Choose Type" />
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {roleOptions.map((role) => (
-                            <SelectItem value={role} key={role}>
-                              {role}
+                          {testimoniCategoryOptions.map((type) => (
+                            <SelectItem value={type} key={type}>
+                              {type}
                             </SelectItem>
                           ))}
                         </SelectGroup>
@@ -180,6 +173,18 @@ export function UserAddDialog() {
                 )}
               />
             </div>
+            <Controller
+              name="testimoniContent"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field className="grid gap-1 h-16" data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="testimoniContent">Testimoni</FieldLabel>
+                  <Textarea {...field} id="testimoniContent" aria-invalid={fieldState.invalid} autoComplete="off" />
+                  {/* <Input {...field} id="testimoniContent" aria-invalid={fieldState.invalid} autoComplete="off" /> */}
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
           </div>
 
           {/* Footer */}

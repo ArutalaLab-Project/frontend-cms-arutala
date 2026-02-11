@@ -6,7 +6,7 @@ import { ActionTable } from "@/components/action-table";
 import { Contributor } from "@/types/contributor";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ContributorDeleteDialog } from "./contributor-delete";
-import { ContributorDetailSheet } from "./contributor-detail";
+import { ContributorDetailDialog } from "./contributor-detail";
 
 export const columns: ColumnDef<Contributor>[] = [
   {
@@ -23,6 +23,16 @@ export const columns: ColumnDef<Contributor>[] = [
         <AvatarFallback>{row.original.contributor_name.charAt(0)}</AvatarFallback>
       </Avatar>
     ),
+  },
+  {
+    accessorKey: "contributor_type",
+    header: "Type",
+    cell: ({ row }) => (
+      <div className="flex gap-1 flex-wrap">
+        <Badge>{row.original.contributor_type === "INTERNAL" ? "Mentor" : "Bukan Mentor"}</Badge>
+      </div>
+    ),
+    filterFn: "arrIncludes",
   },
   {
     id: "contributor_name",
@@ -43,6 +53,7 @@ export const columns: ColumnDef<Contributor>[] = [
     accessorKey: "contributor_company_name",
     header: "Company Name",
   },
+
   {
     accessorKey: "contributor_expertise",
     header: "Expertise",
@@ -62,8 +73,9 @@ export const columns: ColumnDef<Contributor>[] = [
     header: "Action",
     cell: ({ row }) => (
       <ActionTable>
-        <ContributorDetailSheet contributor={row.original} />
-        <ContributorDeleteDialog contribitorId={row.original.contributor_id} />
+        {/* <ContributorDetai1lSheet contributor={row.original} /> */}
+        <ContributorDetailDialog contributor={row.original} />
+        <ContributorDeleteDialog contributorId={row.original.contributor_id} />
       </ActionTable>
     ),
   },

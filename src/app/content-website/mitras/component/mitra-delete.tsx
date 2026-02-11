@@ -1,15 +1,15 @@
 import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, AlertDialogDescription, AlertDialogMedia } from "@/components/ui/alert-dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useDeleteContributor } from "@/hooks/use-contributor";
+import { Button } from "@/components/ui/button";
+import { useDeleteMitra } from "@/hooks/use-mitra";
 import { TrashIcon } from "lucide-react";
 import { toast } from "sonner";
 
-export function ContributorDeleteDialog({ contributorId }: { contributorId: string }) {
-  const { mutateAsync, isPending } = useDeleteContributor();
+export function MitraDeleteDialog({ mitraId }: { mitraId: string }) {
+  const { mutateAsync, isPending } = useDeleteMitra();
 
   const handleDelete = async () => {
-    toast.promise(mutateAsync(contributorId), {
-      loading: "Menghapus contributor...",
+    toast.promise(mutateAsync(mitraId), {
+      loading: "Menghapus Mitra...",
       success: (res) => {
         if (!res.success) {
           throw new Error(res.message);
@@ -17,7 +17,7 @@ export function ContributorDeleteDialog({ contributorId }: { contributorId: stri
         return res.message;
       },
       error: (err) => {
-        return err.message || "Failed to delete contributor";
+        return err.message || "Failed to delete mitra";
       },
     });
   };
@@ -25,10 +25,9 @@ export function ContributorDeleteDialog({ contributorId }: { contributorId: stri
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <DropdownMenuItem variant="destructive" onSelect={(e) => e.preventDefault()}>
-          <TrashIcon className="mr-2 size-4" />
-          Delete
-        </DropdownMenuItem>
+        <Button variant="destructive" size="icon-sm">
+          <TrashIcon />
+        </Button>
       </AlertDialogTrigger>
 
       <AlertDialogContent>
@@ -36,8 +35,8 @@ export function ContributorDeleteDialog({ contributorId }: { contributorId: stri
           <AlertDialogMedia className="bg-red-100">
             <TrashIcon className="text-red-500" />
           </AlertDialogMedia>
-          <AlertDialogTitle>Delete this contributor?</AlertDialogTitle>
-          <AlertDialogDescription>Apakah kamu yakin akan menghapus contributor ini?</AlertDialogDescription>
+          <AlertDialogTitle>Delete this Mitra?</AlertDialogTitle>
+          <AlertDialogDescription>Apakah kamu yakin akan menghapus mitra ini?</AlertDialogDescription>
         </AlertDialogHeader>
 
         <AlertDialogFooter>

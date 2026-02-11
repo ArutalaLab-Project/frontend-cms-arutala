@@ -21,15 +21,10 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9])\S+$/;
 export const createUserSchema = z
   .object({
     fullName: z.string().min(3, "Nama minimal 3 karakter"),
-
     username: z.string().min(8, "Username minimal 8 karakter").regex(USERNAME_REGEX, "Username tidak boleh mengandung spasi"),
-
     password: z.string().min(8, "Password minimal 8 karakter").regex(PASSWORD_REGEX, "Password harus mengandung huruf besar, huruf kecil, angka, dan simbol"),
-
     confirmPassword: z.string().min(8),
-
     userRole: z.enum(Object.values(USER_ROLES) as [string, ...string[]]),
-
     profile: z
       .instanceof(File, { message: "Profile wajib diisi" })
       .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), "File harus berupa JPG, PNG, atau WEBP")

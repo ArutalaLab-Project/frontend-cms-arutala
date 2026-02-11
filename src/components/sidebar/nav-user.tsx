@@ -18,15 +18,14 @@ export function NavUser({ user }: { user?: User }) {
   if (!user) return null;
 
   const handleLogout = async () => {
-    const result = await logoutAction();
-
-    if (!result.success) {
-      toast.error(result.message);
-      return;
-    }
-
-    toast.success(result.message);
-    router.push("/sign-in");
+    toast.promise(logoutAction(), {
+      loading: "Sign Out...",
+      success: (res) => {
+        router.push("/sign-in");
+        return res.message || "Sign Out Berhasil";
+      },
+      error: (err) => err.message || "Sign Out Gagal",
+    });
   };
 
   const roleBadgeClass = user.role_name === "SUPER_ADMIN" ? "bg-black text-white" : "bg-muted text-muted-foreground";

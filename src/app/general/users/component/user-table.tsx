@@ -7,12 +7,34 @@ import { Input } from "../../../../components/ui/input";
 import { useUsers } from "@/hooks/use-user";
 import { SkeletonTable } from "@/components/skeleton-table";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { UserAddSheet } from "./user-add";
+import { UserAddDialog } from "./user-add";
 
 export function UserTable() {
   const { data: users, isLoading } = useUsers();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [filters, setFilters] = React.useState<ColumnFiltersState>([]);
+  const [pagination, setPagination] = React.useState({
+    pageIndex: 0,
+    pageSize: 8,
+  });
+
+  React.useEffect(() => {
+    setPagination((prev) => ({
+      ...prev,
+      pageIndex: 0,
+    }));
+  }, [filters, sorting]);
+
+  React.useEffect(() => {
+    const pageCount = Math.ceil((users?.length ?? 0) / pagination.pageSize);
+
+    if (pagination.pageIndex >= pageCount && pageCount > 0) {
+      setPagination((prev) => ({
+        ...prev,
+        pageIndex: pageCount - 1,
+      }));
+    }
+  }, [users, pagination.pageSize, pagination.pageIndex]);
 
   const uniqueRoles = useMemo(() => {
     if (!users) return [];
@@ -61,12 +83,26 @@ export function UserTable() {
           </Select>
         </div>
 
-        {/* Sheet Add User */}
-        <UserAddSheet />
+        {/* Add User */}
+        <UserAddDialog />
       </div>
 
       {/* Table */}
-      {isLoading ? <SkeletonTable /> : <DataTable data={users ?? []} columns={column} getRowId={(row) => row.user_id} sorting={sorting} columnFilters={filters} onSortingChange={setSorting} onColumnFiltersChange={setFilters} />}
+      {isLoading ? (
+        <SkeletonTable />
+      ) : (
+        <DataTable
+          data={users ?? []}
+          columns={column}
+          getRowId={(row) => row.user_id}
+          sorting={sorting}
+          columnFilters={filters}
+          pagination={pagination}
+          onPaginationChange={setPagination}
+          onSortingChange={setSorting}
+          onColumnFiltersChange={setFilters}
+        />
+      )}
     </div>
   );
 }

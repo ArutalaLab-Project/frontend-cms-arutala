@@ -1,31 +1,18 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useActionState, useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { loginAction, type AuthState } from "@/app/sign-in/action";
+import { loginAction } from "@/app/sign-in/action";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Field, FieldError, FieldGroup, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { useFormStatus } from "react-dom";
 import { toast } from "sonner";
-import { InputGroup, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { SignInInput, signInSchema } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { ApiResponse } from "@/types/api";
-
-// function SubmitButton() {
-//   const { pending } = useFormStatus();
-
-//   return (
-//     <Button type="submit" className="w-full" disabled={pending}>
-//       {pending ? "Loading..." : "Login"}
-//     </Button>
-//   );
-// }
 
 export function SignInForm() {
   const router = useRouter();
@@ -42,41 +29,15 @@ export function SignInForm() {
   const { isSubmitting } = form.formState;
 
   const handleSignIn = async (values: SignInInput) => {
-    try {
-      await toast.promise(
-        async () => {
-          const result = await loginAction(values);
-          if (!result.success) {
-            throw new Error(result.message);
-          }
-          router.push("/general/dashboard");
-          return result;
-        },
-        {
-          loading: "Sign in...",
-          success: (data: any) => data.message || "Sign In Berhasil",
-          error: (err) => err.message,
-        },
-      );
-    } catch (err) {
-      console.log(err);
-    }
+    toast.promise(loginAction(values), {
+      loading: "Sign in...",
+      success: (res) => {
+        router.push("/general/dashboard");
+        return res.message || "Sign In Berhasil";
+      },
+      error: (err) => err.message,
+    });
   };
-
-  // const [state, action] = useActionState<AuthState, FormData>(loginAction, {});
-
-  // useEffect(() => {
-  //   if (!state) return;
-
-  //   if (state.success === false) {
-  //     toast.error(state.message);
-  //   }
-
-  //   if (state.success === true) {
-  //     toast.success(state.message);
-  //     router.push("/general/dashboard");
-  //   }
-  // }, [state, router]);
 
   return (
     <Card>
@@ -108,7 +69,9 @@ export function SignInForm() {
                   <FieldLabel htmlFor="password">Password</FieldLabel>
                   <InputGroup>
                     <InputGroupInput {...field} id="password" aria-invalid={fieldState.invalid} type={passwordCheck ? "text" : "password"} disabled={isSubmitting} />
-                    <InputGroupButton onClick={() => setPasswordCheck(!passwordCheck)}>{passwordCheck ? <EyeIcon size={16} /> : <EyeOffIcon size={16} />}</InputGroupButton>
+                    <InputGroupAddon className=" cursor-pointer" align="inline-end" onClick={() => setPasswordCheck(!passwordCheck)}>
+                      {passwordCheck ? <EyeIcon size={16} /> : <EyeOffIcon size={16} />}
+                    </InputGroupAddon>
                   </InputGroup>
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>

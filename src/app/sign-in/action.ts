@@ -2,41 +2,30 @@ import { ApiResponse } from "@/types/api";
 import { SignInResponse } from "../api/auth/route";
 import { User } from "@/types/user";
 
-export type AuthState = {
-  success?: boolean;
-  message?: string;
-};
-
-// export async function loginAction(_prevState: AuthState, formData: FormData): Promise<AuthState> {
-//   const username = formData.get("username");
-//   const password = formData.get("password");
-
-//   if (!username || !password) {
-//     return { success: false, message: "Username dan password wajib diisi" };
-//   }
-
-//   const res = await fetch(`/api/auth`, {
-//     method: "POST",
-//     headers: { "Content-Type": "application/json" },
-//     body: JSON.stringify({ username, password }),
-//   });
-
-//   return (await res.json()) as ApiResponse<SignInResponse>;
-// }
 export async function loginAction(payload: { username: string; password: string }) {
-  const { username, password } = payload;
   const res = await fetch(`/api/auth`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ username, password }),
+    body: JSON.stringify(payload),
   });
+  const response = (await res.json()) as ApiResponse<SignInResponse>;
 
-  return (await res.json()) as ApiResponse<SignInResponse>;
+  if (!res.ok || !response.success) {
+    throw new Error(response.message || "Sign In Gagal");
+  }
+
+  return response;
 }
 
-export async function logoutAction(): Promise<AuthState> {
-  const res = await fetch(`/api/auth`, { method: "DELETE" });
-  return res.json();
+export async function logoutAction() {
+  const res = await fetch(`/api/auth`, { method: "DELETE", credentials: "include" });
+  const response = await res.json();
+
+  if (!res.ok || !response.success) {
+    throw new Error(response.message || "Sign Out Gagal");
+  }
+
+  return response;
 }
 
 export async function fetchUserAuthenticated(): Promise<User> {
@@ -45,11 +34,11 @@ export async function fetchUserAuthenticated(): Promise<User> {
     credentials: "include",
   });
 
-  const json = (await res.json()) as ApiResponse<User>;
+  const response = (await res.json()) as ApiResponse<User>;
 
-  if (!json.success || json.data === undefined) {
-    throw new Error(json.message);
+  if (!res.ok || !response.success || response.data === undefined) {
+    throw new Error(response.message);
   }
 
-  return json.data;
+  return response.data;
 }

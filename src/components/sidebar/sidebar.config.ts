@@ -45,13 +45,13 @@ export const navContentWebsite = [
   },
   {
     title: "Mitra",
-    url: "#",
+    url: "/content-website/mitras",
     icon: IconHeartHandshake,
     roles: ["ADMIN", "SUPER_ADMIN"],
   },
   {
     title: "Testimoni",
-    url: "#",
+    url: "/content-website/testimonies",
     icon: IconMessageCircleUser,
     roles: ["ADMIN", "SUPER_ADMIN"],
   },

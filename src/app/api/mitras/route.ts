@@ -4,14 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_EXTERNAL = process.env.NEXT_API_EXTERNAL!;
 
-export async function GET(req: NextRequest) {
-  const accessToken = req.cookies.get("accessToken")?.value;
-
-  const res = await fetch(`${API_EXTERNAL}/contributors`, {
-    headers: {
-      ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
-    },
-  });
+export async function GET() {
+  const res = await fetch(`${API_EXTERNAL}/mitras`);
   const json = await res.json();
 
   if (!res.ok) {
@@ -24,7 +18,7 @@ export async function POST(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken")?.value;
   const requestBody = await req.formData();
 
-  const res = await fetch(`${API_EXTERNAL}/contributors`, {
+  const res = await fetch(`${API_EXTERNAL}/mitras`, {
     method: "POST",
     headers: {
       ...(accessToken && { Authorization: `Bearer ${accessToken}` }),
@@ -35,7 +29,7 @@ export async function POST(req: NextRequest) {
   const json = await res.json();
 
   if (!res.ok) {
-    return ResponseError(json.message ?? "Update Contributors Failed", json.status);
+    return ResponseError(json.message ?? "Create Mitra Failed", json.status);
   }
 
   return ResponseSuccess(null, json.message);
@@ -43,9 +37,9 @@ export async function POST(req: NextRequest) {
 
 export async function DELETE(req: NextRequest) {
   const accessToken = req.cookies.get("accessToken")?.value;
-  const { contributorId } = await req.json();
+  const { mitraId } = await req.json();
 
-  const res = await fetch(`${API_EXTERNAL}/contributors/${contributorId}`, {
+  const res = await fetch(`${API_EXTERNAL}/mitras/${mitraId}`, {
     method: "DELETE",
     headers: {
       ...(accessToken && { Authorization: `Bearer ${accessToken}` }),

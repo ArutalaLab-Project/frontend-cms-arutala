@@ -6,8 +6,12 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ActionTable } from "@/components/action-table";
-import { MessageDetailSheet } from "./message-detail";
 import { MessageDeleteDialog } from "./message-delete";
+import { cn } from "@/lib/utils";
+import Link from "next/link";
+import { MessageDetailDialog } from "./message-detail";
+import { formatedDate } from "@/lib/convert-date";
+import { generateWhatsAppMessage, generateWhatsAppNumber } from "@/lib/chat-whatsapp";
 
 export const statusColor: Record<MessageStatus, string> = {
   NEW: "bg-blue-500",
@@ -38,24 +42,29 @@ export const columns: ColumnDef<Message>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => new Date(row.original.created_date).toLocaleDateString("id-ID"),
+    cell: ({ row }) => formatedDate(row.original.created_date),
   },
   {
     id: "sender_name",
     accessorKey: "sender_name",
     header: "Name",
     enableColumnFilter: true,
-    cell: ({ row }) => (
-      <div className="flex flex-col">
-        <span className="font-medium">{row.original.sender_name}</span>
-        <span className="text-xs text-muted-foreground">{row.original.sender_phone}</span>
-      </div>
-    ),
+    filterFn: "includesString",
+    cell: ({ row }) => {
+      const WaPhone = generateWhatsAppNumber(row.original.sender_phone);
+      const message = generateWhatsAppMessage(row.original.sender_name);
+      return (
+        <div className="flex flex-col">
+          <span className="font-medium">{row.original.sender_name}</span>
+          <span className="text-xs text-muted-foreground">
+            <Link href={`https://wa.me/${WaPhone}?text=${message}`} target="_blank" rel="noopener noreferrer">
+              {WaPhone}
+            </Link>
+          </span>
+        </div>
+      );
+    },
   },
-  // {
-  //   accessorKey: "sender_phone",
-  //   header: "Phone Number",
-  // },
   {
     accessorKey: "organization_name",
     header: "Institution",
@@ -66,23 +75,24 @@ export const columns: ColumnDef<Message>[] = [
     cell: ({ row }) => (
       <div className="flex gap-1 flex-wrap">
         {row.original.subject.map((s) => (
-          <Badge key={s} variant="secondary">
+          <Badge key={s} variant="secondary" className="text-xs">
             {s}
           </Badge>
         ))}
       </div>
     ),
+    filterFn: "arrIncludes",
   },
   {
     accessorKey: "message_body",
     header: "Message",
-    cell: ({ row }) => <div className="max-w-[320px] whitespace-normal wrap-break-words max-h-30 overflow-y-auto">{row.original.message_body}</div>,
+    cell: ({ row }) => <div className="max-w-[320px] text-sm line-clamp-3">{row.original.message_body}</div>,
   },
   {
     accessorKey: "message_status",
     header: "Status",
     enableColumnFilter: true,
-    cell: ({ row }) => <Badge className={statusColor[row.original.message_status]}>{row.original.message_status}</Badge>,
+    cell: ({ row }) => <Badge className={cn("text-shadow-2xs", statusColor[row.original.message_status])}>{row.original.message_status}</Badge>,
   },
 
   {
@@ -90,7 +100,8 @@ export const columns: ColumnDef<Message>[] = [
     header: "Action",
     cell: ({ row }) => (
       <ActionTable>
-        <MessageDetailSheet message={row.original} />
+        {/* <MessageDetailSheet message={row.original} /> */}
+        <MessageDetailDialog message={row.original} />
         <MessageDeleteDialog messageId={row.original.message_id} />
       </ActionTable>
     ),
