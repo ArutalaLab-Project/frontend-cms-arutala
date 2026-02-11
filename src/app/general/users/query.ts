@@ -22,7 +22,6 @@ export async function createUser(formData: FormData) {
     credentials: "include",
     body: formData,
   });
-  console.log(res);
   return res.json();
 }
 

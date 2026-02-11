@@ -7,16 +7,16 @@ import { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SkeletonTable } from "@/components/skeleton-table";
-import { useContributors } from "@/hooks/use-contributor";
-import { ContributorAddDialog } from "./contributor-add";
+import { MitraAddDialog } from "./mitra-add";
+import { useMitras } from "@/hooks/use-mitra";
 
-export function ContributorTable() {
-  const { data: contributors, isLoading } = useContributors();
+export function MitraTable() {
+  const { data: mitras, isLoading } = useMitras();
   const [sorting, setSorting] = React.useState<SortingState>([]);
   const [filters, setFilters] = React.useState<ColumnFiltersState>([]);
   const [pagination, setPagination] = React.useState({
     pageIndex: 0,
-    pageSize: 8,
+    pageSize: 6,
   });
 
   React.useEffect(() => {
@@ -27,7 +27,7 @@ export function ContributorTable() {
   }, [filters, sorting]);
 
   React.useEffect(() => {
-    const pageCount = Math.ceil((contributors?.length ?? 0) / pagination.pageSize);
+    const pageCount = Math.ceil((mitras?.length ?? 0) / pagination.pageSize);
 
     if (pagination.pageIndex >= pageCount && pageCount > 0) {
       setPagination((prev) => ({
@@ -35,27 +35,27 @@ export function ContributorTable() {
         pageIndex: pageCount - 1,
       }));
     }
-  }, [contributors, pagination.pageSize, pagination.pageIndex]);
+  }, [mitras, pagination.pageSize, pagination.pageIndex]);
 
   // Memoize opsi untuk dropdown
-  const uniqueExpertise = useMemo(() => {
-    if (!contributors) return [];
-    const allExpertise = contributors.flatMap((c) => c.contributor_expertise);
+  const uniqueBusinessField = useMemo(() => {
+    if (!mitras) return [];
+    const allExpertise = mitras.flatMap((c) => c.business_field);
     return Array.from(new Set(allExpertise)).map((expert) => ({
       value: expert,
       label: expert,
     }));
-  }, [contributors]);
+  }, [mitras]);
 
-  const uniqueType = useMemo(() => {
-    if (!contributors) {
-      return [];
-    }
-    return Array.from(new Set(contributors.map((contributor) => contributor.contributor_type))).map((type) => ({
-      value: type,
-      label: type === "INTERNAL" ? "Mentor" : "Bukan Mentor",
-    }));
-  }, [contributors]);
+  // const uniqueType = useMemo(() => {
+  //   if (!mitras) {
+  //     return [];
+  //   }
+  //   return Array.from(new Set(mitras.map((contributor) => contributor.contributor_type))).map((type) => ({
+  //     value: type,
+  //     label: type === "INTERNAL" ? "Mentor" : "Bukan Mentor",
+  //   }));
+  // }, [mitras]);
 
   // Fungsi helper untuk update filter tanpa menghapus filter id lain
   const setColumnFilter = (id: string, value: string | null) => {
@@ -71,20 +71,20 @@ export function ContributorTable() {
     <div className="space-y-4">
       <div className=" flex justify-between  px-8">
         <div className="flex items-center gap-4">
-          {/* Search by Name: Mengisi filter array dengan id 'contributor_name' */}
-          <Input placeholder="Search by name..." onChange={(e) => setColumnFilter("contributor_name", e.target.value)} className="max-w-sm" />
+          {/* Search by Name: Mengisi filter array dengan id 'mitra_name' */}
+          <Input placeholder="Search by name..." onChange={(e) => setColumnFilter("mitra_name", e.target.value)} className="max-w-sm" />
 
-          {/* Filter by Expertise: Mengisi filter array dengan id 'contributor_expertise' */}
-          <Select onValueChange={(v) => setColumnFilter("contributor_expertise", v !== "ALL" ? v : null)}>
+          {/* Filter by Expertise: Mengisi filter array dengan id 'business_field' */}
+          <Select onValueChange={(v) => setColumnFilter("business_field", v !== "ALL" ? v : null)}>
             <SelectTrigger className="w-50">
-              <SelectValue placeholder="All Expertise" />
+              <SelectValue placeholder="All Field" />
             </SelectTrigger>
             <SelectContent position="popper">
               <SelectGroup>
-                <SelectItem value="ALL">All Expertise</SelectItem>
-                {uniqueExpertise.map((expert) => (
-                  <SelectItem value={expert.value} key={expert.value}>
-                    {expert.label}
+                <SelectItem value="ALL">All Field</SelectItem>
+                {uniqueBusinessField.map((field) => (
+                  <SelectItem value={field.value} key={field.value}>
+                    {field.label}
                   </SelectItem>
                 ))}
               </SelectGroup>
@@ -92,7 +92,7 @@ export function ContributorTable() {
           </Select>
 
           {/* Filter by Type */}
-          <Select onValueChange={(v) => setColumnFilter("contributor_type", v !== "ALL" ? v : null)}>
+          {/* <Select onValueChange={(v) => setColumnFilter("contributor_type", v !== "ALL" ? v : null)}>
             <SelectTrigger className="w-50">
               <SelectValue placeholder="All Type" />
             </SelectTrigger>
@@ -108,16 +108,17 @@ export function ContributorTable() {
                 })}
               </SelectGroup>
             </SelectContent>
-          </Select>
+          </Select> */}
         </div>
-        <ContributorAddDialog />
+        <MitraAddDialog />
       </div>
 
       <DataTable
-        data={contributors ?? []}
+        data={mitras ?? []}
         columns={columns}
-        getRowId={(row) => row.contributor_id}
+        getRowId={(row) => row.mitra_id}
         sorting={sorting}
+        pageSizeOptions={[6, 15, 30, 50]}
         columnFilters={filters}
         pagination={pagination}
         onPaginationChange={setPagination}

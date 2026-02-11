@@ -17,7 +17,6 @@ export async function POST(req: NextRequest) {
     body: JSON.stringify(body),
   });
 
-  // const resJson = (await res.json()) as ApiResponse<SignInResponse>;
   const resJson = await res.json();
 
   if (resJson.success === false) {
@@ -54,14 +53,21 @@ export async function DELETE(req: NextRequest) {
   });
 
   const resJson = (await res.json()) as ApiResponse<null>;
+
   if (resJson.success === false) {
     return NextResponse.json(resJson, { status: res.status });
   }
 
   const response = NextResponse.json(resJson);
+  response.cookies.set("accessToken", "", {
+    expires: new Date(0),
+    path: "/",
+  });
 
-  response.cookies.delete("accessToken");
-  response.cookies.delete("refreshToken");
+  response.cookies.set("refreshToken", "", {
+    expires: new Date(0),
+    path: "/",
+  });
 
   return response;
 }

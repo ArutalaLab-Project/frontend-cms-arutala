@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { ColumnDef, ColumnFiltersState, OnChangeFn, SortingState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
+import { ColumnDef, ColumnFiltersState, OnChangeFn, PaginationState, SortingState, flexRender, getCoreRowModel, getFilteredRowModel, getPaginationRowModel, getSortedRowModel, useReactTable } from "@tanstack/react-table";
 
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 
@@ -25,6 +25,12 @@ export interface DataTableProps<TData, TValue> {
   sorting?: SortingState;
   columnFilters?: ColumnFiltersState;
 
+  pagination: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onPaginationChange: OnChangeFn<PaginationState>;
+
   onSortingChange?: OnChangeFn<SortingState>;
   onColumnFiltersChange?: OnChangeFn<ColumnFiltersState>;
 
@@ -35,12 +41,12 @@ export interface DataTableProps<TData, TValue> {
    Component
 ======================= */
 
-export function DataTable<TData, TValue>({ columns, data, getRowId, sorting, columnFilters, onSortingChange, onColumnFiltersChange, pageSizeOptions = [10, 25, 50] }: DataTableProps<TData, TValue>) {
+export function DataTable<TData, TValue>({ columns, data, getRowId, sorting, columnFilters, pagination, onPaginationChange, onSortingChange, onColumnFiltersChange, pageSizeOptions = [8, 15, 30, 50] }: DataTableProps<TData, TValue>) {
   const [rowSelection, setRowSelection] = React.useState({});
-  const [pagination, setPagination] = React.useState({
-    pageIndex: 0,
-    pageSize: pageSizeOptions[0],
-  });
+  // const [pagination, setPagination] = React.useState({
+  //   pageIndex: 0,
+  //   pageSize: pageSizeOptions[0],
+  // });
 
   const table = useReactTable({
     data,
@@ -56,7 +62,7 @@ export function DataTable<TData, TValue>({ columns, data, getRowId, sorting, col
 
     enableRowSelection: true,
 
-    onPaginationChange: setPagination,
+    onPaginationChange,
     onRowSelectionChange: setRowSelection,
     onSortingChange,
     onColumnFiltersChange,
@@ -90,7 +96,7 @@ export function DataTable<TData, TValue>({ columns, data, getRowId, sorting, col
               table.getRowModel().rows.map((row) => (
                 <TableRow key={row.id} data-state={row.getIsSelected() && "selected"}>
                   {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="p-3">
+                    <TableCell key={cell.id} className="px-3 py-2 text-sm">
                       {flexRender(cell.column.columnDef.cell, cell.getContext())}
                     </TableCell>
                   ))}
@@ -110,16 +116,16 @@ export function DataTable<TData, TValue>({ columns, data, getRowId, sorting, col
       {/* FOOTER */}
       <div className="flex items-center justify-between px-2">
         {/* PAGE SIZE */}
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-2 h-2">
           <Label className="text-sm text-muted-foreground">Rows per page</Label>
 
           <Select value={String(table.getState().pagination.pageSize)} onValueChange={(value) => table.setPageSize(Number(value))}>
-            <SelectTrigger className="w-20">
+            <SelectTrigger className="h-8 w-17.5 text-sm">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent>
+            <SelectContent position="popper" className="p-1">
               {pageSizeOptions.map((size) => (
-                <SelectItem key={size} value={String(size)}>
+                <SelectItem key={size} value={String(size)} className="h-8 py-1 text-sm">
                   {size}
                 </SelectItem>
               ))}
@@ -129,7 +135,9 @@ export function DataTable<TData, TValue>({ columns, data, getRowId, sorting, col
 
         {/* PAGE INFO + PAGINATION */}
         <div className="flex items-center gap-6 whitespace-nowrap">
-          <Label className="text-sm text-muted-foreground">
+          <Label className="text-xs text-muted-foreground">Total Data: {data.length}</Label>
+
+          <Label className="text-xs text-muted-foreground">
             Page {currentPage + 1} of {pageCount}
           </Label>
 
@@ -141,7 +149,7 @@ export function DataTable<TData, TValue>({ columns, data, getRowId, sorting, col
 
               {Array.from({ length: pageCount }).map((_, index) => (
                 <PaginationItem key={index}>
-                  <PaginationLink isActive={index === currentPage} onClick={() => table.setPageIndex(index)}>
+                  <PaginationLink isActive={index === currentPage} onClick={() => table.setPageIndex(index)} className="h-8 w-8 text-sm">
                     {index + 1}
                   </PaginationLink>
                 </PaginationItem>

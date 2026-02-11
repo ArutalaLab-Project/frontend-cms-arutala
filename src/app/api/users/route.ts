@@ -48,8 +48,6 @@ export async function POST(req: NextRequest) {
 
   const json = await res.json();
 
-  console.log(json);
-
   if (!res.ok) {
     return ResponseError(json.message ?? "Create User Failed", json.status);
   }
@@ -69,8 +67,6 @@ export async function DELETE(req: NextRequest) {
   });
 
   const json = await res.json();
-
-  console.log(json);
 
   if (!res.ok) {
     return ResponseError(json.message ?? "Delete Failed", json.status);

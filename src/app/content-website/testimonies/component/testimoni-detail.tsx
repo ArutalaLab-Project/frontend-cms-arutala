@@ -2,29 +2,27 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { Contributor, ContributorType, CreateContributorInput, createContributorSchema } from "@/types/contributor";
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import { Controller, useFieldArray, useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
 import Image from "next/image";
 import { IconListDetails } from "@tabler/icons-react";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { useUpdateContributor } from "@/hooks/use-contributor";
 import { toast } from "sonner";
+import { CreateTestimoniInput, createTestimoniSchema, Testimoni, TestimoniType } from "@/types/testimoni";
+import { useUpdateTestimoni } from "@/hooks/use-testimoni";
+import { Textarea } from "@/components/ui/textarea";
 
-export function ContributorDetailDialog({ contributor }: { contributor: Contributor }) {
+export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
   const [open, setOpen] = useState(false);
-  const [previewProfile, setPreviewProfile] = useState<string | null>(contributor.contributor_profile_url);
-  const contributorTypeOptions = Object.values(ContributorType);
-  const { mutateAsync, isPending } = useUpdateContributor();
+  const [previewProfile, setPreviewProfile] = useState<string | null>(testimoni.author_profile_url);
+  const testimoniCategoryOptions = Object.values(TestimoniType);
+  const { mutateAsync, isPending } = useUpdateTestimoni();
 
-  const handleUpdate = async (values: CreateContributorInput) => {
+  const handleUpdate = async (values: CreateTestimoniInput) => {
     toast.promise(
       mutateAsync({
-        id: contributor.contributor_id,
+        id: testimoni.testimoni_id,
         data: values,
       }),
       {
@@ -44,49 +42,39 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
     setOpen(false);
   };
 
-  const form = useForm<CreateContributorInput>({
-    resolver: zodResolver(createContributorSchema),
+  const form = useForm<CreateTestimoniInput>({
+    resolver: zodResolver(createTestimoniSchema),
     defaultValues: {
-      contributorName: "",
-      jobTitle: "",
-      companyName: "",
-      expertise: [],
-      profile: undefined,
-      contributorType: undefined,
+      authorName: "",
+      authorJobTitle: "",
+      authorCompanyName: "",
+      testimoniContent: "",
+      testimoniCategory: undefined,
+      authorProfile: undefined,
     },
-  });
-
-  const {
-    fields: expertiseFields,
-    append,
-    remove,
-  } = useFieldArray({
-    control: form.control,
-    name: "expertise",
   });
 
   useEffect(() => {
     if (open) {
       form.reset({
-        contributorName: contributor.contributor_name,
-        jobTitle: contributor.contributor_job_title,
-        companyName: contributor.contributor_company_name,
-        contributorType: contributor.contributor_type,
-        expertise: contributor.contributor_expertise.map((e) => ({ value: e })),
-        profile: undefined,
+        authorName: testimoni.author_name,
+        authorJobTitle: testimoni.author_job_title,
+        authorCompanyName: testimoni.author_company_name,
+        testimoniContent: testimoni.testimoni_content,
+        testimoniCategory: testimoni.testimoni_category,
+        authorProfile: undefined,
       });
       // setPreviewProfile(contributor.contributor_profile_url);
     }
-  }, [open, contributor, form]);
+  }, [open, testimoni, form]);
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger */}
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <IconListDetails className="mr-2 size-4" />
-          Detail
-        </DropdownMenuItem>
+        <Button variant="outline" size="icon-sm">
+          <IconListDetails />
+        </Button>
       </DialogTrigger>
 
       {/* Content */}
@@ -94,13 +82,13 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
         <form onSubmit={form.handleSubmit(handleUpdate)} className="flex flex-col h-full">
           {/* Header */}
           <DialogHeader className="shrink-0">
-            <DialogTitle>Contributor Detail</DialogTitle>
+            <DialogTitle>Testimpni Detail</DialogTitle>
             <DialogDescription>Make changes here. Click save when you&apos;re done</DialogDescription>
           </DialogHeader>
 
           <div className="flex-1 overflow-y-auto px-4 py-4 gap-4  ">
             <Controller
-              name="profile"
+              name="authorProfile"
               control={form.control}
               render={({ field, fieldState }) => {
                 return (
@@ -132,42 +120,43 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
               }}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
               <Controller
-                name="contributorName"
+                name="authorName"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field className="grid gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="contributorName">Name</FieldLabel>
-                    <Input {...field} id="contributorName" aria-invalid={fieldState.invalid} autoComplete="off" />
+                    <FieldLabel htmlFor="authorName">Name</FieldLabel>
+                    <Input {...field} id="authorName" aria-invalid={fieldState.invalid} autoComplete="off" />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
               <Controller
-                name="jobTitle"
+                name="authorJobTitle"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field className="grid gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="jobTitle">Job Title</FieldLabel>
-                    <Input {...field} id="jobTitle" aria-invalid={fieldState.invalid} autoComplete="off" />
+                    <FieldLabel htmlFor="authorJobTitle">Job Title</FieldLabel>
+                    <Input {...field} id="authorJobTitle" aria-invalid={fieldState.invalid} autoComplete="off" />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
               <Controller
-                name="companyName"
+                name="authorCompanyName"
                 control={form.control}
                 render={({ field, fieldState }) => (
                   <Field className="grid gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="companyName">Company Name</FieldLabel>
-                    <Input {...field} id="companyName" aria-invalid={fieldState.invalid} autoComplete="off" />
+                    <FieldLabel htmlFor="authorCompanyName">Company Name</FieldLabel>
+                    <Input {...field} id="authorCompanyName" aria-invalid={fieldState.invalid} autoComplete="off" />
                     {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
+
               <Controller
-                name="contributorType"
+                name="testimoniCategory"
                 control={form.control}
                 render={({ field }) => (
                   <Field className="gap-1">
@@ -178,7 +167,7 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
                       </SelectTrigger>
                       <SelectContent>
                         <SelectGroup>
-                          {contributorTypeOptions.map((type) => (
+                          {testimoniCategoryOptions.map((type) => (
                             <SelectItem value={type} key={type}>
                               {type}
                             </SelectItem>
@@ -189,45 +178,18 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
                   </Field>
                 )}
               />
-              <Controller
-                name="expertise"
-                control={form.control}
-                render={({ fieldState }) => (
-                  <Field className="grid gap-2" data-invalid={fieldState.invalid}>
-                    <FieldLabel>Expertise</FieldLabel>
-
-                    {/* Input add expertise */}
-                    <Input
-                      placeholder="Ketik expertise lalu Enter"
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter") {
-                          e.preventDefault();
-                          const value = e.currentTarget.value.trim();
-                          if (!value) return;
-
-                          append({ value });
-                          e.currentTarget.value = "";
-                        }
-                      }}
-                    />
-
-                    {/* Badge list */}
-                    <div className="flex flex-wrap gap-2">
-                      {expertiseFields.map((item, index) => (
-                        <Badge key={item.id} variant="secondary" className="flex items-center gap-1">
-                          {item.value}
-                          <button type="button" onClick={() => remove(index)} className="ml-1 rounded-full hover:bg-muted p-0.5">
-                            <X className="w-3 h-3" />
-                          </button>
-                        </Badge>
-                      ))}
-                    </div>
-
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              />
             </div>
+            <Controller
+              name="testimoniContent"
+              control={form.control}
+              render={({ field, fieldState }) => (
+                <Field className="grid gap-1 h-16" data-invalid={fieldState.invalid}>
+                  <FieldLabel htmlFor="testimoniContent">Testimoni</FieldLabel>
+                  <Textarea {...field} id="testimoniContent" aria-invalid={fieldState.invalid} autoComplete="off" />
+                  {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                </Field>
+              )}
+            />
           </div>
 
           {/* Footer */}

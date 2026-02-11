@@ -1,8 +1,6 @@
 import { Message, MessageStatus, messageStatusEnum } from "@/types/message";
-import { Sheet, SheetClose, SheetContent, SheetDescription, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { IconListDetails } from "@tabler/icons-react";
-import { Label } from "@/components/ui/label";
+import { IconBrandWhatsappFilled, IconListDetails } from "@tabler/icons-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
@@ -13,9 +11,14 @@ import { statusColor } from "./columns";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { useUpdateMessageStatus } from "@/hooks/use-message";
 import { toast } from "sonner";
+import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { formatedDate } from "@/lib/convert-date";
+import { InputGroup, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 
-export function MessageDetailSheet({ message }: { message: Message }) {
-  const [sheetOpen, setSheetOpen] = useState(false);
+import { generateWhatsAppMessage, generateWhatsAppNumber } from "@/lib/chat-whatsapp";
+
+export function MessageDetailDialog({ message }: { message: Message }) {
+  const [open, setOpen] = useState(false);
   const [statusMessage, setStatusMessage] = useState<MessageStatus>(message.message_status);
 
   const { mutateAsync, isPending } = useUpdateMessageStatus();
@@ -42,7 +45,7 @@ export function MessageDetailSheet({ message }: { message: Message }) {
           if (!res.success) {
             throw new Error(res.message);
           }
-          setSheetOpen(false);
+          setOpen(false);
           return res.message;
         },
         error: (err) => {
@@ -54,77 +57,107 @@ export function MessageDetailSheet({ message }: { message: Message }) {
   };
 
   return (
-    <Sheet open={sheetOpen} onOpenChange={setSheetOpen}>
-      <SheetTrigger asChild>
+    <Dialog open={open} onOpenChange={setOpen}>
+      {/* Trigger */}
+      <DialogTrigger asChild>
         <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
           <IconListDetails className="mr-2 size-4" />
           Detail
         </DropdownMenuItem>
-      </SheetTrigger>
+      </DialogTrigger>
 
-      <SheetContent side="right" className="w-120">
-        <SheetHeader>
-          <SheetTitle>Message Detail</SheetTitle>
-          <SheetDescription>Make changes here. Click save when you&apos;re done</SheetDescription>
-        </SheetHeader>
+      {/* Content */}
+      <DialogContent className="sm:max-w-3xl max-h-max h-11/12 ">
+        {/* Header */}
+        <DialogHeader>
+          <DialogTitle>Message Detail</DialogTitle>
+          <DialogDescription>Make changes here. Click save when you&apos;re done</DialogDescription>
+        </DialogHeader>
 
-        <div className="grid flex-1 auto-rows-min gap-6 px-4">
-          <Field className="grid gap-3">
-            <Label htmlFor="sheet-demo-name">Name</Label>
-            <Input id="sheet-demo-name" defaultValue={message.sender_name} disabled />
+        {/* Detail */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2 no-scrollbar -mx-4 max-h-max overflow-y-auto px-4">
+          <Field className="gap-1 md:col-span-2">
+            <FieldLabel>
+              <Badge className="px-4 py-1"> {formatedDate(message.created_date)}</Badge>
+            </FieldLabel>
           </Field>
-          <Field className="grid gap-3">
-            <Label htmlFor="sheet-demo-phone">Phone Number</Label>
-            <Input id="sheet-demo-phone" defaultValue={message.sender_phone} disabled />
+
+          {/* Name */}
+          <Field className="gap-1">
+            <FieldLabel>Name</FieldLabel>
+            <Input value={message.sender_name} disabled />
           </Field>
-          <Field className="grid gap-3">
-            <Label htmlFor="sheet-demo-email">Email</Label>
-            <Input id="sheet-demo-email" defaultValue={message.sender_email} disabled />
+
+          {/* Email */}
+          <Field className="gap-1">
+            <FieldLabel>Email</FieldLabel>
+            <Input value={message.sender_email} disabled />
           </Field>
-          <Field className="grid gap-3">
-            <Label htmlFor="sheet-demo-institution">Institution</Label>
-            <Input id="sheet-demo-institution" defaultValue={message.organization_name} disabled />
+
+          {/* Institution */}
+          <Field className="gap-1">
+            <FieldLabel>Institution</FieldLabel>
+            <Input value={message.organization_name} disabled />
           </Field>
-          <Field className="grid gap-3">
-            <Label htmlFor="sheet-demo-subject">Subject</Label>
-            <Input id="sheet-demo-subject" defaultValue={message.subject} disabled />
+
+          {/* Phone */}
+          <Field className="gap-1">
+            <FieldLabel>Phone Number</FieldLabel>
+            <InputGroup>
+              <InputGroupInput value={message.sender_phone} disabled />
+              <InputGroupButton variant="ghost" size="icon-sm">
+                <a href={`https://wa.me/${generateWhatsAppNumber(message.sender_phone)}?text=${generateWhatsAppMessage(message.sender_phone)}`} target="_blank" rel="noopener noreferrer">
+                  <IconBrandWhatsappFilled />
+                </a>
+              </InputGroupButton>
+            </InputGroup>
+            {/* <Input value={message.sender_phone} disabled /> */}
           </Field>
-          <Field className="grid gap-3">
+
+          {/* Subject */}
+          <Field className="md:col-span-2 gap-1">
+            <FieldLabel>Subject</FieldLabel>
+            <Input value={message.subject} disabled />
+          </Field>
+
+          {/* Message */}
+          <Field className="md:col-span-2 gap-1">
             <FieldLabel>Message</FieldLabel>
-            <Textarea defaultValue={message.message_body} disabled />
+            <Textarea value={message.message_body} disabled className="h-fit" />
           </Field>
+
+          {/* Status */}
           <Field>
             <FieldLabel>Status</FieldLabel>
-            <Select value={statusMessage} onValueChange={(value: MessageStatus) => setStatusMessage(value)} disabled={isPending}>
-              <SelectTrigger className="w-full">
-                <SelectValue placeholder="Status" />
+            <Select value={statusMessage} onValueChange={(v: MessageStatus) => setStatusMessage(v)} disabled={isPending}>
+              <SelectTrigger className="w-40">
+                <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper">
                 <SelectGroup>
-                  {messageStatus.map((status) => {
-                    return (
-                      <SelectItem value={status.value} key={status.value}>
-                        <Badge className={statusColor[status.value as MessageStatus]}>{status.label}</Badge>
-                      </SelectItem>
-                    );
-                  })}
+                  {messageStatus.map((status) => (
+                    <SelectItem key={status.value} value={status.value}>
+                      <Badge className={statusColor[status.value]}>{status.label}</Badge>
+                    </SelectItem>
+                  ))}
                 </SelectGroup>
               </SelectContent>
             </Select>
           </Field>
         </div>
 
-        <SheetFooter>
-          <Button type="submit" onClick={handleUpdate} disabled={isPending}>
-            {isPending ? "Saving" : "Save changes"}
-          </Button>
-          <SheetClose asChild>
-            <Button variant="outline" className="w-full">
+        {/* Footer */}
+        <DialogFooter className="flex w-full justify-between">
+          <DialogClose asChild>
+            <Button variant="outline" size="sm">
               Cancel
             </Button>
-          </SheetClose>
-        </SheetFooter>
-      </SheetContent>
-    </Sheet>
+          </DialogClose>
+          <Button type="submit" size="sm" onClick={handleUpdate} disabled={isPending}>
+            {isPending ? "Saving" : "Save changes"}
+          </Button>
+        </DialogFooter>
+      </DialogContent>
+    </Dialog>
   );
 }
