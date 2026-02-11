@@ -20,6 +20,8 @@ export async function createContributor(formData: FormData) {
     credentials: "include",
     body: formData,
   });
+
+  console.log(res);
   return res.json();
 }
 

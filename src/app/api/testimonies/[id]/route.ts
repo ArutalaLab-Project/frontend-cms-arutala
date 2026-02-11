@@ -3,9 +3,9 @@ import { NextRequest, NextResponse } from "next/server";
 
 const API_EXTERNAL = process.env.NEXT_API_EXTERNAL!;
 
-export async function PATCH(req: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(req: NextRequest, context: { params: Promise<{ id: string }> }) {
   const accessToken = req.cookies.get("accessToken")?.value;
-  const { id } = await params;
+  const { id } = await context.params;
 
   const formData = await req.formData();
 
