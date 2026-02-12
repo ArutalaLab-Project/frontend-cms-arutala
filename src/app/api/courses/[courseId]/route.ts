@@ -1,15 +1,15 @@
-import { Course } from "@/features/course";
+import { CourseDetail } from "@/features/course";
 import { ApiError } from "@/server/errors/api-error";
 import { serverFetch } from "@/server/http/server-fetch";
 import { NextRequest, NextResponse } from "next/server";
-import z from "zod";
 
-export async function GET() {
+export async function GET(req: NextRequest, context: { params: Promise<{ courseId: string }> }) {
   try {
-    const courses = await serverFetch<Course[]>("/courses");
+    const { courseId } = await context.params;
+    const course = await serverFetch<CourseDetail>(`/courses/${courseId}`);
     return NextResponse.json({
       success: true,
-      data: courses,
+      data: course,
     });
   } catch (error) {
     if (error instanceof ApiError) {
@@ -32,31 +32,17 @@ export async function GET() {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ courseId: string }> }) {
   try {
-    const body = await req.json();
-    // console.log("body server", body);
-
-    await serverFetch<null>("/courses", {
-      method: "POST",
-      body: JSON.stringify(body),
+    const { courseId } = await context.params;
+    await serverFetch(`/courses/${courseId}`, {
+      method: "DELETE",
     });
-    const response = NextResponse.json({
+    return NextResponse.json({
       success: true,
       data: null,
     });
-    return response;
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: error.cause,
-        },
-        { status: 400 },
-      );
-    }
-
     if (error instanceof ApiError) {
       return NextResponse.json(
         {

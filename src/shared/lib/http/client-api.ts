@@ -5,10 +5,12 @@ async function request<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
     credentials: "include",
     ...init,
   });
+  // console.log(res);
 
   const json: ApiResponse<T> = await res.json();
 
   if (!res.ok || !json.success) {
+    console.log(json);
     throw new Error(json.message);
   }
   return json.data as T;

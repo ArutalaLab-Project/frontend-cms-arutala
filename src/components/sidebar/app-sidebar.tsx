@@ -4,7 +4,6 @@ import * as React from "react";
 import { NavMain } from "@/components/sidebar/nav-main";
 import { Sidebar, SidebarContent, SidebarHeader, SidebarMenu, SidebarMenuButton, SidebarMenuItem } from "@/components/ui/sidebar";
 import Image from "next/image";
-// import { useAuthenticated } from "@/hooks/use-auth";
 import { filterByRole } from "./filter-menu";
 import { navContentWebsite, navGeneral } from "./sidebar.config";
 import { useAuthenticated } from "@/features/auth";
