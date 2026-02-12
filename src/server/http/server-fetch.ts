@@ -20,6 +20,7 @@ export async function serverFetch<T>(path: string, options: RequestInit = {}): P
     },
     cache: "no-store",
   });
+  // console.log(res);
 
   let json: ApiResponse<T>;
 

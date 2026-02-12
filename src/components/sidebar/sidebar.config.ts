@@ -24,7 +24,7 @@ export const navGeneral = [
   },
   {
     title: "SEO Management",
-    url: "#",
+    url: "/general/seo-manage",
     icon: IconWorldSearch,
     roles: ["ADMIN", "SUPER_ADMIN"],
   },

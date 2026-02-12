@@ -8,6 +8,7 @@ import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SkeletonTable } from "@/components/skeleton-table";
 import { useCourses } from "../hook";
+import { CourseAddDialog } from "./course-add";
 
 export function CourseTable() {
   const { data: courses, isLoading } = useCourses();
@@ -17,6 +18,7 @@ export function CourseTable() {
     pageIndex: 0,
     pageSize: 8,
   });
+  // console.log(courses);
 
   React.useEffect(() => {
     setPagination((prev) => ({
@@ -36,45 +38,45 @@ export function CourseTable() {
     }
   }, [courses, pagination.pageSize, pagination.pageIndex]);
 
-  // Memoize opsi untuk dropdown
-  // const uniqueExpertise = useMemo(() => {
-  //   if (!courses) return [];
-  //   const allExpertise = courses.flatMap((c) => c.contributor_expertise);
-  //   return Array.from(new Set(allExpertise)).map((expert) => ({
-  //     value: expert,
-  //     label: expert,
-  //   }));
-  // }, [courses]);
+  const uniqueCategoryCourse = useMemo(() => {
+    if (!courses) {
+      return [];
+    }
+    return Array.from(new Set(courses.map((course) => course.course_category_name))).map((category) => ({
+      value: category,
+      label: category,
+    }));
+  }, [courses]);
 
-  // const uniqueType = useMemo(() => {
-  //   if (!courses) {
-  //     return [];
-  //   }
-  //   return Array.from(new Set(courses.map((contributor) => contributor.contributor_type))).map((type) => ({
-  //     value: type,
-  //     label: type === "INTERNAL" ? "Mentor" : "Bukan Mentor",
-  //   }));
-  // }, [courses]);
+  const uniqueFieldCourse = useMemo(() => {
+    if (!courses) {
+      return [];
+    }
+    return Array.from(new Set(courses.map((course) => course.course_field_name))).map((field) => ({
+      value: field,
+      label: field,
+    }));
+  }, [courses]);
 
   // Fungsi helper untuk update filter tanpa menghapus filter id lain
-  // const setColumnFilter = (id: string, value: string | null) => {
-  //   setFilters((prev) => {
-  //     const others = prev.filter((f) => f.id !== id);
-  //     return value ? [...others, { id, value }] : others;
-  //   });
-  // };
+  const setColumnFilter = (id: string, value: string | null) => {
+    setFilters((prev) => {
+      const others = prev.filter((f) => f.id !== id);
+      return value ? [...others, { id, value }] : others;
+    });
+  };
 
   if (isLoading) return <SkeletonTable />;
 
   return (
     <div className="space-y-4">
-      {/* <div className=" flex justify-between  px-8">
-        <div className="flex items-center gap-4"> */}
-      {/* Search by Name: Mengisi filter array dengan id 'contributor_name' */}
-      {/* <Input placeholder="Search by name..." onChange={(e) => setColumnFilter("contributor_name", e.target.value)} className="max-w-sm" /> */}
+      <div className=" flex justify-between  px-8">
+        <div className="flex items-center gap-4">
+          {/* Search by Name: Mengisi filter array dengan id 'contributor_name' */}
+          <Input placeholder="Search by name..." onChange={(e) => setColumnFilter("course_title", e.target.value)} className="max-w-sm" />
 
-      {/* Filter by Expertise: Mengisi filter array dengan id 'contributor_expertise' */}
-      {/* <Select onValueChange={(v) => setColumnFilter("contributor_expertise", v !== "ALL" ? v : null)}>
+          {/* Filter by Expertise: Mengisi filter array dengan id 'contributor_expertise' */}
+          {/* <Select onValueChange={(v) => setColumnFilter("contributor_expertise", v !== "ALL" ? v : null)}>
             <SelectTrigger className="w-50">
               <SelectValue placeholder="All Expertise" />
             </SelectTrigger>
@@ -90,18 +92,37 @@ export function CourseTable() {
             </SelectContent>
           </Select> */}
 
-      {/* Filter by Type */}
-      {/* <Select onValueChange={(v) => setColumnFilter("contributor_type", v !== "ALL" ? v : null)}>
+          {/* Filter by Category */}
+          <Select onValueChange={(v) => setColumnFilter("course_category_name", v !== "ALL" ? v : null)}>
             <SelectTrigger className="w-50">
-              <SelectValue placeholder="All Type" />
+              <SelectValue placeholder="All Category" />
             </SelectTrigger>
             <SelectContent position="popper">
               <SelectGroup>
-                <SelectItem value="ALL">All Type</SelectItem>
-                {uniqueType.map((type) => {
+                <SelectItem value="ALL">All Category</SelectItem>
+                {uniqueCategoryCourse.map((category) => {
                   return (
-                    <SelectItem value={type.value} key={type.value}>
-                      {type.label}
+                    <SelectItem value={category.value} key={category.value}>
+                      {category.label}
+                    </SelectItem>
+                  );
+                })}
+              </SelectGroup>
+            </SelectContent>
+          </Select>
+
+          {/* Filter by Field */}
+          <Select onValueChange={(v) => setColumnFilter("course_field_name", v !== "ALL" ? v : null)}>
+            <SelectTrigger className="w-50">
+              <SelectValue placeholder="All Field" />
+            </SelectTrigger>
+            <SelectContent position="popper">
+              <SelectGroup>
+                <SelectItem value="ALL">All Field</SelectItem>
+                {uniqueFieldCourse.map((field) => {
+                  return (
+                    <SelectItem value={field.value} key={field.value}>
+                      {field.label}
                     </SelectItem>
                   );
                 })}
@@ -109,8 +130,9 @@ export function CourseTable() {
             </SelectContent>
           </Select>
         </div>
-        <ContributorAddDialog />
-      </div> */}
+
+        <CourseAddDialog />
+      </div>
 
       <DataTable
         data={courses ?? []}
