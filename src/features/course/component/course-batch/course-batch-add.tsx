@@ -211,7 +211,7 @@ export default function CourseBatchAddDialog() {
                   <SelectTrigger>
                     <SelectValue placeholder="Pilih Status" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {courseBatchStatusOptions.map((status) => (
                       <SelectItem value={status} key={status}>
                         {status.replace(/_/g, " ")}
@@ -332,7 +332,7 @@ export default function CourseBatchAddDialog() {
                       <SelectTrigger>
                         <SelectValue placeholder="Tanpa Diskon" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="popper">
                         <SelectItem value="NONE">Tanpa Diskon</SelectItem>
                         <SelectItem value="PERCENT">Persen (%)</SelectItem>
                         <SelectItem value="FIXED">Nominal (Rp)</SelectItem>

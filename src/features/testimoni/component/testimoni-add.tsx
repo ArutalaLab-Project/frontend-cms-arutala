@@ -79,7 +79,7 @@ export function TestimoniAddDialog() {
             <AlertDialogDescription>Make changes here. Click save when you&apos;re done</AlertDialogDescription>
           </AlertDialogHeader>
 
-          <div className="flex-1 overflow-y-auto px-4 py-4 ">
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2 ">
             <Controller
               name="authorProfile"
               control={form.control}
@@ -113,7 +113,7 @@ export function TestimoniAddDialog() {
               }}
             />
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-1">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
               <Controller
                 name="authorName"
                 control={form.control}
@@ -151,14 +151,14 @@ export function TestimoniAddDialog() {
               <Controller
                 name="testimoniCategory"
                 control={form.control}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <Field className="gap-1">
-                    <FieldLabel>Type</FieldLabel>
+                    <FieldLabel>Category</FieldLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="w-full">
-                        <SelectValue placeholder="Choose Type" />
+                        <SelectValue placeholder="Choose Category" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="popper">
                         <SelectGroup>
                           {testimoniCategoryOptions.map((type) => (
                             <SelectItem value={type} key={type}>
@@ -168,6 +168,7 @@ export function TestimoniAddDialog() {
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />
@@ -176,7 +177,7 @@ export function TestimoniAddDialog() {
               name="testimoniContent"
               control={form.control}
               render={({ field, fieldState }) => (
-                <Field className="grid gap-1 h-16" data-invalid={fieldState.invalid}>
+                <Field className="grid gap-1 h-36" data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="testimoniContent">Testimoni</FieldLabel>
                   <Textarea {...field} id="testimoniContent" aria-invalid={fieldState.invalid} autoComplete="off" />
                   {/* <Input {...field} id="testimoniContent" aria-invalid={fieldState.invalid} autoComplete="off" /> */}

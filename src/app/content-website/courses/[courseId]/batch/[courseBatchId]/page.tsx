@@ -23,7 +23,7 @@ export default function CourseDetailPage() {
   if (!coursesbatch) {
     return <div>Course not found</div>;
   }
-  console.log(coursesbatch);
+  // console.log(coursesbatch);
 
   return (
     <div className="flex flex-1 flex-col">

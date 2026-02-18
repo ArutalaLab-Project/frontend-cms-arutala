@@ -20,20 +20,45 @@ export const contributorsSchema = z.array(contributorSchema);
 
 // Type Create Contributor
 export const createContributorSchema = z.object({
-  contributorName: z.string(),
-  jobTitle: z.string(),
-  companyName: z.string(),
+  contributorName: z.string().min(1, "Nama wajib diisi").trim(),
+  jobTitle: z.string().min(1, "Job title wajib diisi").trim(),
+  companyName: z.string().min(1, "Company name wajib diisi").trim(),
   expertise: z
     .array(
       z.object({
-        value: z.string().min(1),
+        value: z.string().min(1, "Expertise tidak boleh kosong").trim(),
       }),
     )
     .min(1, "Minimal 1 expertise"),
-  profile: z.instanceof(File, { message: "Profile wajib diisi" }).optional(),
-  // .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), "File harus berupa JPG, PNG, atau WEBP")
-  // .refine((file) => file.size <= 5 * 1024 * 1024, "Ukuran file maksimal 5MB"),
-  contributorType: z.enum(Object.values(ContributorType) as [string, ...string[]]),
+  contributorType: z.enum(Object.values(ContributorType) as [string, ...string[]], {
+    error: "Type wajib dipilih",
+  }),
+  profile: z
+    .instanceof(File)
+    .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), "File harus berupa JPG, PNG, atau WEBP")
+    .refine((file) => file.size <= 5 * 1024 * 1024, "Ukuran file maksimal 5MB"),
 });
-
 export type CreateContributorInput = z.infer<typeof createContributorSchema>;
+
+// Type update Contributor
+export const updateContributorSchema = z.object({
+  contributorName: z.string().min(1, "Nama wajib diisi").trim(),
+  jobTitle: z.string().min(1, "Job title wajib diisi").trim(),
+  companyName: z.string().min(1, "Company name wajib diisi").trim(),
+  expertise: z
+    .array(
+      z.object({
+        value: z.string().min(1, "Expertise tidak boleh kosong").trim(),
+      }),
+    )
+    .min(1, "Minimal 1 expertise"),
+  contributorType: z.enum(Object.values(ContributorType) as [string, ...string[]], {
+    error: "Type wajib dipilih",
+  }),
+  profile: z
+    .instanceof(File)
+    .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), "File harus berupa JPG, PNG, atau WEBP")
+    .refine((file) => file.size <= 5 * 1024 * 1024, "Ukuran file maksimal 5MB")
+    .optional(),
+});
+export type UpdateContributorInput = z.infer<typeof updateContributorSchema>;

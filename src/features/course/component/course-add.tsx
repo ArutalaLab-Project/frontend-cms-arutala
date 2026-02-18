@@ -95,7 +95,7 @@ export function CourseAddDialog() {
                   <SelectTrigger>
                     <SelectValue placeholder="Choose Category" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {coursescategory?.map((cat) => (
                       <SelectItem key={cat.id} value={cat.id}>
                         {cat.name}
@@ -114,7 +114,7 @@ export function CourseAddDialog() {
                   <SelectTrigger>
                     <SelectValue placeholder="Choose Field" />
                   </SelectTrigger>
-                  <SelectContent>
+                  <SelectContent position="popper">
                     {coursesfield?.map((f) => (
                       <SelectItem key={f.id} value={f.id}>
                         {f.field}
@@ -176,7 +176,7 @@ export function CourseAddDialog() {
                       <SelectTrigger>
                         <SelectValue placeholder="Choose Benefit" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="popper">
                         {coursesbenefits?.map((b) => (
                           <SelectItem key={b.id} value={b.id}>
                             {b.title}
@@ -212,7 +212,8 @@ export function CourseAddDialog() {
           {/* ================= FOOTER ================= */}
 
           <AlertDialogFooter>
-            <AlertDialogCancel size="sm"
+            <AlertDialogCancel
+              size="sm"
               onClick={() => {
                 setOpen(false);
                 form.reset();

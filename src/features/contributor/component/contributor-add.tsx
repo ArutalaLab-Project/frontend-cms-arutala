@@ -157,37 +157,27 @@ export function ContributorAddDialog() {
                   </Field>
                 )}
               />
-              {/* <Controller
-                name="expertise"
-                control={form.control}
-                render={({ field, fieldState }) => (
-                  <Field className="grid gap-1" data-invalid={fieldState.invalid}>
-                    <FieldLabel htmlFor="expertise">Expertise</FieldLabel>
-                    <Input {...field} id="expertise" aria-invalid={fieldState.invalid} autoComplete="off" />
-                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                  </Field>
-                )}
-              /> */}
               <Controller
                 name="contributorType"
                 control={form.control}
-                render={({ field }) => (
+                render={({ field, fieldState }) => (
                   <Field className="gap-1">
                     <FieldLabel>Type</FieldLabel>
                     <Select value={field.value} onValueChange={field.onChange}>
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Choose Type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="popper">
                         <SelectGroup>
                           {contributorTypeOptions.map((type) => (
                             <SelectItem value={type} key={type}>
-                              {type}
+                              {type === "INTERNAL" ? "Mentor" : "Bukan Mentor"}
                             </SelectItem>
                           ))}
                         </SelectGroup>
                       </SelectContent>
                     </Select>
+                    {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                   </Field>
                 )}
               />

@@ -8,7 +8,6 @@ import { CourseBatch } from "../../type";
 import { formatedDate } from "@/shared/utils/date";
 import { Button } from "@/components/ui/button";
 import { IconListDetails } from "@tabler/icons-react";
-import Link from "next/link";
 import { CourseBatchDeleteDialog } from "./course-batch-delete";
 import { redirect } from "next/navigation";
 

@@ -8,7 +8,7 @@ import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group"
 import { CourseDeleteDialog } from "./course-delete";
 import { IconListDetails } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import Link from "next/link";
+import { redirect } from "next/navigation";
 
 export const columns: ColumnDef<Course>[] = [
   {
@@ -46,11 +46,9 @@ export const columns: ColumnDef<Course>[] = [
     header: "Action",
     cell: ({ row }) => (
       <ButtonGroup>
-        <Link href={`/content-website/courses/${row.original.course_id}`}>
-          <Button variant="outline" size="icon-sm">
-            <IconListDetails />
-          </Button>
-        </Link>
+        <Button variant="outline" size="icon-sm" onClick={() => redirect(`/content-website/courses/${row.original.course_id}`)}>
+          <IconListDetails />
+        </Button>
         <ButtonGroupSeparator />
         <CourseDeleteDialog courseId={row.original.course_id} />
       </ButtonGroup>
