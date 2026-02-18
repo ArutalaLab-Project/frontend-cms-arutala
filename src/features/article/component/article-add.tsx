@@ -7,14 +7,7 @@ import Image from "next/image";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
-import {
-  Sheet,
-  SheetContent,
-  SheetFooter,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetFooter, SheetHeader, SheetTitle, SheetTrigger } from "@/components/ui/sheet";
 
 import { ArticleEditor, ArticleEditorHandle } from "./article-editor";
 import { useCreateArticle, useUploadArticleCover } from "../hook";
@@ -67,18 +60,14 @@ export function ArticleAddSheet() {
       const blocks = outputData.blocks.map((block) => ({
         id: block.id ?? "",
         type: block.type,
-        // eslint-disable-next-line @typescript-eslint/no-explicit-any
-        data: block.data as any,
+        data: block.data,
       })) as z.infer<typeof ContentBlock>[];
 
-      await toast.promise(
-        createArticle({ article_content_blocks: blocks }),
-        {
-          loading: status === "PUBLISHED" ? "Mempublish artikel..." : "Menyimpan draft...",
-          success: status === "PUBLISHED" ? "Artikel berhasil dipublish" : "Draft berhasil disimpan",
-          error: (err) => err.message || "Gagal menyimpan artikel",
-        },
-      );
+      await toast.promise(createArticle({ article_content_blocks: blocks }), {
+        loading: status === "PUBLISHED" ? "Mempublish artikel..." : "Menyimpan draft...",
+        success: status === "PUBLISHED" ? "Artikel berhasil dipublish" : "Draft berhasil disimpan",
+        error: (err) => err.message || "Gagal menyimpan artikel",
+      });
 
       setOpen(false);
       setCoverPreview(null);
@@ -112,34 +101,16 @@ export function ArticleAddSheet() {
             <span className="text-sm font-medium">Cover Artikel</span>
             {coverPreview ? (
               <div className="relative h-48 w-full">
-                <Image
-                  src={coverPreview}
-                  alt="cover preview"
-                  fill
-                  className="rounded-md object-cover"
-                  unoptimized
-                />
-                <button
-                  type="button"
-                  onClick={() => setCoverPreview(null)}
-                  className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80"
-                >
+                <Image src={coverPreview} alt="cover preview" fill className="rounded-md object-cover" unoptimized />
+                <button type="button" onClick={() => setCoverPreview(null)} className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80">
                   <X className="size-4" />
                 </button>
               </div>
             ) : (
               <label className="flex h-48 w-full cursor-pointer flex-col items-center justify-center gap-2 rounded-md border-2 border-dashed border-input bg-muted/30 transition hover:bg-muted/50">
                 <UploadCloud className="size-8 text-muted-foreground" />
-                <span className="text-sm text-muted-foreground">
-                  {isUploading ? "Mengupload..." : "Klik untuk upload cover"}
-                </span>
-                <input
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleCoverChange}
-                  disabled={isUploading}
-                />
+                <span className="text-sm text-muted-foreground">{isUploading ? "Mengupload..." : "Klik untuk upload cover"}</span>
+                <input type="file" accept="image/*" className="hidden" onChange={handleCoverChange} disabled={isUploading} />
               </label>
             )}
           </div>
@@ -147,13 +118,7 @@ export function ArticleAddSheet() {
           {/* Editor */}
           <div className="flex flex-col gap-2">
             <span className="text-sm font-medium">Konten Artikel</span>
-            {open && (
-              <ArticleEditor
-                ref={editorRef}
-                holder="article-add-editor"
-                onUploadImage={handleImageUpload}
-              />
-            )}
+            {open && <ArticleEditor ref={editorRef} holder="article-add-editor" onUploadImage={handleImageUpload} />}
           </div>
         </div>
 
@@ -161,17 +126,10 @@ export function ArticleAddSheet() {
           <Button variant="outline" onClick={() => setOpen(false)} disabled={isCreating}>
             Batal
           </Button>
-          <Button
-            variant="secondary"
-            onClick={() => handleSubmit("DRAFT")}
-            disabled={isCreating || isUploading}
-          >
+          <Button variant="secondary" onClick={() => handleSubmit("DRAFT")} disabled={isCreating || isUploading}>
             Simpan Draft
           </Button>
-          <Button
-            onClick={() => handleSubmit("PUBLISHED")}
-            disabled={isCreating || isUploading}
-          >
+          <Button onClick={() => handleSubmit("PUBLISHED")} disabled={isCreating || isUploading}>
             Publish
           </Button>
         </SheetFooter>
