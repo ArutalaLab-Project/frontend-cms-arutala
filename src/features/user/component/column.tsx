@@ -1,9 +1,9 @@
 import { User } from "@/features/user/type";
 import { ColumnDef } from "@tanstack/react-table";
-import { ActionTable } from "@/components/action-table";
 import { UserDeleteDialog } from "./user-delete";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { ButtonGroup } from "@/components/ui/button-group";
 
 export const column: ColumnDef<User>[] = [
   {
@@ -37,9 +37,9 @@ export const column: ColumnDef<User>[] = [
     id: "actions",
     header: "Action",
     cell: ({ row }) => (
-      <ActionTable>
+      <ButtonGroup>
         <UserDeleteDialog userId={row.original.user_id} />
-      </ActionTable>
+      </ButtonGroup>
     ),
   },
 ];

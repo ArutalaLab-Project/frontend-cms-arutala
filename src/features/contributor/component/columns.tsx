@@ -2,12 +2,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { ActionTable } from "@/components/action-table";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ContributorDeleteDialog } from "./contributor-delete";
 import { ContributorDetailDialog } from "./contributor-detail";
 import { Contributor } from "../type";
+import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
 
 export const columns: ColumnDef<Contributor>[] = [
   {
@@ -73,11 +72,11 @@ export const columns: ColumnDef<Contributor>[] = [
     id: "actions",
     header: "Action",
     cell: ({ row }) => (
-      <ActionTable>
-        {/* <ContributorDetai1lSheet contributor={row.original} /> */}
+      <ButtonGroup>
         <ContributorDetailDialog contributor={row.original} />
+        <ButtonGroupSeparator />
         <ContributorDeleteDialog contributorId={row.original.contributor_id} />
-      </ActionTable>
+      </ButtonGroup>
     ),
   },
 ];

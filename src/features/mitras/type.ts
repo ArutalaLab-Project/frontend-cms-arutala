@@ -8,13 +8,27 @@ export const mitraSchema = z.object({
 });
 
 export type Mitra = z.infer<typeof mitraSchema>;
-
 export const mitrasSchema = z.array(mitraSchema);
 
+// Type Create Mitra
 export const createMitraSchema = z.object({
-  mitraName: z.string(),
-  businessField: z.array(z.object({ value: z.string().min(1) })),
-  mitraLogo: z.instanceof(File, { message: "Profile wajib diisi" }).optional(),
+  mitraName: z.string().min(1, "Nama wajib diisi"),
+  businessField: z.array(z.object({ value: z.string().min(1, "Business field tidak boleh kosong").trim() })).min(1, "Minimal 1 Business Field"),
+  mitraLogo: z
+    .instanceof(File)
+    .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), "File harus berupa JPG, PNG, atau WEBP")
+    .refine((file) => file.size <= 5 * 1024 * 1024, "Ukuran file maksimal 5MB"),
 });
-
 export type CreateMitraInput = z.infer<typeof createMitraSchema>;
+
+// Type update Mitra
+export const updateMitraSchema = z.object({
+  mitraName: z.string().min(1, "Nama wajib diisi"),
+  businessField: z.array(z.object({ value: z.string().min(1, "Business field tidak boleh kosong").trim() })).min(1, "Minimal 1 Business Field"),
+  mitraLogo: z
+    .instanceof(File)
+    .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), "File harus berupa JPG, PNG, atau WEBP")
+    .refine((file) => file.size <= 5 * 1024 * 1024, "Ukuran file maksimal 5MB")
+    .optional(),
+});
+export type UpdateMitraInput = z.infer<typeof updateMitraSchema>;

@@ -10,7 +10,7 @@ import Image from "next/image";
 import { IconListDetails } from "@tabler/icons-react";
 import { toast } from "sonner";
 import { Textarea } from "@/components/ui/textarea";
-import { CreateTestimoniInput, createTestimoniSchema, Testimoni, TestimoniType } from "../type";
+import { Testimoni, TestimoniType, UpdateTestimoniInput, updateTestimoniSchema } from "../type";
 import { useUpdateTestimoni } from "../hook";
 
 export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
@@ -19,7 +19,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
   const testimoniCategoryOptions = Object.values(TestimoniType);
   const { mutateAsync, isPending } = useUpdateTestimoni();
 
-  const handleUpdate = async (values: CreateTestimoniInput) => {
+  const handleUpdate = async (values: UpdateTestimoniInput) => {
     const formData = new FormData();
     formData.append("authorName", values.authorName);
     formData.append("authorJobTitle", values.authorJobTitle);
@@ -48,8 +48,8 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
     setOpen(false);
   };
 
-  const form = useForm<CreateTestimoniInput>({
-    resolver: zodResolver(createTestimoniSchema),
+  const form = useForm<UpdateTestimoniInput>({
+    resolver: zodResolver(updateTestimoniSchema),
     defaultValues: {
       authorName: "",
       authorJobTitle: "",
@@ -101,17 +101,19 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
                   <div className="">
                     <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start mb-2 w-fit">
                       <FieldLabel htmlFor="profile">Profile</FieldLabel>
-                      <Input
-                        id="profile"
-                        type="file"
-                        accept="image/jpeg, image/png, image/webp"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          field.onChange(file);
-                          setPreviewProfile(URL.createObjectURL(file));
-                        }}
-                      />
+                      {!previewProfile && (
+                        <Input
+                          id="profile"
+                          type="file"
+                          accept="image/jpeg, image/png, image/webp"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            field.onChange(file);
+                            setPreviewProfile(URL.createObjectURL(file));
+                          }}
+                        />
+                      )}
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                       {previewProfile && (
                         <div className="flex items-center">
@@ -171,7 +173,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Choose Type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="popper">
                         <SelectGroup>
                           {testimoniCategoryOptions.map((type) => (
                             <SelectItem value={type} key={type}>

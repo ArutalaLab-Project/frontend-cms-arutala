@@ -2,7 +2,6 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useEffect, useState } from "react";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-
 import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -11,10 +10,8 @@ import { Badge } from "@/components/ui/badge";
 import { X } from "lucide-react";
 import Image from "next/image";
 import { IconListDetails } from "@tabler/icons-react";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-
 import { toast } from "sonner";
-import { Contributor, ContributorType, CreateContributorInput, createContributorSchema } from "../type";
+import { Contributor, ContributorType, UpdateContributorInput, updateContributorSchema } from "../type";
 import { useUpdateContributor } from "../hook";
 
 export function ContributorDetailDialog({ contributor }: { contributor: Contributor }) {
@@ -23,7 +20,7 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
   const contributorTypeOptions = Object.values(ContributorType);
   const { mutateAsync, isPending } = useUpdateContributor();
 
-  const handleUpdate = async (values: CreateContributorInput) => {
+  const handleUpdate = async (values: UpdateContributorInput) => {
     const formData = new FormData();
     formData.append("contributorName", values.contributorName);
     formData.append("jobTitle", values.jobTitle);
@@ -54,8 +51,8 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
     setOpen(false);
   };
 
-  const form = useForm<CreateContributorInput>({
-    resolver: zodResolver(createContributorSchema),
+  const form = useForm<UpdateContributorInput>({
+    resolver: zodResolver(updateContributorSchema),
     defaultValues: {
       contributorName: "",
       jobTitle: "",
@@ -93,10 +90,9 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger */}
       <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <IconListDetails className="mr-2 size-4" />
-          Detail
-        </DropdownMenuItem>
+        <Button variant="outline" size="icon-sm">
+          <IconListDetails />
+        </Button>
       </DialogTrigger>
 
       {/* Content */}
@@ -117,17 +113,20 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
                   <div className="">
                     <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start mb-2 w-fit">
                       <FieldLabel htmlFor="profile">Profile</FieldLabel>
-                      <Input
-                        id="profile"
-                        type="file"
-                        accept="image/jpeg, image/png, image/webp"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          field.onChange(file);
-                          setPreviewProfile(URL.createObjectURL(file));
-                        }}
-                      />
+                      {!previewProfile && (
+                        <Input
+                          id="profile"
+                          type="file"
+                          accept="image/jpeg, image/png, image/webp"
+                          onChange={(e) => {
+                            const file = e.target.files?.[0];
+                            if (!file) return;
+                            field.onChange(file);
+                            setPreviewProfile(URL.createObjectURL(file));
+                          }}
+                        />
+                      )}
+
                       {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                       {previewProfile && (
                         <div className="flex items-center">
@@ -186,7 +185,7 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Choose Type" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="popper">
                         <SelectGroup>
                           {contributorTypeOptions.map((type) => (
                             <SelectItem value={type} key={type}>

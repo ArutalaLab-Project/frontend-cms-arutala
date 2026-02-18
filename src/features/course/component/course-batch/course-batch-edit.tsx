@@ -138,7 +138,7 @@ export default function CourseBatchEditDialog({ batch }: { batch: CourseBatch })
 
       (payload.batchPrice as any).finalPrice = Math.max(0, finalPrice);
     }
-    console.log("payload edit Course Batch", payload);
+    // console.log("payload edit Course Batch", payload);
 
     toast.promise(
       mutateAsync({
@@ -186,7 +186,7 @@ export default function CourseBatchEditDialog({ batch }: { batch: CourseBatch })
                 <SelectTrigger>
                   <SelectValue placeholder="Pilih Instruktur" />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {contributors?.map((c) => (
                     <SelectItem key={c.contributor_id} value={c.contributor_id}>
                       {c.contributor_name}
@@ -205,7 +205,7 @@ export default function CourseBatchEditDialog({ batch }: { batch: CourseBatch })
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
-                <SelectContent>
+                <SelectContent position="popper">
                   {courseBatchStatusOptions.map((status) => (
                     <SelectItem key={status} value={status}>
                       {status.replace(/_/g, " ")}
@@ -297,7 +297,7 @@ export default function CourseBatchEditDialog({ batch }: { batch: CourseBatch })
                         {" "}
                         <SelectValue placeholder="Tanpa Diskon" />{" "}
                       </SelectTrigger>{" "}
-                      <SelectContent>
+                      <SelectContent position="popper">
                         {" "}
                         <SelectItem value="NONE">Tanpa Diskon</SelectItem> <SelectItem value="PERCENT">Persen (%)</SelectItem> <SelectItem value="FIXED">Nominal (Rp)</SelectItem>{" "}
                       </SelectContent>{" "}

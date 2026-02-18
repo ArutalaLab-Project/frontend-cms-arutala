@@ -66,11 +66,6 @@ export const columns: ColumnDef<Testimoni>[] = [
         <ButtonGroupSeparator />
         <TestimoniDeleteDialog testimoniId={row.original.testimoni_id} />
       </ButtonGroup>
-      // <ActionTable>
-      //   {/* <ContributorDetai1lSheet contributor={row.original} /> */}
-      //   <ContributorDetailDialog contributor={row.original} />
-      //   <ContributorDeleteDialog contributorId={row.original.contributor_id} />
-      // </ActionTable>
     ),
   },
 ];

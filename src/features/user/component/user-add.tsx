@@ -166,7 +166,7 @@ export function UserAddDialog() {
                       <SelectTrigger className="w-full">
                         <SelectValue placeholder="Role" />
                       </SelectTrigger>
-                      <SelectContent>
+                      <SelectContent position="popper">
                         <SelectGroup>
                           {roleOptions.map((role) => (
                             <SelectItem value={role} key={role}>
@@ -186,6 +186,7 @@ export function UserAddDialog() {
           <AlertDialogFooter className="shrink-0 flex justify-between">
             <AlertDialogCancel
               onClick={() => {
+                form.reset();
                 setOpen(false);
               }}
             >

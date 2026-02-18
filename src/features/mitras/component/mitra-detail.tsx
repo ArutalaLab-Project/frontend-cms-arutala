@@ -10,9 +10,8 @@ import { X } from "lucide-react";
 import Image from "next/image";
 import { IconListDetails } from "@tabler/icons-react";
 import { toast } from "sonner";
-
 import { AspectRatio } from "@/components/ui/aspect-ratio";
-import { CreateMitraInput, createMitraSchema, Mitra } from "../type";
+import { UpdateMitraInput, Mitra, updateMitraSchema } from "../type";
 import { useUpdateMitra } from "../hook";
 
 export function MitraDetailDialog({ mitra }: { mitra: Mitra }) {
@@ -20,7 +19,7 @@ export function MitraDetailDialog({ mitra }: { mitra: Mitra }) {
   const [previewLogo, setPreviewLogo] = useState<string | null>(mitra.mitra_logo_url);
   const { mutateAsync, isPending } = useUpdateMitra();
 
-  const handleUpdate = async (values: CreateMitraInput) => {
+  const handleUpdate = async (values: UpdateMitraInput) => {
     const formData = new FormData();
 
     formData.append("mitraName", values.mitraName);
@@ -50,8 +49,8 @@ export function MitraDetailDialog({ mitra }: { mitra: Mitra }) {
     setOpen(false);
   };
 
-  const form = useForm<CreateMitraInput>({
-    resolver: zodResolver(createMitraSchema),
+  const form = useForm<UpdateMitraInput>({
+    resolver: zodResolver(updateMitraSchema),
     defaultValues: {
       mitraName: "",
       businessField: [],
@@ -83,7 +82,7 @@ export function MitraDetailDialog({ mitra }: { mitra: Mitra }) {
     <Dialog open={open} onOpenChange={setOpen}>
       {/* Trigger */}
       <DialogTrigger asChild>
-        <Button size="icon-sm">
+        <Button variant="outline" size="icon-sm">
           <IconListDetails />
         </Button>
         {/* <DropdownMenuItem onSelect={(e) => e.preventDefault()}></DropdownMenuItem> */}
@@ -160,25 +159,27 @@ export function MitraDetailDialog({ mitra }: { mitra: Mitra }) {
                   <div className="">
                     <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start mb-2 w-fit">
                       <FieldLabel htmlFor="mitraLogo">Logo</FieldLabel>
-                      <Input
-                        id="mitraLogo"
-                        type="file"
-                        accept="image/jpeg, image/png, image/webp"
-                        onChange={(e) => {
-                          const file = e.target.files?.[0];
-                          if (!file) return;
-                          field.onChange(file);
-                          setPreviewLogo(URL.createObjectURL(file));
-                        }}
-                      />
-                      {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-                      {previewLogo && (
-                        <div className="flex items-center">
-                          <AspectRatio ratio={4 / 2} className="bg-accent rounded-lg border">
+                      <div className="flex items-center">
+                        {!previewLogo ? (
+                          <Input
+                            id="mitraLogo"
+                            type="file"
+                            accept="image/jpeg, image/png, image/webp"
+                            onChange={(e) => {
+                              const file = e.target.files?.[0];
+                              if (!file) return;
+                              field.onChange(file);
+                              setPreviewLogo(URL.createObjectURL(file));
+                            }}
+                          />
+                        ) : (
+                          <div className="flex items-center relative h-36 w-36 rounded-md overflow-hidden border">
                             <Image src={previewLogo} alt={field.name} fill className="object-contain p-2" />
-                          </AspectRatio>
-                        </div>
-                      )}
+                          </div>
+                        )}
+
+                        {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+                      </div>
                     </Field>
                   </div>
                 );
