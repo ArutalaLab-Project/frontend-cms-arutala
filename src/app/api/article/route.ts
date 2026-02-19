@@ -24,14 +24,18 @@ export async function GET() {
   }
 }
 
-export async function DELETE(
-  _req: NextRequest,
-  context: { params: Promise<{ articleId: string }> },
-) {
+export async function POST(req: NextRequest) {
   try {
-    const { articleId } = await context.params;
-    await serverFetch(`/article/${articleId}`, { method: "DELETE" });
-    return NextResponse.json({ success: true, data: null });
+    const body = await req.json();
+    const article = await serverFetch("/article", {
+      method: "POST",
+      body: JSON.stringify({
+        contentBlocks: body.contentBlocks,
+        ...(body.status ? { status: body.status } : {}),
+        ...(body.coverUrl ? { coverUrl: body.coverUrl } : {}),
+      }),
+    });
+    return NextResponse.json({ success: true, data: article });
   } catch (error) {
     if (error instanceof ApiError) {
       return NextResponse.json(

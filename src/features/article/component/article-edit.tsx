@@ -4,7 +4,6 @@ import { useRef, useMemo, useState } from "react";
 import { toast } from "sonner";
 import { UploadCloud } from "lucide-react";
 import { IconPencil } from "@tabler/icons-react";
-import Image from "next/image";
 import { z } from "zod";
 import type { OutputData } from "@editorjs/editorjs";
 
@@ -72,7 +71,8 @@ export function ArticleEditSheet({ article }: ArticleEditSheetProps) {
     formData.append("cover", file);
     try {
       const result = await uploadCover(formData);
-      return { success: 1, file: { url: result.url } };
+      return { success: 1, file: { url: result.cover_url } };
+      // return { success: 1, file: { url: result.url } };
     } catch {
       return { success: 0, file: { url: "" } };
     }
@@ -152,12 +152,11 @@ export function ArticleEditSheet({ article }: ArticleEditSheetProps) {
             <span className="text-sm font-medium">Cover Artikel</span>
             {currentCover ? (
               <div className="relative h-48 w-full">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={currentCover}
                   alt="cover"
-                  fill
-                  className="rounded-md object-cover"
-                  unoptimized
+                  className="h-full w-full rounded-md object-cover"
                 />
                 <label className="absolute bottom-2 right-2 cursor-pointer rounded-md bg-black/60 px-3 py-1 text-xs text-white hover:bg-black/80">
                   Ganti Cover

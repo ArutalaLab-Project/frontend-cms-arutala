@@ -3,7 +3,6 @@
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 import { PlusCircle, UploadCloud, X } from "lucide-react";
-import Image from "next/image";
 import { z } from "zod";
 
 import { Button } from "@/components/ui/button";
@@ -17,7 +16,7 @@ import {
 } from "@/components/ui/sheet";
 
 import { ArticleEditor, ArticleEditorHandle } from "./article-editor";
-import { useCreateArticle, useUploadArticleCover } from "../hook";
+import { useCreateArticle, useUploadArticleCover, useUploadArticleImage } from "../hook";
 import { ContentBlock } from "../type";
 
 export function ArticleAddSheet() {
@@ -28,6 +27,9 @@ export function ArticleAddSheet() {
 
   const { mutateAsync: createArticle, isPending: isCreating } = useCreateArticle();
   const { mutateAsync: uploadCover, isPending: isUploading } = useUploadArticleCover();
+  const { mutateAsync: uploadImage } = useUploadArticleImage();
+
+  const [coverUrl, setCoverUrl] = useState<string | null>(null);
 
   const handleCoverChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -38,22 +40,25 @@ export function ArticleAddSheet() {
     const formData = new FormData();
     formData.append("cover", file);
 
-    toast.promise(uploadCover(formData), {
-      loading: "Mengupload cover...",
-      success: () => "Cover berhasil diupload",
-      error: (err) => {
-        setCoverPreview(null);
-        return err.message || "Gagal mengupload cover";
-      },
-    });
+    const toastId = toast.loading("Mengupload cover...");
+    try {
+      const result = await uploadCover(formData); // await langsung, tipe aman
+      setCoverUrl(result.cover_url);
+      toast.success("Cover berhasil diupload", { id: toastId });
+    } catch (err: unknown) {
+      setCoverPreview(null);
+      setCoverUrl(null);
+      const message = err instanceof Error ? err.message : "Gagal mengupload cover";
+      toast.error(message, { id: toastId });
+    }
   };
 
   const handleImageUpload = async (file: File) => {
     const formData = new FormData();
     formData.append("cover", file);
     try {
-      const result = await uploadCover(formData);
-      return { success: 1, file: { url: result.url } };
+      const result = await uploadImage(formData);
+      return { success: 1, file: { url: result.cover_url } };
     } catch {
       return { success: 0, file: { url: "" } };
     }
@@ -72,7 +77,11 @@ export function ArticleAddSheet() {
       })) as z.infer<typeof ContentBlock>[];
 
       await toast.promise(
-        createArticle({ article_content_blocks: blocks }),
+        createArticle({
+          article_content_blocks: blocks,
+          status,
+          ...(coverUrl ? { cover_url: coverUrl } : {}),
+        }),
         {
           loading: status === "PUBLISHED" ? "Mempublish artikel..." : "Menyimpan draft...",
           success: status === "PUBLISHED" ? "Artikel berhasil dipublish" : "Draft berhasil disimpan",
@@ -89,7 +98,10 @@ export function ArticleAddSheet() {
 
   const handleOpenChange = (val: boolean) => {
     setOpen(val);
-    if (!val) setCoverPreview(null);
+    if (!val) {
+      setCoverPreview(null);
+      setCoverUrl(null); // Reset URL
+    }
   };
 
   return (
@@ -112,16 +124,18 @@ export function ArticleAddSheet() {
             <span className="text-sm font-medium">Cover Artikel</span>
             {coverPreview ? (
               <div className="relative h-48 w-full">
-                <Image
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
                   src={coverPreview}
                   alt="cover preview"
-                  fill
-                  className="rounded-md object-cover"
-                  unoptimized
+                  className="h-full w-full rounded-md object-cover"
                 />
                 <button
                   type="button"
-                  onClick={() => setCoverPreview(null)}
+                  onClick={() => {
+                    setCoverPreview(null);
+                    setCoverUrl(null); // Reset URL juga
+                  }}
                   className="absolute right-2 top-2 rounded-full bg-black/60 p-1 text-white hover:bg-black/80"
                 >
                   <X className="size-4" />

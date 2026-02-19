@@ -85,6 +85,8 @@ export type ArticleInputCover = z.infer<typeof articleInputCoverSchema>;
 
 export const articleInputSchema = z.object({
     article_content_blocks: z.array(ContentBlock),
+    status: z.enum(["DRAFT", "PUBLISHED"]).optional(),
+    cover_url: z.string().optional(),
 });
 
 export type ArticleInput = z.infer<typeof articleInputSchema>;
