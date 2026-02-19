@@ -7,6 +7,7 @@ import {
   fetchArticles,
   updateArticle,
   uploadArticleCover,
+  uploadArticleImage,
 } from "./api";
 
 export function useArticles() {
@@ -37,6 +38,12 @@ export function useCreateArticle() {
 export function useUploadArticleCover() {
   return useMutation({
     mutationFn: uploadArticleCover,
+  });
+}
+
+export function useUploadArticleImage() {
+  return useMutation({
+    mutationFn: uploadArticleImage,
   });
 }
 
