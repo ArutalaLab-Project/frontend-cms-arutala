@@ -1,10 +1,7 @@
 "use client";
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Badge } from "@/components/ui/badge";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
-
+import { ButtonGroup } from "@/components/ui/button-group";
 import { Page } from "../type";
 import { PageDeleteDialog } from "./page-delete";
 
@@ -40,15 +37,6 @@ export const columns: ColumnDef<Page>[] = [
     accessorKey: "page_slug",
     header: "Page Slug",
   },
-  // {
-  //   accessorKey: "author_company_name",
-  //   header: "Company Name",
-  // },
-  // {
-  //   accessorKey: "testimoni_content",
-  //   header: "Testimoni",
-  //   cell: ({ row }) => <div className="max-w-[320px] text-sm line-clamp-3">{row.original.testimoni_content}</div>,
-  // },
   {
     id: "actions",
     header: "Action",
@@ -56,11 +44,6 @@ export const columns: ColumnDef<Page>[] = [
       <ButtonGroup>
         <PageDeleteDialog pageId={row.original.page_id} />
       </ButtonGroup>
-      // <ActionTable>
-      //   {/* <ContributorDetai1lSheet contributor={row.original} /> */}
-      //   <ContributorDetailDialog contributor={row.original} />
-      //   <ContributorDeleteDialog contributorId={row.original.contributor_id} />
-      // </ActionTable>
     ),
   },
 ];

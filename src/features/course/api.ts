@@ -1,5 +1,5 @@
 import { clientApi } from "@/shared/lib/http/client-api";
-import { Course, CourseBatchInput, CourseBenefit, CourseCategory, CourseDetail, CourseField, CourseInput } from "./type";
+import { Course, CourseBenefit, CourseCategory, CourseDetail, CourseField, CourseInput } from "./type";
 
 export async function fetchCourses(): Promise<Course[]> {
   return clientApi.get<Course[]>("/api/courses");
@@ -33,9 +33,4 @@ export async function updateCourse(courseId: string, payload: CourseInput) {
 
 export async function deleteCourse(courseId: string) {
   return await clientApi.delete(`/api/courses/${courseId}`);
-}
-
-export async function createCourseBatch(courseId: string, payload: CourseBatchInput) {
-  const body = JSON.stringify(payload);
-  return clientApi.post<null>(`/api/courses/${courseId}/batch`, body);
 }

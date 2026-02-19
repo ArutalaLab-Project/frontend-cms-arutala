@@ -5,7 +5,6 @@ import { ArrowUpDown } from "lucide-react";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { ActionTable } from "@/components/action-table";
 import { MessageDeleteDialog } from "./message-delete";
 import { cn } from "@/shared/lib/cn";
 import Link from "next/link";
@@ -13,6 +12,8 @@ import { MessageDetailDialog } from "./message-detail";
 import { formatedDate } from "@/shared/utils/date";
 import { generateWhatsAppMessage, generateWhatsAppNumber } from "@/shared/utils/whatsapp";
 import { Message, MessageStatus } from "../type";
+import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
+import { IconBrandWhatsappFilled } from "@tabler/icons-react";
 
 export const statusColor: Record<MessageStatus, string> = {
   NEW: "bg-blue-500",
@@ -34,7 +35,6 @@ export const columns: ColumnDef<Message>[] = [
   },
   {
     accessorKey: "created_date",
-    // header: "Date",
     header: ({ column }) => {
       return (
         <Button variant="ghost" onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}>
@@ -99,12 +99,23 @@ export const columns: ColumnDef<Message>[] = [
   {
     id: "actions",
     header: "Action",
-    cell: ({ row }) => (
-      <ActionTable>
-        {/* <MessageDetailSheet message={row.original} /> */}
-        <MessageDetailDialog message={row.original} />
-        <MessageDeleteDialog messageId={row.original.message_id} />
-      </ActionTable>
-    ),
+    cell: ({ row }) => {
+      const WaPhone = generateWhatsAppNumber(row.original.sender_phone);
+      const message = generateWhatsAppMessage(row.original.sender_name);
+      return (
+        <ButtonGroup>
+          <Button size="icon-sm">
+            <Link href={`https://wa.me/${WaPhone}?text=${message}`} target="_blank" rel="noopener noreferrer">
+              <IconBrandWhatsappFilled />
+            </Link>
+          </Button>
+
+          <ButtonGroupSeparator />
+          <MessageDetailDialog message={row.original} />
+          <ButtonGroupSeparator />
+          <MessageDeleteDialog messageId={row.original.message_id} />
+        </ButtonGroup>
+      );
+    },
   },
 ];

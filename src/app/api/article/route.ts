@@ -12,15 +12,9 @@ export async function GET() {
     });
   } catch (error) {
     if (error instanceof ApiError) {
-      return NextResponse.json(
-        { success: false, message: error.message },
-        { status: error.status },
-      );
+      return NextResponse.json({ success: false, message: error.message }, { status: error.status });
     }
-    return NextResponse.json(
-      { success: false, message: "Internal Server Error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
   }
 }
 
@@ -38,14 +32,8 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ success: true, data: article });
   } catch (error) {
     if (error instanceof ApiError) {
-      return NextResponse.json(
-        { success: false, message: error.message },
-        { status: error.status },
-      );
+      return NextResponse.json({ success: false, message: error.message }, { status: error.status });
     }
-    return NextResponse.json(
-      { success: false, message: "Internal Server Error" },
-      { status: 500 },
-    );
+    return NextResponse.json({ success: false, message: "Internal Server Error" }, { status: 500 });
   }
 }

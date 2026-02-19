@@ -1,4 +1,3 @@
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
 import { IconBrandWhatsappFilled, IconListDetails } from "@tabler/icons-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -9,13 +8,13 @@ import { Badge } from "@/components/ui/badge";
 import { statusColor } from "./columns";
 import { Field, FieldLabel } from "@/components/ui/field";
 import { toast } from "sonner";
-import { Dialog, DialogClose, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { formatedDate } from "@/shared/utils/date";
 import { InputGroup, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
-
 import { generateWhatsAppMessage, generateWhatsAppNumber } from "@/shared/utils/whatsapp";
 import { useUpdateMessageStatus } from "../hook";
 import { Message, MessageStatus, messageStatusEnum } from "../type";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
+import { Separator } from "@/components/ui/separator";
 
 export function MessageDetailDialog({ message }: { message: Message }) {
   const [open, setOpen] = useState(false);
@@ -54,25 +53,25 @@ export function MessageDetailDialog({ message }: { message: Message }) {
   };
 
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <AlertDialog open={open} onOpenChange={setOpen}>
       {/* Trigger */}
-      <DialogTrigger asChild>
-        <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-          <IconListDetails className="mr-2 size-4" />
-          Detail
-        </DropdownMenuItem>
-      </DialogTrigger>
+      <AlertDialogTrigger asChild>
+        <Button variant="outline" size="icon-sm">
+          <IconListDetails />
+        </Button>
+      </AlertDialogTrigger>
 
       {/* Content */}
-      <DialogContent className="sm:max-w-3xl max-h-max h-11/12 ">
+      <AlertDialogContent className="sm:max-w-3xl max-h-max h-fit">
         {/* Header */}
-        <DialogHeader>
-          <DialogTitle>Message Detail</DialogTitle>
-          <DialogDescription>Make changes here. Click save when you&apos;re done</DialogDescription>
-        </DialogHeader>
+        <AlertDialogHeader>
+          <AlertDialogTitle>Message Detail</AlertDialogTitle>
+          <AlertDialogDescription>Make changes here. Click save when you&apos;re done</AlertDialogDescription>
+        </AlertDialogHeader>
+        <Separator />
 
         {/* Detail */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-2 no-scrollbar -mx-4 max-h-max overflow-y-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-4 no-scrollbar -mx-4 max-h-max overflow-y-auto px-4">
           <Field className="gap-1 md:col-span-2">
             <FieldLabel>
               <Badge className="px-4 py-1"> {formatedDate(message.created_date)}</Badge>
@@ -124,10 +123,10 @@ export function MessageDetailDialog({ message }: { message: Message }) {
           </Field>
 
           {/* Status */}
-          <Field>
+          <Field className="md:col-span-1 gap-1">
             <FieldLabel>Status</FieldLabel>
             <Select value={statusMessage} onValueChange={(v: MessageStatus) => setStatusMessage(v)} disabled={isPending}>
-              <SelectTrigger className="w-40">
+              <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent position="popper">
@@ -144,17 +143,17 @@ export function MessageDetailDialog({ message }: { message: Message }) {
         </div>
 
         {/* Footer */}
-        <DialogFooter className="flex w-full justify-between">
-          <DialogClose asChild>
-            <Button variant="outline" size="sm">
+        <AlertDialogFooter className="flex w-full justify-between">
+          <AlertDialogCancel asChild size="sm">
+            <Button variant="outline" onClick={() => setOpen(false)}>
               Cancel
             </Button>
-          </DialogClose>
+          </AlertDialogCancel>
           <Button type="submit" size="sm" onClick={handleUpdate} disabled={isPending}>
-            {isPending ? "Saving" : "Save changes"}
+            {isPending ? "Saving" : "Save Changes"}
           </Button>
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </AlertDialogFooter>
+      </AlertDialogContent>
+    </AlertDialog>
   );
 }

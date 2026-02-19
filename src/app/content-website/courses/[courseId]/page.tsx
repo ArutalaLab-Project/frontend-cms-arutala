@@ -1,9 +1,10 @@
 "use client";
 
-import { CourseBatchTable } from "@/features/course/component/course-batch/course-batch-table";
 import { CourseDetailCard } from "@/features/course/component/course-detail-card";
 import { useCourseDetail } from "@/features/course/hook";
 import { useParams } from "next/navigation";
+import { SkeletonCourseDetail } from "@/components/skeleton-detail-card";
+import { CourseBatchTable } from "@/features/course-batch/component/course-batch-table";
 
 export default function CourseDetailPage() {
   const params = useParams();
@@ -12,7 +13,7 @@ export default function CourseDetailPage() {
   const { data, isLoading, isError, error } = useCourseDetail(courseId);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <SkeletonCourseDetail />;
   }
 
   if (isError) {

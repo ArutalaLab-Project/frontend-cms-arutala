@@ -47,3 +47,4 @@ export async function POST(req: NextRequest, context: { params: Promise<{ course
     );
   }
 }
+

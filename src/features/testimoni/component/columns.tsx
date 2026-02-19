@@ -25,15 +25,6 @@ export const columns: ColumnDef<Testimoni>[] = [
     ),
   },
   {
-    accessorKey: "testimoni_category",
-    header: "Type",
-    cell: ({ row }) => (
-      <div className="flex gap-1 flex-wrap">
-        <Badge>{row.original.testimoni_category.toLowerCase()}</Badge>
-      </div>
-    ),
-  },
-  {
     id: "author_name",
     accessorKey: "author_name",
     header: "Name",
@@ -53,6 +44,15 @@ export const columns: ColumnDef<Testimoni>[] = [
     header: "Company Name",
   },
   {
+    accessorKey: "testimoni_category",
+    header: "Category",
+    cell: ({ row }) => (
+      <div className="flex gap-1 flex-wrap">
+        <Badge>{row.original.testimoni_category === "SISWA" ? "Siswa" : "Talent"}</Badge>
+      </div>
+    ),
+  },
+  {
     accessorKey: "testimoni_content",
     header: "Testimoni",
     cell: ({ row }) => <div className="max-w-[320px] text-sm line-clamp-3">{row.original.testimoni_content}</div>,
@@ -66,11 +66,6 @@ export const columns: ColumnDef<Testimoni>[] = [
         <ButtonGroupSeparator />
         <TestimoniDeleteDialog testimoniId={row.original.testimoni_id} />
       </ButtonGroup>
-      // <ActionTable>
-      //   {/* <ContributorDetai1lSheet contributor={row.original} /> */}
-      //   <ContributorDetailDialog contributor={row.original} />
-      //   <ContributorDeleteDialog contributorId={row.original.contributor_id} />
-      // </ActionTable>
     ),
   },
 ];

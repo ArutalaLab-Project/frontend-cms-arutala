@@ -2,12 +2,11 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
-import { ActionTable } from "@/components/action-table";
-
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { ContributorDeleteDialog } from "./contributor-delete";
 import { ContributorDetailDialog } from "./contributor-detail";
 import { Contributor } from "../type";
+import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
 
 export const columns: ColumnDef<Contributor>[] = [
   {
@@ -24,16 +23,6 @@ export const columns: ColumnDef<Contributor>[] = [
         <AvatarFallback>{row.original.contributor_name.charAt(0)}</AvatarFallback>
       </Avatar>
     ),
-  },
-  {
-    accessorKey: "contributor_type",
-    header: "Type",
-    cell: ({ row }) => (
-      <div className="flex gap-1 flex-wrap">
-        <Badge>{row.original.contributor_type === "INTERNAL" ? "Mentor" : "Bukan Mentor"}</Badge>
-      </div>
-    ),
-    filterFn: "arrIncludes",
   },
   {
     id: "contributor_name",
@@ -54,7 +43,16 @@ export const columns: ColumnDef<Contributor>[] = [
     accessorKey: "contributor_company_name",
     header: "Company Name",
   },
-
+  {
+    accessorKey: "contributor_type",
+    header: "Type",
+    cell: ({ row }) => (
+      <div className="flex gap-1 flex-wrap">
+        <Badge>{row.original.contributor_type === "INTERNAL" ? "Mentor" : "Bukan Mentor"}</Badge>
+      </div>
+    ),
+    filterFn: "arrIncludes",
+  },
   {
     accessorKey: "contributor_expertise",
     header: "Expertise",
@@ -73,11 +71,11 @@ export const columns: ColumnDef<Contributor>[] = [
     id: "actions",
     header: "Action",
     cell: ({ row }) => (
-      <ActionTable>
-        {/* <ContributorDetai1lSheet contributor={row.original} /> */}
+      <ButtonGroup>
         <ContributorDetailDialog contributor={row.original} />
+        <ButtonGroupSeparator />
         <ContributorDeleteDialog contributorId={row.original.contributor_id} />
-      </ActionTable>
+      </ButtonGroup>
     ),
   },
 ];

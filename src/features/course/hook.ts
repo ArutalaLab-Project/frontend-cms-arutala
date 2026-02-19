@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Course, CourseBatchInput, CourseBenefit, CourseCategory, CourseDetail, CourseField, CourseInput } from "./type";
-import { createCourse, createCourseBatch, deleteCourse, fetchCourseBenefit, fetchCourseById, fetchCourseCategory, fetchCourseField, fetchCourses, updateCourse } from "./api";
+import { Course, CourseBenefit, CourseCategory, CourseDetail, CourseField, CourseInput } from "./type";
+import { createCourse, deleteCourse, fetchCourseBenefit, fetchCourseById, fetchCourseCategory, fetchCourseField, fetchCourses, updateCourse } from "./api";
 
 export function useCourses() {
   return useQuery<Course[]>({
@@ -63,16 +63,6 @@ export function useDeleteCourse() {
     mutationFn: deleteCourse,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["courses"] });
-    },
-  });
-}
-
-export function useCreateCourseBatch() {
-  const queryClient = useQueryClient();
-  return useMutation({
-    mutationFn: ({ courseId, body }: { courseId: string; body: CourseBatchInput }) => createCourseBatch(courseId, body),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["coursesdetail"] });
     },
   });
 }
