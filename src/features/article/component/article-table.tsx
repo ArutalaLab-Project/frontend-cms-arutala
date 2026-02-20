@@ -7,8 +7,10 @@ import { ColumnFiltersState, SortingState } from "@tanstack/react-table";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { SkeletonTable } from "@/components/skeleton-table";
-import { ArticleAddSheet } from "./article-add";
 import { useArticles } from "../hook";
+import { Button } from "@/components/ui/button";
+import { PlusCircle } from "lucide-react";
+import { redirect } from "next/navigation";
 
 export function ArticleTable() {
   const { data: articles, isLoading } = useArticles();
@@ -79,7 +81,11 @@ export function ArticleTable() {
             </SelectContent>
           </Select>
         </div>
-        <ArticleAddSheet />
+        {/* <ArticleAddSheet /> */}
+
+        <Button size="sm" onClick={() => redirect(`/content-website/articles/create`)}>
+          <PlusCircle /> Create Article
+        </Button>
       </div>
 
       <DataTable

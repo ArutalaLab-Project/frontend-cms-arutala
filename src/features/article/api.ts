@@ -10,11 +10,7 @@ export async function fetchArticleById(articleId: string): Promise<ArticleDetail
 }
 
 export async function createArticle(payload: ArticleInput) {
-  return clientApi.post<null>("/api/article", JSON.stringify({
-    contentBlocks: payload.article_content_blocks,
-    ...(payload.status ? { status: payload.status } : {}),
-    ...(payload.cover_url ? { coverUrl: payload.cover_url } : {}),
-  }));
+  return clientApi.post<null>("/api/article", JSON.stringify(payload));
 }
 
 export async function uploadArticleCover(formData: FormData): Promise<{ cover_url: string }> {
@@ -25,10 +21,7 @@ export async function uploadArticleImage(formData: FormData): Promise<{ cover_ur
   return clientApi.post<{ cover_url: string }>("/api/article/upload", formData);
 }
 
-export async function updateArticle(
-  articleId: string,
-  payload: { contentBlocks?: ArticleInput["article_content_blocks"]; status?: "DRAFT" | "PUBLISHED" },
-) {
+export async function updateArticle(articleId: string, payload: { contentBlocks?: ArticleInput["contentBlocks"]; status?: "DRAFT" | "PUBLISHED" }) {
   return clientApi.patch(`/api/article/${articleId}`, JSON.stringify(payload));
 }
 
