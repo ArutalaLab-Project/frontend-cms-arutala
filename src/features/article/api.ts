@@ -10,11 +10,7 @@ export async function fetchArticleById(articleId: string): Promise<ArticleDetail
 }
 
 export async function createArticle(payload: ArticleInput) {
-  return clientApi.post<null>("/api/article", JSON.stringify({
-    contentBlocks: payload.article_content_blocks,
-    ...(payload.status ? { status: payload.status } : {}),
-    ...(payload.cover_url ? { coverUrl: payload.cover_url } : {}),
-  }));
+  return clientApi.post<null>("/api/article", JSON.stringify(payload));
 }
 
 export async function uploadArticleCover(formData: FormData): Promise<{ cover_url: string }> {
