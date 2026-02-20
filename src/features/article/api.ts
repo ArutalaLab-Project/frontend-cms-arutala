@@ -17,10 +17,7 @@ export async function uploadArticleCover(formData: FormData): Promise<{ url: str
   return clientApi.post<{ url: string }>("/api/article/upload", formData);
 }
 
-export async function updateArticle(
-  articleId: string,
-  payload: { contentBlocks?: ArticleInput["article_content_blocks"]; status?: "DRAFT" | "PUBLISHED" },
-) {
+export async function updateArticle(articleId: string, payload: { contentBlocks?: ArticleInput["contentBlocks"]; status?: "DRAFT" | "PUBLISHED" }) {
   return clientApi.patch(`/api/article/${articleId}`, JSON.stringify(payload));
 }
 

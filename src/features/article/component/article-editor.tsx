@@ -1,100 +1,133 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 "use client";
 
-import { useEffect, useRef, forwardRef, useImperativeHandle } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef } from "react";
+
 import type EditorJS from "@editorjs/editorjs";
 import type { OutputData } from "@editorjs/editorjs";
 
-export type ArticleEditorHandle = {
-  save: () => Promise<OutputData>;
-};
+export interface ArticleEditorHandle {
+  save: () => Promise<OutputData | undefined>;
+}
 
-type ArticleEditorProps = {
-  holder: string;
+interface ArticleEditorProps {
   defaultData?: OutputData;
   readOnly?: boolean;
-  onUploadImage?: (file: File) => Promise<{ success: number; file: { url: string } }>;
-};
+  onUploadImage?: (file: File) => Promise<string>;
+}
 
-const ArticleEditor = forwardRef<ArticleEditorHandle, ArticleEditorProps>(
-  ({ holder, defaultData, readOnly = false, onUploadImage }, ref) => {
-    const editorRef = useRef<EditorJS | null>(null);
-    const isInitialized = useRef(false);
+const ArticleEditor = forwardRef<ArticleEditorHandle, ArticleEditorProps>(({ defaultData, readOnly = false, onUploadImage }, ref) => {
+  const editorRef = useRef<EditorJS | null>(null);
+  const holderRef = useRef<HTMLDivElement | null>(null);
 
-    useImperativeHandle(ref, () => ({
-      save: async () => {
-        if (!editorRef.current) throw new Error("Editor not initialized");
-        return editorRef.current.save();
-      },
-    }));
+  useImperativeHandle(ref, () => ({
+    async save() {
+      return await editorRef.current?.save();
+    },
+  }));
 
-    useEffect(() => {
-      if (isInitialized.current) return;
-      isInitialized.current = true;
+  useEffect(() => {
+    if (!holderRef.current) return;
+    if (editorRef.current) return;
 
-      const initEditor = async () => {
-        const EditorJS = (await import("@editorjs/editorjs")).default;
-        const Header = (await import("@editorjs/header")).default;
-        const Paragraph = (await import("@editorjs/paragraph")).default;
-        const List = (await import("@editorjs/list")).default;
-        const ImageTool = (await import("@editorjs/image")).default;
-        const Quote = (await import("@editorjs/quote")).default;
-        const Code = (await import("@editorjs/code")).default;
+    const initEditor = async () => {
+      const EditorJS = (await import("@editorjs/editorjs")).default;
+      const Header = (await import("@editorjs/header")).default;
+      const Paragraph = (await import("@editorjs/paragraph")).default;
+      const ImageTool = (await import("@editorjs/image")).default;
+      const List = (await import("@editorjs/list")).default;
+      const Quote = (await import("@editorjs/quote")).default;
+      const Code = (await import("@editorjs/code")).default;
+      const Delimiter = (await import("@editorjs/delimiter")).default;
+      const InlineCode = (await import("@editorjs/inline-code")).default;
+      const Underline = (await import("@editorjs/underline")).default;
 
-        const editor = new EditorJS({
-          holder,
-          readOnly,
-          data: defaultData,
-          tools: {
-            header: {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              class: Header as any,
-              config: { levels: [1, 2, 3, 4], defaultLevel: 2 },
+      const editor = new EditorJS({
+        holder: holderRef.current!,
+        readOnly,
+        data: defaultData ?? {
+          blocks: [
+            {
+              type: "header",
+              data: {
+                text: "Masukkan Judul Artikel...",
+                level: 1,
+              },
             },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            paragraph: { class: Paragraph as any, inlineToolbar: true },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            list: { class: List as any, inlineToolbar: true },
-            image: {
-              // eslint-disable-next-line @typescript-eslint/no-explicit-any
-              class: ImageTool as any,
-              config: {
-                uploader: {
-                  uploadByFile: onUploadImage,
+            {
+              type: "paragraph",
+              data: {
+                text: "Mulai menulis artikel Anda di sini...",
+              },
+            },
+          ],
+        },
+
+        tools: {
+          header: {
+            class: Header as unknown as any,
+            inlineToolbar: true,
+            config: {
+              levels: [1, 2, 3, 4],
+              defaultLevel: 2,
+            },
+          },
+          paragraph: {
+            class: Paragraph as unknown as any,
+            inlineToolbar: true,
+          },
+          image: {
+            class: ImageTool as unknown as any,
+            config: {
+              uploader: {
+                uploadByFile: async (file: File) => {
+                  if (!onUploadImage) {
+                    throw new Error("Upload handler not provided");
+                  }
+
+                  const url = await onUploadImage(file);
+
+                  return {
+                    success: 1,
+                    file: { url },
+                  };
                 },
               },
             },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            quote: { class: Quote as any, inlineToolbar: true },
-            // eslint-disable-next-line @typescript-eslint/no-explicit-any
-            code: { class: Code as any },
           },
-          placeholder: "Mulai tulis artikel di sini...",
-        });
+          list: {
+            class: List as unknown as any,
+            inlineToolbar: true,
+          },
+          quote: {
+            class: Quote as unknown as any,
+            inlineToolbar: true,
+          },
+          code: Code as unknown as any,
+          delimiter: Delimiter as unknown as any,
+          inlineCode: InlineCode as unknown as any,
+          underline: Underline as unknown as any,
+        },
+      });
 
-        editorRef.current = editor;
-      };
+      editorRef.current = editor;
+    };
 
-      initEditor();
+    initEditor();
 
-      return () => {
-        if (editorRef.current && typeof editorRef.current.destroy === "function") {
-          editorRef.current.destroy();
-          editorRef.current = null;
-          isInitialized.current = false;
-        }
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [holder]);
+    return () => {
+      editorRef.current?.destroy();
+      editorRef.current = null;
+    };
+  }, [defaultData, readOnly, onUploadImage]);
 
-    return (
-      <div
-        id={holder}
-        className="min-h-[300px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
-      />
-    );
-  },
-);
+  return (
+    <div className="prose max-w-none dark:prose-invert">
+      <div ref={holderRef} />
+    </div>
+  );
+});
 
 ArticleEditor.displayName = "ArticleEditor";
 
-export { ArticleEditor };
+export default ArticleEditor;

@@ -8,11 +8,15 @@ import { IconListDetails } from "@tabler/icons-react";
 import Link from "next/link";
 import { Article } from "../type";
 import { ArticleDeleteDialog } from "./article-delete";
-import { ArticleEditSheet } from "./article-edit";
-import { ArticleStatusBadge } from "./article-status-badge";
+// import { ArticleEditSheet } from "./article-edit";
+// import { ArticleStatusBadge } from "./article-status-badge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
 import { formatedDate } from "@/shared/utils/date";
+import { ButtonGroup } from "@/components/ui/button-group";
+import { Button } from "@/components/ui/button";
+import { redirect } from "next/navigation";
+import { Badge } from "@/components/ui/badge";
 
 export const columns: ColumnDef<Article>[] = [
   {
@@ -23,18 +27,18 @@ export const columns: ColumnDef<Article>[] = [
   {
     accessorKey: "article_cover_url",
     header: "Cover",
-    cell: ({ row }) => (
-      // <img
-      //   src={row.original.article_cover_url}
-      //   alt={row.original.article_title}
-      //   className="h-12 w-20 rounded object-cover"
-      // />
-      <div className=" min-w-36">
-        <AspectRatio ratio={4 / 2} className="bg-accent rounded-lg border">
-          <Image src={row.original.article_cover_url} alt={row.original.article_id} fill className="object-contain" />
-        </AspectRatio>
-      </div>
-    ),
+    cell: ({ row }) => {
+      if (row.original.article_cover_url === null) {
+        return <span></span>;
+      }
+      return (
+        <div className=" min-w-36">
+          <AspectRatio ratio={4 / 2} className="bg-accent rounded-lg border">
+            <Image src={row.original.article_cover_url} alt={row.original.article_id} fill className="object-contain" />
+          </AspectRatio>
+        </div>
+      );
+    },
   },
   {
     id: "article_title",
@@ -58,23 +62,22 @@ export const columns: ColumnDef<Article>[] = [
     accessorKey: "article_status",
     header: "Status",
     enableColumnFilter: true,
-    cell: ({ row }) => <ArticleStatusBadge status={row.original.article_status} />,
+    cell: ({ row }) => <Badge>{row.original.article_status}</Badge>,
+    // cell: ({ row }) => <ArticleStatusBadge status={row.original.article_status} />,
     filterFn: "arrIncludes",
   },
   {
     id: "actions",
     header: "Action",
     cell: ({ row }) => (
-      <ActionTable>
-        <DropdownMenuItem asChild>
-          <Link href={`/content-website/articles/${row.original.article_id}`}>
-            <IconListDetails className="mr-2 size-4" />
-            Lihat Detail
-          </Link>
-        </DropdownMenuItem>
-        <ArticleEditSheet article={row.original} />
+      <ButtonGroup>
         <ArticleDeleteDialog articleId={row.original.article_id} />
-      </ActionTable>
+
+        <Button size="sm" onClick={() => redirect(`/content-website/articles/${row.original.article_id}`)}>
+          <IconListDetails />
+          Lihat Detail
+        </Button>
+      </ButtonGroup>
     ),
   },
 ];
