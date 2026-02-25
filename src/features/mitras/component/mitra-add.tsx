@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle, X } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -13,6 +13,8 @@ import { Badge } from "@/components/ui/badge";
 import { useCreateMitra } from "../hook";
 import { CreateMitraInput, createMitraSchema } from "../type";
 import { EntityDialog } from "@/components/shared/entity-dialog";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
+import { IconPlus, IconX } from "@tabler/icons-react";
 
 export function MitraAddDialog() {
   const [open, setOpen] = useState(false);
@@ -127,7 +129,7 @@ export function MitraAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="mitraName">Name</FieldLabel>
-            <Input {...field} id="mitraName" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="mitraName" placeholder="Masukan nama mitra..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -140,28 +142,49 @@ export function MitraAddDialog() {
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Business Field</FieldLabel>
             <FieldDescription>Ketik business field lalu tekan Enter</FieldDescription>
-            <Input
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  const value = e.currentTarget.value.trim();
-                  if (!value) return;
-                  append({ value });
-                  e.currentTarget.value = "";
-                }
-              }}
-            />
+            <InputGroup>
+              <InputGroupInput
+                placeholder="Masukan business field..."
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    const value = e.currentTarget.value.trim();
+                    if (!value) return;
+                    append({ value });
+                    e.currentTarget.value = "";
+                  }
+                }}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  variant="secondary"
+                  onClick={(e, value) => {
+                    e.preventDefault();
+                    const trimmedValue = value.trim();
+                    if (!trimmedValue) return;
+                    append({ value: trimmedValue });
+                    // Clear the input using the ref from context if we had access,
+                    // but here we can just find it in the DOM or let InputGroupButton handle it.
+                    // Let's improve InputGroupButton to allow clearing.
+                    const input = e.currentTarget.closest('[data-slot="input-group"]')?.querySelector("input");
+                    if (input) input.value = "";
+                  }}
+                >
+                  <IconPlus />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             <div className="flex flex-wrap gap-2 mt-2">
               {businessFields.map((item, index) => (
                 <Badge key={item.id} variant="outline" className="flex items-center gap-1.5">
                   {item.value}
                   <button type="button" onClick={() => remove(index)} className="rounded-full hover:bg-muted p-0.5">
-                    <X className="w-3 h-3" />
+                    <IconX className="size-3" />
                   </button>
                 </Badge>
               ))}
             </div>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
       />

@@ -2,17 +2,7 @@
 
 import { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
 import { cn } from "@/shared/lib/cn";
 
 interface EntityDialogProps {
@@ -62,15 +52,22 @@ export function EntityDialog({
 
           <AlertDialogFooter className="flex w-full justify-between">
             <AlertDialogCancel asChild size="sm">
-              <Button variant="outline" size="sm" onClick={() => onOpenChange(false)}>
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => {
+                  // form.reset();
+                  onOpenChange(false);
+                }}
+              >
                 {cancelLabel}
               </Button>
             </AlertDialogCancel>
-            <AlertDialogAction asChild size="sm">
-              <Button type="submit" size="sm" disabled={isPending}>
-                {isPending ? "Saving..." : saveLabel}
-              </Button>
-            </AlertDialogAction>
+            {/* <AlertDialogAction asChild size="sm"> */}
+            <Button type="submit" size="sm" disabled={isPending}>
+              {isPending ? "Saving..." : saveLabel}
+            </Button>
+            {/* </AlertDialogAction> */}
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>

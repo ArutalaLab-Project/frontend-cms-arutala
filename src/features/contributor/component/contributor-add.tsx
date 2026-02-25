@@ -3,7 +3,7 @@
 import { useRef, useState, useEffect } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle, X } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
@@ -14,6 +14,8 @@ import { Badge } from "@/components/ui/badge";
 import { ContributorType, CreateContributorInput, createContributorSchema } from "../type";
 import { useCreateContributor } from "../hook";
 import { EntityDialog } from "@/components/shared/entity-dialog";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
+import { IconPlus, IconX } from "@tabler/icons-react";
 
 export function ContributorAddDialog() {
   const [open, setOpen] = useState(false);
@@ -134,7 +136,7 @@ export function ContributorAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="contributorName">Name</FieldLabel>
-            <Input {...field} id="contributorName" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="contributorName" placeholder="Masukan nama..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -148,7 +150,7 @@ export function ContributorAddDialog() {
             <FieldLabel>Type</FieldLabel>
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Choose Type" />
+                <SelectValue placeholder="Pilih tipe contributor..." />
               </SelectTrigger>
               <SelectContent position="popper">
                 <SelectGroup>
@@ -171,7 +173,7 @@ export function ContributorAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="jobTitle">Job Title</FieldLabel>
-            <Input {...field} id="jobTitle" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="jobTitle" placeholder="Masukan job title..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -183,7 +185,7 @@ export function ContributorAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="companyName">Company Name</FieldLabel>
-            <Input {...field} id="companyName" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="companyName" placeholder="Masukan nama perusahaan..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -196,28 +198,46 @@ export function ContributorAddDialog() {
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Expertise</FieldLabel>
             <FieldDescription>Ketik expertise lalu tekan Enter</FieldDescription>
-            <Input
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  e.preventDefault();
-                  const value = e.currentTarget.value.trim();
-                  if (!value) return;
-                  append({ value });
-                  e.currentTarget.value = "";
-                }
-              }}
-            />
+            <InputGroup>
+              <InputGroupInput
+                placeholder="Masukan expertise..."
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    const value = e.currentTarget.value.trim();
+                    if (!value) return;
+                    append({ value });
+                    e.currentTarget.value = "";
+                  }
+                }}
+              />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton
+                  variant="secondary"
+                  onClick={(e, value) => {
+                    e.preventDefault();
+                    const trimmedValue = value.trim();
+                    if (!trimmedValue) return;
+                    append({ value: trimmedValue });
+                    const input = e.currentTarget.closest('[data-slot="input-group"]')?.querySelector("input");
+                    if (input) input.value = "";
+                  }}
+                >
+                  <IconPlus />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             <div className="flex flex-wrap gap-2 mt-2">
               {expertiseFields.map((item, index) => (
                 <Badge key={item.id} variant="outline" className="flex items-center gap-1.5">
                   {item.value}
                   <button type="button" onClick={() => remove(index)} className="rounded-full hover:bg-muted p-0.5">
-                    <X className="w-3 h-3" />
+                    <IconX className="size-3" />
                   </button>
                 </Badge>
               ))}
             </div>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
       />

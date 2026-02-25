@@ -85,7 +85,7 @@ export function CourseForm({ initialData, onSubmit, isPending, submitLabel = "Sa
           render={({ field, fieldState }) => (
             <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="courseTitle">Title</FieldLabel>
-              <Input {...field} id="courseTitle" aria-invalid={fieldState.invalid} autoComplete="off" />
+              <Input {...field} id="courseTitle" placeholder="Masukan judul kursus..." aria-invalid={fieldState.invalid} autoComplete="off" />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -99,7 +99,7 @@ export function CourseForm({ initialData, onSubmit, isPending, submitLabel = "Sa
               <FieldLabel>Category</FieldLabel>
               <Select value={initialData?.courseCategoryId || field.value} onValueChange={field.onChange}>
                 <SelectTrigger className={cn("md:col-span-1 gap-1", fieldState.invalid && "border-destructive")}>
-                  <SelectValue placeholder="Choose Category" />
+                  <SelectValue placeholder="Pilih kategori..." />
                 </SelectTrigger>
                 <SelectContent position="popper">
                   {coursescategory?.map((cat) => (
@@ -122,7 +122,7 @@ export function CourseForm({ initialData, onSubmit, isPending, submitLabel = "Sa
               <FieldLabel>Field</FieldLabel>
               <Select value={initialData?.courseFieldId || field.value} onValueChange={field.onChange}>
                 <SelectTrigger className={cn("md:col-span-1 gap-1", fieldState.invalid && "border-destructive")}>
-                  <SelectValue placeholder="Choose Field" />
+                  <SelectValue placeholder="Pilih bidang..." />
                 </SelectTrigger>
                 <SelectContent position="popper">
                   {coursesfield?.map((f) => (
@@ -143,7 +143,7 @@ export function CourseForm({ initialData, onSubmit, isPending, submitLabel = "Sa
           render={({ field, fieldState }) => (
             <Field className="md:col-span-4 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="courseDescription">Description</FieldLabel>
-              <Textarea {...field} id="courseDescription" aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20" />
+              <Textarea {...field} id="courseDescription" placeholder="Masukan deskripsi kursus..." aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20" />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -170,7 +170,7 @@ export function CourseForm({ initialData, onSubmit, isPending, submitLabel = "Sa
                             <FieldLabel>Benefit - {index + 1}</FieldLabel>
                             <Select value={field.value} onValueChange={field.onChange}>
                               <SelectTrigger>
-                                <SelectValue placeholder="Choose Benefit" />
+                                <SelectValue placeholder="Pilih benefit..." />
                               </SelectTrigger>
                               <SelectContent position="popper">
                                 {coursesbenefits
@@ -236,7 +236,7 @@ export function CourseForm({ initialData, onSubmit, isPending, submitLabel = "Sa
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel>Title {index + 1}</FieldLabel>
-                              <Input {...field} placeholder="Material title" />
+                              <Input {...field} placeholder="Masukan judul materi..." />
                               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                           )}
@@ -247,7 +247,7 @@ export function CourseForm({ initialData, onSubmit, isPending, submitLabel = "Sa
                           render={({ field, fieldState }) => (
                             <Field className="md:col-span-2" data-invalid={fieldState.invalid}>
                               <FieldLabel>Description {index + 1}</FieldLabel>
-                              <Textarea {...field} placeholder="Material description" />
+                              <Textarea {...field} placeholder="Masukan deskripsi materi..." />
                               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                           )}

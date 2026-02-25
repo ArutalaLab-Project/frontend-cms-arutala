@@ -65,7 +65,7 @@ export function SeoEditDialog({ seo, seoId }: { seo: SeoInput; seoId: string }) 
         render={({ field, fieldState }) => (
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="metaTitle">Meta Title</FieldLabel>
-            <Input {...field} id="metaTitle" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="metaTitle" placeholder="Masukan meta title..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -76,7 +76,7 @@ export function SeoEditDialog({ seo, seoId }: { seo: SeoInput; seoId: string }) 
         render={({ field, fieldState }) => (
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="metaDescription">Meta Description</FieldLabel>
-            <Textarea {...field} id="metaDescription" aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20" />
+            <Textarea {...field} id="metaDescription" placeholder="Masukan meta description..." aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}

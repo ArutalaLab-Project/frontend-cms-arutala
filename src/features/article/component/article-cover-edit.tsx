@@ -133,7 +133,7 @@ export function ArticleCoverEditDialog({ articleDetail }: { articleDetail: Artic
               render={({ field, fieldState }) => (
                 <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="cover_description">Description</FieldLabel>
-                  <Textarea {...field} id="cover_description" aria-invalid={fieldState.invalid} autoComplete="off" className="w-full min-h-20" />
+                  <Textarea {...field} id="cover_description" placeholder="Masukan deskripsi cover..." aria-invalid={fieldState.invalid} autoComplete="off" className="w-full min-h-20" />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}

@@ -122,7 +122,7 @@ export function UserAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="full-name">Full Name</FieldLabel>
-            <Input {...field} id="full-name" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="full-name" placeholder="Masukan nama lengkap..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -134,7 +134,7 @@ export function UserAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="username">Username</FieldLabel>
-            <Input {...field} id="username" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="username" placeholder="Masukan username..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -146,7 +146,7 @@ export function UserAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="password">Password</FieldLabel>
-            <Input {...field} id="password" type="password" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="password" type="password" placeholder="Masukan password..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -158,7 +158,7 @@ export function UserAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
-            <Input {...field} id="confirm-password" type="password" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="confirm-password" type="password" placeholder="Konfirmasi password..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -172,7 +172,7 @@ export function UserAddDialog() {
             <FieldLabel>Role</FieldLabel>
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger>
-                <SelectValue placeholder="Role" />
+                <SelectValue placeholder="Pilih role user..." />
               </SelectTrigger>
               <SelectContent position="popper">
                 <SelectGroup>
