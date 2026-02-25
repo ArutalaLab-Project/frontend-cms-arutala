@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import { useEffect, useRef, useState } from "react";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { AlertDialog, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle, AlertDialogTrigger } from "@/components/ui/alert-dialog";
-import { PlusCircle} from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import Image from "next/image";
@@ -12,13 +12,12 @@ import { articleCoverInputSchema, ArticleCoverInputType } from "../type";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateArticleCover } from "../hook";
 
-
-export function ArticleCoverAddDialog({articleId}: {articleId: string}) {
+export function ArticleCoverAddDialog({ articleId }: { articleId: string }) {
   const [open, setOpen] = useState(false);
   const [previewLogo, setPreviewLogo] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const { mutateAsync, isPending } = useCreateArticleCover(articleId)
+  const { mutateAsync, isPending } = useCreateArticleCover(articleId);
 
   const handleCreate = async (values: ArticleCoverInputType) => {
     const formData = new FormData();
@@ -128,13 +127,11 @@ export function ArticleCoverAddDialog({articleId}: {articleId: string}) {
               render={({ field, fieldState }) => (
                 <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
                   <FieldLabel htmlFor="cover_description">Description</FieldLabel>
-                  <Textarea {...field} id="cover_description" aria-invalid={fieldState.invalid} autoComplete="off" className="w-full min-h-20"  />
+                  <Textarea {...field} id="cover_description" placeholder="Masukan deskripsi cover..." aria-invalid={fieldState.invalid} autoComplete="off" className="w-full min-h-20" />
                   {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                 </Field>
               )}
             />
-
-          
           </div>
 
           {/* Footer */}
@@ -154,7 +151,6 @@ export function ArticleCoverAddDialog({articleId}: {articleId: string}) {
             <Button type="submit" size="sm" disabled={isPending}>
               {isPending ? "Creating.." : "Create Cover Article"}
             </Button>
-            
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>

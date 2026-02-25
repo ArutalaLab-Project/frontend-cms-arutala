@@ -114,7 +114,7 @@ export function CourseBatchForm({ initialData, onSubmit, isPending, submitLabel 
           render={({ field, fieldState }) => (
             <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel>Batch Name</FieldLabel>
-              <Input {...field} placeholder="Batch name" aria-invalid={fieldState.invalid} />
+              <Input {...field} placeholder="Masukan nama batch..." aria-invalid={fieldState.invalid} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -129,7 +129,7 @@ export function CourseBatchForm({ initialData, onSubmit, isPending, submitLabel 
               <FieldLabel>Instruktur</FieldLabel>
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className={fieldState.invalid ? "border-destructive" : ""}>
-                  <SelectValue placeholder="Pilih Instruktur" />
+                  <SelectValue placeholder="Pilih instruktur..." />
                 </SelectTrigger>
                 <SelectContent position="popper">
                   {contributors?.map((c) => (
@@ -153,7 +153,7 @@ export function CourseBatchForm({ initialData, onSubmit, isPending, submitLabel 
               <FieldLabel>Status</FieldLabel>
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className={fieldState.invalid ? "border-destructive" : ""}>
-                  <SelectValue placeholder="Pilih Status" />
+                  <SelectValue placeholder="Pilih status batch..." />
                 </SelectTrigger>
                 <SelectContent position="popper">
                   {Object.values(CourseBatchStatus).map((status) => (
@@ -232,7 +232,7 @@ export function CourseBatchForm({ initialData, onSubmit, isPending, submitLabel 
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel>Topic - {index + 1}</FieldLabel>
-                              <Input {...field} placeholder="Enter topic" aria-invalid={fieldState.invalid} />
+                              <Input {...field} placeholder="Masukan topik sesi..." aria-invalid={fieldState.invalid} />
                               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                           )}
@@ -355,7 +355,7 @@ export function CourseBatchForm({ initialData, onSubmit, isPending, submitLabel 
                             }}
                           >
                             <SelectTrigger className={fieldState.invalid ? "border-destructive" : ""}>
-                              <SelectValue placeholder="Tanpa Diskon" />
+                              <SelectValue placeholder="Pilih tipe diskon..." />
                             </SelectTrigger>
                             <SelectContent position="popper">
                               <SelectItem value="NONE">Tanpa Diskon</SelectItem>

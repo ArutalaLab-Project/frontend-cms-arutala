@@ -146,7 +146,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="authorName">Name</FieldLabel>
-            <Input {...field} id="authorName" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="authorName" placeholder="Masukan nama..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -160,7 +160,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
             <FieldLabel>Type</FieldLabel>
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Choose Type" />
+                <SelectValue placeholder="Pilih kategori testimoni..." />
               </SelectTrigger>
               <SelectContent position="popper">
                 <SelectGroup>
@@ -181,7 +181,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="authorJobTitle">Job Title</FieldLabel>
-            <Input {...field} id="authorJobTitle" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="authorJobTitle" placeholder="Masukan job title..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -192,7 +192,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="authorCompanyName">Company Name</FieldLabel>
-            <Input {...field} id="authorCompanyName" aria-invalid={fieldState.invalid} autoComplete="off" />
+            <Input {...field} id="authorCompanyName" placeholder="Masukan nama perusahaan..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -204,7 +204,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="testimoniContent">Testimoni</FieldLabel>
-            <Textarea {...field} id="testimoniContent" aria-invalid={fieldState.invalid} autoComplete="off" className="w-full min-h-20" />
+            <Textarea {...field} id="testimoniContent" placeholder="Masukan konten testimoni..." aria-invalid={fieldState.invalid} autoComplete="off" className="w-full min-h-20" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}

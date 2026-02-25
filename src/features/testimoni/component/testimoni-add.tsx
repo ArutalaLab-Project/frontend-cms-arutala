@@ -134,7 +134,7 @@ export function TestimoniAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Name</FieldLabel>
-            <Input {...field} className="w-full" />
+            <Input {...field} placeholder="Masukan nama..." className="w-full" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -150,7 +150,7 @@ export function TestimoniAddDialog() {
 
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Choose Category" />
+                <SelectValue placeholder="Pilih kategori testimoni..." />
               </SelectTrigger>
 
               <SelectContent position="popper">
@@ -176,7 +176,7 @@ export function TestimoniAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Job Title</FieldLabel>
-            <Input {...field} className="w-full" />
+            <Input {...field} placeholder="Masukan job title..." className="w-full" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -189,7 +189,7 @@ export function TestimoniAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Company Name</FieldLabel>
-            <Input {...field} className="w-full" />
+            <Input {...field} placeholder="Masukan nama perusahaan..." className="w-full" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -201,7 +201,7 @@ export function TestimoniAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Testimoni</FieldLabel>
-            <Textarea {...field} className="w-full min-h-20" />
+            <Textarea {...field} placeholder="Masukan konten testimoni..." className="w-full min-h-20" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
