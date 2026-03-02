@@ -26,6 +26,8 @@ export const courseBatch = z.object({
   status: z.string(),
   poster_url: z.string(),
 
+  registration_url: z.string(),
+
   registration_start: z.string(),
   registration_end: z.string(),
 
@@ -131,6 +133,8 @@ export const courseBatchInputSchema = z
     batchName: z.string().min(5, "Nama batch minimal 5 karakter").max(255, "Nama batch maksimal 255 karakter"),
 
     contributorId: z.string().uuid("Contributor harus diisi"),
+
+    registrationUrl: z.string().url("URL registrasi harus diisi"),
 
     registrationStart: z.string().regex(dateRegex, "Tanggal mulai registrasi harus diisi"),
 

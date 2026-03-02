@@ -35,6 +35,7 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
     defaultValues: {
       courseTitle: "",
       courseDescription: "",
+      courseHeadline: "",
       courseCategoryId: "",
       courseFieldId: "",
       isDisplayed: true,
@@ -147,7 +148,7 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
             <Field className="md:col-span-4 gap-1 flex-row items-center justify-between rounded-lg border p-3" data-invalid={fieldState.invalid}>
               <div className="space-y-0.5">
                 <FieldLabel>Status</FieldLabel>
-                <div className="text-[0.8rem] text-muted-foreground">Tentukan apakah Course ini akan ditampilkan atau disembunyikan pada Landing Page.</div>
+                <div className="text-[0.8rem] text-accent-700 font-medium">Unpublished/Published</div>
               </div>
               <Switch checked={field.value} onCheckedChange={field.onChange} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -162,6 +163,18 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
             <Field className="md:col-span-4 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="courseDescription">Description</FieldLabel>
               <Textarea {...field} id="courseDescription" placeholder="Masukan deskripsi kursus..." aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20" />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+        {/* Headline */}
+        <Controller
+          name="courseHeadline"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field className="md:col-span-4 gap-1" data-invalid={fieldState.invalid}>
+              <FieldLabel htmlFor="courseHeadline">Headline</FieldLabel>
+              <Textarea {...field} id="courseHeadline" placeholder="Masukan headline kursus..." aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20" />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}

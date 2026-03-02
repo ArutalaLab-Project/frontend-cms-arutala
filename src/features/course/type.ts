@@ -14,6 +14,7 @@ export const courseSchema = z.object({
   course_id: z.string(),
   course_title: z.string(),
   course_description: z.string(),
+  course_headline: z.string(),
   course_category_name: z.string(),
   course_field_name: z.string(),
   is_displayed: z.boolean(),
@@ -31,10 +32,9 @@ export const courseDetailSchema = z.object({
   course_id: z.string(),
   course_title: z.string(),
   course_description: z.string(),
+  course_headline: z.string(),
   course_category_name: z.string(),
   course_field_name: z.string(),
-  is_displayed: z.boolean(),
-
   courseBenefit: z.array(
     z.object({
       title: z.string(),
@@ -48,6 +48,7 @@ export const courseDetailSchema = z.object({
       description: z.string(),
     }),
   ),
+  is_displayed: z.boolean(),
 
   courseBatch: z.array(courseBatch),
 });
@@ -88,7 +89,7 @@ export const courseInputSchema = z
   .object({
     courseTitle: z.string().min(5, "Title minimal 5 karakter").trim(),
     courseDescription: z.string().min(50, "Deskripsi minimal 50 karakter").trim(),
-
+    courseHeadline: z.string().min(5, "Headline minimal 5 karakter").trim(),
     courseCategoryId: z.string().min(1, "Category wajib dipilih").trim(),
     courseFieldId: z.string().min(1, "Field wajib dipilih"),
     isDisplayed: z.boolean(),

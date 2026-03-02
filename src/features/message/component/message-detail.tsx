@@ -63,7 +63,7 @@ export function MessageDetailDialog({ message }: { message: Message }) {
       </AlertDialogTrigger>
 
       {/* Content */}
-      <AlertDialogContent className="sm:max-w-3xl max-h-max h-fit">
+      <AlertDialogContent className="sm:max-w-3xl max-h-max h-fit max-w-3xl!">
         {/* Header */}
         <AlertDialogHeader>
           <AlertDialogTitle>Message Detail</AlertDialogTitle>
@@ -131,7 +131,6 @@ export function MessageDetailDialog({ message }: { message: Message }) {
                 </a>
               </InputGroupButton>
             </InputGroup>
-            {/* <Input value={message.sender_phone} disabled /> */}
           </Field>
 
           {/* Subject */}
@@ -150,7 +149,7 @@ export function MessageDetailDialog({ message }: { message: Message }) {
           {/* Message */}
           <Field className="md:col-span-2 gap-1">
             <FieldLabel>Message</FieldLabel>
-            <Textarea value={message.message_body} disabled className="h-fit" />
+            <Textarea value={message.message_body} disabled className="h-32" />
           </Field>
         </div>
 

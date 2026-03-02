@@ -40,7 +40,6 @@ export async function PATCH(req: NextRequest, context: { params: Promise<{ cours
   try {
     const { courseId, batchId } = await context.params;
     const body = await req.json();
-    console.log(body);
 
     await serverFetch(`/courses/${courseId}/batch/${batchId}`, {
       method: "PATCH",

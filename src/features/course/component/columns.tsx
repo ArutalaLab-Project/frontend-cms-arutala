@@ -53,6 +53,16 @@ export const columns: ColumnDef<Course>[] = [
     header: "Field",
   },
   {
+    accessorKey: "is_displayed",
+    header: "Status",
+    enableColumnFilter: true,
+    cell: ({ row }) => <Badge className={row.original.is_displayed ? "bg-success" : "bg-destructive"}>{row.original.is_displayed ? "Published" : "Unpublished"}</Badge>,
+    filterFn: (row, columnId, value) => {
+      if (value === null || value === undefined) return true;
+      return String(row.getValue(columnId)) === String(value);
+    },
+  },
+  {
     id: "next_batch",
     header: "Next Batch",
     cell: ({ row }) => {
@@ -90,16 +100,6 @@ export const columns: ColumnDef<Course>[] = [
           </div>
         </div>
       );
-    },
-  },
-  {
-    accessorKey: "is_displayed",
-    header: "Status",
-    enableColumnFilter: true,
-    cell: ({ row }) => <Badge className={row.original.is_displayed ? "bg-success" : "bg-destructive"}>{row.original.is_displayed ? "Published" : "Unpublished"}</Badge>,
-    filterFn: (row, columnId, value) => {
-      if (value === null || value === undefined) return true;
-      return String(row.getValue(columnId)) === String(value);
     },
   },
   {

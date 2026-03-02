@@ -34,6 +34,7 @@ export default function CourseBatchEditPage() {
       batchName: batch.name,
       contributorId: batch.instructor_id ?? "",
       batchStatus: batch.batch_status as CourseBatchStatus,
+      registrationUrl: batch.registration_url,
       registrationStart: toDateOnly(batch.registration_start),
       registrationEnd: toDateOnly(batch.registration_end),
       startDate: toDateOnly(batch.start_date),

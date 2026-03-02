@@ -99,6 +99,8 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
           </Field>
         )}
       />
+
+      {/* Author */}
       <Controller
         name="authorName"
         control={form.control}
@@ -111,6 +113,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
         )}
       />
 
+      {/* Category */}
       <Controller
         name="testimoniCategory"
         control={form.control}
@@ -134,6 +137,8 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
           </Field>
         )}
       />
+
+      {/* Job Title */}
       <Controller
         name="authorJobTitle"
         control={form.control}
@@ -145,6 +150,8 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
           </Field>
         )}
       />
+
+      {/* Company Name */}
       <Controller
         name="authorCompanyName"
         control={form.control}
@@ -157,13 +164,14 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
         )}
       />
 
+      {/* Testimoni Content */}
       <Controller
         name="testimoniContent"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="testimoniContent">Testimoni</FieldLabel>
-            <Textarea {...field} id="testimoniContent" placeholder="Masukan konten testimoni..." aria-invalid={fieldState.invalid} autoComplete="off" className="w-full min-h-20" />
+            <Textarea {...field} id="testimoniContent" placeholder="Masukan konten testimoni..." aria-invalid={fieldState.invalid} autoComplete="off" className="w-full min-h-20 h-32" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
