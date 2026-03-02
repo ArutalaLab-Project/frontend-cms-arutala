@@ -201,7 +201,7 @@ export function TestimoniAddDialog() {
         render={({ field, fieldState }) => (
           <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Testimoni</FieldLabel>
-            <Textarea {...field} placeholder="Masukan konten testimoni..." className="w-full min-h-20" />
+            <Textarea {...field} placeholder="Masukan konten testimoni..." className="w-full min-h-20 h-32" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}

@@ -33,6 +33,7 @@ export default function CourseEditPage({ params }: { params: Promise<{ courseId:
       courseTitle: course.course_title,
       courseDescription: course.course_description,
       courseCategoryId: categoryId ?? "",
+      courseHeadline: course.course_headline,
       courseFieldId: fieldId ?? "",
       isDisplayed: course.is_displayed,
       courseBenefits:

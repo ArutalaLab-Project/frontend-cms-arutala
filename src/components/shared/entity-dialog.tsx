@@ -41,7 +41,7 @@ export function EntityDialog({
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       {trigger && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
-      <AlertDialogContent className={cn("sm:max-w-5xl max-h-max h-fit", className)}>
+      <AlertDialogContent className={cn("sm:max-w-5xl max-h-max h-fit max-w-3xl!", className)}>
         <AlertDialogHeader className="shrink-0">
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>

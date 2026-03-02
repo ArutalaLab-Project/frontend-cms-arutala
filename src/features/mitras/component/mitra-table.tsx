@@ -24,8 +24,6 @@ export function MitraTable() {
     return getUniqueOptions(mitras, "is_displayed", (val) => (val ? "Published" : "Unpublished"));
   }, [mitras]);
 
-  console.log(mitras);
-
   return (
     <div className="space-y-4">
       <div className=" flex justify-between  px-8">

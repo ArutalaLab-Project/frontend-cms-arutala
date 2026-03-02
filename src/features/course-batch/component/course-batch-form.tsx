@@ -65,7 +65,8 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
     values: initialData || {
       batchName: "",
       contributorId: "",
-      batchStatus: "",
+      batchStatus: CourseBatchStatus.DRAFT,
+      registrationUrl: "",
       registrationStart: "",
       registrationEnd: "",
       startDate: "",
@@ -182,12 +183,25 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           />
         )}
 
+        {/* Registration URL */}
+        <Controller
+          name="registrationUrl"
+          control={form.control}
+          render={({ field, fieldState }) => (
+            <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+              <FieldLabel>Registration URL</FieldLabel>
+              <Input {...field} placeholder="Masukan URL registrasi..." aria-invalid={fieldState.invalid} />
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+            </Field>
+          )}
+        />
+
         {/* Registration Period */}
         <Controller
           name="registrationStart"
           control={form.control}
           render={({}) => (
-            <Field className="md:col-span-2 gap-1">
+            <Field className="md:col-span-1 gap-1">
               <FieldLabel>Periode Pendaftaran</FieldLabel>
               <RangeDatePicker
                 value={{
@@ -209,7 +223,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           name="startDate"
           control={form.control}
           render={({}) => (
-            <Field className="md:col-span-2 gap-1">
+            <Field className="md:col-span-1 gap-1">
               <FieldLabel>Periode Pelaksanaan</FieldLabel>
               <RangeDatePicker
                 value={{

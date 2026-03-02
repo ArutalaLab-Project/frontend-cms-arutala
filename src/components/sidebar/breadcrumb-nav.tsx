@@ -25,7 +25,7 @@ export function BreadcrumbNav() {
       <BreadcrumbList>
         <BreadcrumbItem>
           <BreadcrumbLink asChild>
-            <Link href="/dashboard">Home</Link>
+            <Link href="/general/dashboard">Home</Link>
           </BreadcrumbLink>
         </BreadcrumbItem>
         {breadcrumbs.length > 0 && <BreadcrumbSeparator />}

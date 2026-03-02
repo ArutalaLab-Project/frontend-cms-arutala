@@ -29,7 +29,6 @@ export function CourseTable() {
   const statusOptions = useMemo(() => {
     return getUniqueOptions(courses, "is_displayed", (status) => (status ? "Published" : "Unpublished"));
   }, [courses]);
-  console.log(courses);
 
   return (
     <div className="space-y-4">

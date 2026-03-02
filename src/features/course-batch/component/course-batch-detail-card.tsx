@@ -12,6 +12,7 @@ import { IconCircleArrowLeft, IconPencil } from "@tabler/icons-react";
 import { formatSnakeCaseToTitle } from "@/shared/utils/string";
 import { cn } from "@/shared/lib/cn";
 import { StatusColorCoursebatch } from "./columns";
+import Link from "next/link";
 
 type CourseDetailCardProps = {
   courseBatchDetail: Partial<CourseBatch>;
@@ -26,6 +27,7 @@ export function CourseBatchDetailCard({ courseBatchDetail }: CourseDetailCardPro
     name,
     batch_status,
     poster_url,
+    registration_url,
     registration_start,
     registration_end,
     start_date,
@@ -76,6 +78,12 @@ export function CourseBatchDetailCard({ courseBatchDetail }: CourseDetailCardPro
           <CourseBatchUpload posterUrl={poster_url || undefined} courseId={courseId} batchId={courseBatchId} />
 
           <div className="space-y-3 text-sm">
+            <div>
+              <p className="text-muted-foreground text-sm">URL Pendaftaran</p>
+              <Button variant="link" size="sm" className="items-start pl-0">
+                <Link href={registration_url!}>{registration_url}</Link>
+              </Button>
+            </div>
             <div>
               <p className="text-muted-foreground">Pendaftaran</p>
               <p className="font-medium">

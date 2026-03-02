@@ -9,11 +9,11 @@ export function CourseBatchDeleteDialog({ courseId, batchId }: { courseId: strin
       variables={{ courseId, batchId }}
       onDelete={mutateAsync}
       isPending={isPending}
-      title="Delete this contributor"
-      description="Apakah kamu yakin akan menghapus contributor ini?"
-      loadingMessage="Menghapus contributor..."
-      successMessage="Contributor berhasil dihapus"
-      errorMessage="Gagal menghapus contributor"
+      title="Delete this course batch"
+      description="Apakah kamu yakin akan menghapus course batch ini?"
+      loadingMessage="Menghapus course batch..."
+      successMessage="Course batch berhasil dihapus"
+      errorMessage="Gagal menghapus course batch"
     />
   );
 }
