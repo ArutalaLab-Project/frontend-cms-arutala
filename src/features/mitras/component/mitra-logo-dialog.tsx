@@ -43,7 +43,8 @@ export function MitraLogoDialog({ mitra }: { mitra: Mitra }) {
       }),
       {
         loading: "Updating logo...",
-        success: () => {
+        success: (res) => {
+          console.log(res);
           setOpen(false);
           return "Logo mitra berhasil diperbarui";
         },
@@ -69,7 +70,8 @@ export function MitraLogoDialog({ mitra }: { mitra: Mitra }) {
       isPending={isPending}
       saveLabel="Update Logo"
       onSubmit={form.handleSubmit(handleUpdateLogo)}
-      className="sm:max-w-md"
+      className="sm:max-w-md max-w-md!"
+      contentClassName="!grid-cols-1"
       trigger={
         <div className="w-full max-w-sm cursor-pointer hover:opacity-80 transition-opacity">
           <AspectRatio ratio={4 / 2} className="bg-accent rounded-lg border overflow-hidden">
@@ -83,7 +85,7 @@ export function MitraLogoDialog({ mitra }: { mitra: Mitra }) {
         control={form.control}
         render={({ field, fieldState }) => (
           <div className="flex flex-col items-center gap-4 py-4">
-            <Field data-invalid={fieldState.invalid} className="w-full flex flex-col items-center gap-4">
+            <Field data-invalid={fieldState.invalid} className="w-full flex flex-col items-center gap-3">
               <FieldLabel htmlFor="mitraLogo" className="sr-only">
                 Logo Mitra
               </FieldLabel>
@@ -103,7 +105,7 @@ export function MitraLogoDialog({ mitra }: { mitra: Mitra }) {
                 }}
               />
 
-              <div className="relative h-48 w-full rounded-md overflow-hidden border bg-muted">
+              <div className="relative h-60 w-full rounded-md overflow-hidden border bg-muted">
                 {previewLogo ? (
                   <Image src={previewLogo} alt="preview-logo" fill unoptimized className="object-contain p-4" />
                 ) : (

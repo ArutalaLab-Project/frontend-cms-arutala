@@ -80,7 +80,7 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
       isPending={isPending}
       saveLabel="Update"
       onSubmit={form.handleSubmit(handleUpdate)}
-      className="sm:max-w-3xl"
+      className="sm:max-w-3xl max-w-xl!"
       trigger={
         <Button variant="outline" size="icon-sm">
           <IconListDetails className="h-4 w-4" />
@@ -92,9 +92,9 @@ export function TestimoniDetailDialog({ testimoni }: { testimoni: Testimoni }) {
         name="isDisplayed"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="isDisplayed">Status</FieldLabel>
-            <Switch className="mt-2" id="isDisplayed" checked={field.value} onCheckedChange={field.onChange} />
+          <Field className="md:col-span-2 gap-3" data-invalid={fieldState.invalid}>
+            <FieldLabel>Status (Unpublish/Publish)</FieldLabel>
+            <Switch checked={field.value} onCheckedChange={field.onChange} id="isDisplayed" aria-invalid={fieldState.invalid} size="lg" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}

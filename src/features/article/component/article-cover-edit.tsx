@@ -110,7 +110,7 @@ export function ArticleCoverEditDialog({ articleDetail }: { articleDetail: Artic
 
                       <div className="flex flex-row items-center gap-4">
                         {previewLogo && (
-                          <div className="relative h-36 w-36 rounded-md overflow-hidden border">
+                          <div className="relative h-60 w-60 rounded-md overflow-hidden border">
                             <Image src={previewLogo} alt="cover-preview" fill unoptimized className="object-contain" />
                           </div>
                         )}

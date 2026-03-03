@@ -51,7 +51,6 @@ export function MitraDetailDialog({ mitra }: { mitra: Mitra }) {
   }, [open, mitra, form]);
 
   const handleUpdate = async (values: UpdateMitraInput) => {
-    // Only send metadata as JSON
     const payload = {
       mitraName: values.mitraName,
       businessField: values.businessField.map((f) => f.value),
@@ -83,39 +82,37 @@ export function MitraDetailDialog({ mitra }: { mitra: Mitra }) {
       isPending={isPending}
       saveLabel="Update"
       onSubmit={form.handleSubmit(handleUpdate)}
-      className="sm:max-w-3xl"
+      className="sm:max-w-3xl max-w-lg!"
       trigger={
         <Button variant="outline" size="icon-sm">
           <IconListDetails className="h-4 w-4" />
         </Button>
       }
     >
-      <div className="md:col-span-2 flex">
-        {/* Status */}
-        <Controller
-          name="isDisplayed"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
-              <FieldLabel htmlFor="isDisplayed">Status</FieldLabel>
-              <Switch className="mt-2" id="isDisplayed" checked={field.value} onCheckedChange={field.onChange} />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-        {/* Name */}
-        <Controller
-          name="mitraName"
-          control={form.control}
-          render={({ field, fieldState }) => (
-            <Field data-invalid={fieldState.invalid} className="gap-1">
-              <FieldLabel htmlFor="mitraName">Name</FieldLabel>
-              <Input {...field} id="mitraName" placeholder="Masukan nama mitra..." aria-invalid={fieldState.invalid} autoComplete="off" />
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          )}
-        />
-      </div>
+      {/* Name */}
+      <Controller
+        name="mitraName"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field data-invalid={fieldState.invalid} className="gap-1">
+            <FieldLabel htmlFor="mitraName">Name</FieldLabel>
+            <Input {...field} id="mitraName" placeholder="Masukan nama mitra..." aria-invalid={fieldState.invalid} autoComplete="off" />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="isDisplayed"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field className="md:col-span-1 gap-3" data-invalid={fieldState.invalid}>
+            <FieldLabel>Status (Unpublish/Publish)</FieldLabel>
+            <Switch checked={field.value} onCheckedChange={field.onChange} id="isDisplayed" aria-invalid={fieldState.invalid} size="lg" />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
 
       {/* Business Field */}
       <Controller

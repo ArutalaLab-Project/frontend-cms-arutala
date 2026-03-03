@@ -68,7 +68,7 @@ export function TestimoniProfileDialog({ testimoni }: { testimoni: Testimoni }) 
       isPending={isPending}
       saveLabel="Update Profile"
       onSubmit={form.handleSubmit(handleUpdateProfile)}
-      className="sm:max-w-[340px]"
+      className="sm:max-w-85 max-w-md!"
       contentClassName="!grid-cols-1"
       trigger={
         <div className="cursor-pointer hover:opacity-80 transition-opacity">
@@ -84,7 +84,7 @@ export function TestimoniProfileDialog({ testimoni }: { testimoni: Testimoni }) 
         control={form.control}
         render={({ field, fieldState }) => (
           <div className="pt-4 pb-1">
-            <Field data-invalid={fieldState.invalid} className="w-full flex flex-col items-center gap-5">
+            <Field data-invalid={fieldState.invalid} className="w-full flex flex-col items-center gap-3">
               <FieldLabel htmlFor="authorProfile" className="sr-only">
                 Foto Profil
               </FieldLabel>
@@ -103,18 +103,17 @@ export function TestimoniProfileDialog({ testimoni }: { testimoni: Testimoni }) 
                   setPreviewProfile(URL.createObjectURL(file));
                 }}
               />
+              <Button type="button" variant="outline" className="w-full" onClick={() => fileInputRef.current?.click()}>
+                {previewProfile ? "Pilih Foto Lain" : "Upload Foto"}
+              </Button>
 
-              <div className="relative h-60 w-60 rounded-lg overflow-hidden border bg-muted shrink-0">
+              <div className="relative h-100 w-100 rounded-lg overflow-hidden border bg-muted shrink-0">
                 {previewProfile ? (
                   <Image src={previewProfile} alt="preview-profile" fill unoptimized className="object-contain p-2" />
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground italic text-sm">No image</div>
                 )}
               </div>
-
-              <Button type="button" variant="outline" className="w-full" onClick={() => fileInputRef.current?.click()}>
-                {previewProfile ? "Pilih Foto Lain" : "Upload Foto"}
-              </Button>
 
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

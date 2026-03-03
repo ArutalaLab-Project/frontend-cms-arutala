@@ -34,6 +34,7 @@ export const createContributorSchema = z.object({
   contributorType: z.enum(Object.values(ContributorType) as [string, ...string[]], {
     error: "Type wajib dipilih",
   }),
+  isDisplayed: z.boolean(),
   profile: z
     .instanceof(File)
     .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), "File harus berupa JPG, PNG, atau WEBP")
@@ -56,11 +57,11 @@ export const updateContributorSchema = z.object({
   contributorType: z.enum(Object.values(ContributorType) as [string, ...string[]], {
     error: "Type wajib dipilih",
   }),
+  isDisplayed: z.boolean(),
   profile: z
     .instanceof(File)
     .refine((file) => ["image/jpeg", "image/png", "image/webp"].includes(file.type), "File harus berupa JPG, PNG, atau WEBP")
     .refine((file) => file.size <= 5 * 1024 * 1024, "Ukuran file maksimal 5MB")
     .optional(),
-  isDisplayed: z.boolean(),
 });
 export type UpdateContributorInput = z.infer<typeof updateContributorSchema>;
