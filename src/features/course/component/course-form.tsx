@@ -94,6 +94,7 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
             </Field>
           )}
         />
+
         {/* Category */}
         <Controller
           name="courseCategoryId"
@@ -140,6 +141,7 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
             </Field>
           )}
         />
+
         {/* Status */}
         <Controller
           name="isDisplayed"
@@ -150,11 +152,12 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
                 <FieldLabel>Status</FieldLabel>
                 <div className="text-[0.8rem] text-accent-700 font-medium">Unpublished/Published</div>
               </div>
-              <Switch checked={field.value} onCheckedChange={field.onChange} />
+              <Switch size="lg" checked={field.value} onCheckedChange={field.onChange} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
+
         {/* Description */}
         <Controller
           name="courseDescription"
@@ -162,7 +165,7 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
           render={({ field, fieldState }) => (
             <Field className="md:col-span-4 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="courseDescription">Description</FieldLabel>
-              <Textarea {...field} id="courseDescription" placeholder="Masukan deskripsi kursus..." aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20" />
+              <Textarea {...field} id="courseDescription" placeholder="Masukan deskripsi kursus..." aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20 max-h-40" />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
@@ -174,7 +177,7 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
           render={({ field, fieldState }) => (
             <Field className="md:col-span-4 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="courseHeadline">Headline</FieldLabel>
-              <Textarea {...field} id="courseHeadline" placeholder="Masukan headline kursus..." aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20" />
+              <Textarea {...field} id="courseHeadline" placeholder="Masukan headline kursus..." aria-invalid={fieldState.invalid} autoComplete="off" className="min-h-20 max-h-40" />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}

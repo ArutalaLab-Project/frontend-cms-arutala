@@ -90,7 +90,7 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
       isPending={isPending}
       saveLabel="Update"
       onSubmit={form.handleSubmit(handleUpdate)}
-      className="sm:max-w-3xl"
+      className="sm:max-w-3xl max-w-xl!"
       trigger={
         <Button variant="outline" size="icon-sm">
           <IconListDetails />
@@ -98,22 +98,10 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
       }
     >
       <Controller
-        name="isDisplayed"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="isDisplayed">Status</FieldLabel>
-            <Switch className="mt-2" id="isDisplayed" checked={field.value} onCheckedChange={field.onChange} />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-
-      <Controller
         name="contributorName"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="gap-1" data-invalid={fieldState.invalid}>
+          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="contributorName">Name</FieldLabel>
 
             <Input {...field} id="contributorName" placeholder="Masukan nama..." aria-invalid={fieldState.invalid} autoComplete="off" />
@@ -166,6 +154,18 @@ export function ContributorDetailDialog({ contributor }: { contributor: Contribu
                 </SelectGroup>
               </SelectContent>
             </Select>
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="isDisplayed"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field className="md:col-span-1 gap-3" data-invalid={fieldState.invalid}>
+            <FieldLabel>Status (Unpublish/Publish)</FieldLabel>
+            <Switch checked={field.value} onCheckedChange={field.onChange} id="isDisplayed" aria-invalid={fieldState.invalid} size="lg" />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
       />

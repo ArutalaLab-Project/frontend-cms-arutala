@@ -69,7 +69,7 @@ export function ContributorProfileDialog({ contributor }: { contributor: Contrib
       isPending={isPending}
       saveLabel="Update Profile"
       onSubmit={form.handleSubmit(handleUpdateProfile)}
-      className="sm:max-w-[340px]"
+      className="sm:max-w-85 max-w-md!"
       contentClassName="!grid-cols-1"
       trigger={
         <div className="cursor-pointer hover:opacity-80 transition-opacity">
@@ -105,7 +105,7 @@ export function ContributorProfileDialog({ contributor }: { contributor: Contrib
                 }}
               />
 
-              <div className="relative h-60 w-60 rounded-lg overflow-hidden border bg-muted shrink-0">
+              <div className="relative h-100 w-100 rounded-lg overflow-hidden border bg-muted shrink-0">
                 {previewProfile ? (
                   <Image src={previewProfile} alt="preview-profile" fill unoptimized className="object-contain p-2" />
                 ) : (

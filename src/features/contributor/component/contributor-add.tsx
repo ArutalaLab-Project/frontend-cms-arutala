@@ -32,6 +32,7 @@ export function ContributorAddDialog() {
       companyName: "",
       expertise: [],
       profile: undefined,
+      isDisplayed: false,
       contributorType: undefined,
     },
   });
@@ -87,7 +88,7 @@ export function ContributorAddDialog() {
       isPending={isPending}
       saveLabel="Create Contributor"
       onSubmit={form.handleSubmit(handleCreate)}
-      className="sm:max-w-3xl"
+      className="sm:max-w-3xl max-w-xl!"
       trigger={
         <Button size="sm">
           Tambah Contributor <PlusCircle />
@@ -134,9 +135,33 @@ export function ContributorAddDialog() {
         name="contributorName"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="contributorName">Name</FieldLabel>
             <Input {...field} id="contributorName" placeholder="Masukan nama..." aria-invalid={fieldState.invalid} autoComplete="off" />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="companyName"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="companyName">Company Name</FieldLabel>
+            <Input {...field} id="companyName" placeholder="Masukan nama perusahaan..." aria-invalid={fieldState.invalid} autoComplete="off" />
+            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
+          </Field>
+        )}
+      />
+
+      <Controller
+        name="jobTitle"
+        control={form.control}
+        render={({ field, fieldState }) => (
+          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+            <FieldLabel htmlFor="jobTitle">Job Title</FieldLabel>
+            <Input {...field} id="jobTitle" placeholder="Masukan job title..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}
@@ -162,30 +187,6 @@ export function ContributorAddDialog() {
                 </SelectGroup>
               </SelectContent>
             </Select>
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-
-      <Controller
-        name="jobTitle"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="jobTitle">Job Title</FieldLabel>
-            <Input {...field} id="jobTitle" placeholder="Masukan job title..." aria-invalid={fieldState.invalid} autoComplete="off" />
-            {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-          </Field>
-        )}
-      />
-
-      <Controller
-        name="companyName"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="companyName">Company Name</FieldLabel>
-            <Input {...field} id="companyName" placeholder="Masukan nama perusahaan..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}

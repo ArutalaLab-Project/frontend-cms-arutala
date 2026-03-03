@@ -80,7 +80,7 @@ export function MitraAddDialog() {
       isPending={isPending}
       saveLabel="Create Mitra"
       onSubmit={form.handleSubmit(handleCreate)}
-      className="sm:max-w-3xl"
+      className="sm:max-w-3xl max-w-md!"
       trigger={
         <Button size="sm">
           Tambah Mitra <PlusCircle />
@@ -109,7 +109,7 @@ export function MitraAddDialog() {
               />
               <div className="flex flex-row items-center gap-4">
                 {previewLogo ? (
-                  <div className="relative h-24 w-24 rounded-md overflow-hidden border">
+                  <div className="relative h-40 w-40 rounded-md overflow-hidden border">
                     <Image src={previewLogo} alt="mitra-logo" fill unoptimized className="object-contain" />
                   </div>
                 ) : null}

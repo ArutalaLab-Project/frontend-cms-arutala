@@ -71,7 +71,7 @@ export function TestimoniAddDialog() {
       isPending={isPending}
       saveLabel="Create Testimoni"
       onSubmit={form.handleSubmit(handleCreate)}
-      className="sm:max-w-3xl"
+      className="sm:max-w-3xl max-w-xl!"
       trigger={
         <Button size="sm">
           Tambah Testimoni <PlusCircle />
