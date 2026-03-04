@@ -9,7 +9,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ courseI
     const courseBatch = await serverFetch<CourseBatch>(`/courses/${courseId}/batch/${batchId}`, {
       method: "GET",
     });
-    // console.log("course-batch", courseBatch);
     const response = NextResponse.json({
       success: true,
       data: courseBatch,
