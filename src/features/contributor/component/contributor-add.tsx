@@ -99,8 +99,8 @@ export function ContributorAddDialog() {
         name="profile"
         control={form.control}
         render={({ field, fieldState }) => (
-          <div className="md:col-span-2 col-span-2">
-            <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start">
+          <div className="lg:col-span-2 col-span-2">
+            <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 lg:grid-cols-[1fr,160px] gap-2 items-start">
               <FieldLabel htmlFor="profile">Profile</FieldLabel>
               <input
                 ref={fileInputRef}
@@ -115,16 +115,22 @@ export function ContributorAddDialog() {
                   setPreviewProfile(URL.createObjectURL(file));
                 }}
               />
-              <div className="flex flex-row items-center gap-4">
-                {previewProfile ? (
-                  <div className="relative h-24 w-24 rounded-md overflow-hidden border">
+
+              {previewProfile ? (
+                <div className="flex flex-row items-center gap-4">
+                  <div className="relative h-36 w-36 rounded-md overflow-hidden border">
                     <Image src={previewProfile} alt="contributor-profile" fill unoptimized className="object-contain" />
                   </div>
-                ) : null}
+                  <Button type="button" size="sm" variant="outline" onClick={() => fileInputRef.current?.click()}>
+                    {previewProfile ? "Ganti Foto" : "Upload Foto"}
+                  </Button>
+                </div>
+              ) : (
                 <Button type="button" size="sm" variant="outline" onClick={() => fileInputRef.current?.click()}>
-                  {previewProfile ? "Ganti Foto" : "Upload Foto"}
+                  Upload Foto
                 </Button>
-              </div>
+              )}
+
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           </div>
@@ -135,7 +141,7 @@ export function ContributorAddDialog() {
         name="contributorName"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="contributorName">Name</FieldLabel>
             <Input {...field} id="contributorName" placeholder="Masukan nama..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -147,7 +153,7 @@ export function ContributorAddDialog() {
         name="companyName"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="companyName">Company Name</FieldLabel>
             <Input {...field} id="companyName" placeholder="Masukan nama perusahaan..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -159,7 +165,7 @@ export function ContributorAddDialog() {
         name="jobTitle"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="jobTitle">Job Title</FieldLabel>
             <Input {...field} id="jobTitle" placeholder="Masukan job title..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -171,7 +177,7 @@ export function ContributorAddDialog() {
         name="contributorType"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Type</FieldLabel>
             <Select value={field.value} onValueChange={field.onChange}>
               <SelectTrigger className="w-full">
@@ -196,7 +202,7 @@ export function ContributorAddDialog() {
         name="expertise"
         control={form.control}
         render={({ fieldState }) => (
-          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Expertise</FieldLabel>
             <FieldDescription>Ketik expertise lalu tekan Enter</FieldDescription>
             <InputGroup>

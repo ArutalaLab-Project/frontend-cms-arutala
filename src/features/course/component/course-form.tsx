@@ -1,6 +1,7 @@
 /* eslint-disable react-hooks/incompatible-library */
 "use client";
 
+import React from "react";
 import { Button } from "@/components/ui/button";
 import { Controller, useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -29,10 +30,12 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
   const { data: coursesfield } = useCourseField();
   const { data: coursesbenefits } = useCourseBenefit();
 
+  console.log(initialData);
+
   const form = useForm<CourseInput>({
     resolver: zodResolver(courseInputSchema),
     values: initialData,
-    defaultValues: {
+    defaultValues: initialData || {
       courseTitle: "",
       courseDescription: "",
       courseHeadline: "",
@@ -81,13 +84,13 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
   };
   return (
     <form id={formId} className="space-y-3" onSubmit={form.handleSubmit(handleFormSubmit)}>
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-3">
         {/* Title */}
         <Controller
           name="courseTitle"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-2 lg:col-span-2 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="courseTitle">Title</FieldLabel>
               <Input {...field} id="courseTitle" placeholder="Masukan judul kursus..." aria-invalid={fieldState.invalid} autoComplete="off" />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -100,10 +103,10 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
           name="courseCategoryId"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-1 lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel>Category</FieldLabel>
-              <Select value={initialData?.courseCategoryId || field.value} onValueChange={field.onChange}>
-                <SelectTrigger className={cn("md:col-span-1 gap-1", fieldState.invalid && "border-destructive")}>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className={cn("w-full", fieldState.invalid && "border-destructive")}>
                   <SelectValue placeholder="Pilih kategori..." />
                 </SelectTrigger>
                 <SelectContent position="popper">
@@ -123,10 +126,10 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
           name="courseFieldId"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-1 lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel>Field</FieldLabel>
-              <Select value={initialData?.courseFieldId || field.value} onValueChange={field.onChange}>
-                <SelectTrigger className={cn("md:col-span-1 gap-1", fieldState.invalid && "border-destructive")}>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <SelectTrigger className={cn("w-full", fieldState.invalid && "border-destructive")}>
                   <SelectValue placeholder="Pilih bidang..." />
                 </SelectTrigger>
                 <SelectContent position="popper">
@@ -147,7 +150,7 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
           name="isDisplayed"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field className="md:col-span-4 gap-1 flex-row items-center justify-between rounded-lg border p-3" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-2 lg:col-span-4 gap-1 flex-row items-center justify-between rounded-lg border p-3" data-invalid={fieldState.invalid}>
               <div className="space-y-0.5">
                 <FieldLabel>Status</FieldLabel>
                 <div className="text-[0.8rem] text-accent-700 font-medium">Unpublished/Published</div>

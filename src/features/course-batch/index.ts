@@ -1,6 +1,5 @@
 // components
 export { CourseBatchTable } from "./component/course-batch-table";
-export { CourseBatchDetailCard } from "./component/course-batch-detail-card";
 export { CourseBatchForm } from "./component/course-batch-form";
 
 // hooks

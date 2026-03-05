@@ -20,7 +20,7 @@ export type CourseSession = z.infer<typeof courseSessions>;
  * COURSE BATCH (RESPONSE)
  * ---------------------------
  */
-export const courseBatch = z.object({
+export const CourseBatchSchema = z.object({
   course_batch_id: z.string(),
   name: z.string(),
   status: z.string(),
@@ -50,7 +50,7 @@ export const courseBatch = z.object({
   sessions: z.optional(z.array(courseSessions)),
 });
 
-export type CourseBatch = z.infer<typeof courseBatch>;
+export type CourseBatch = z.infer<typeof CourseBatchSchema>;
 
 /* =========================================================
    ================= COURSE BATCH INPUT ====================
@@ -155,3 +155,15 @@ export const courseBatchInputSchema = z
   .strict();
 
 export type CourseBatchInput = z.infer<typeof courseBatchInputSchema>;
+
+/**
+ * ---------------------------
+ * COURSE BATCH UPLOAD POSTER
+ * ---------------------------
+ */
+
+export const courseBatchUploadPosterInputSchema = z.object({
+  poster: z.instanceof(File, { message: "Poster harus diisi" }),
+});
+
+export type CourseBatchUploadPosterInput = z.infer<typeof courseBatchUploadPosterInputSchema>;

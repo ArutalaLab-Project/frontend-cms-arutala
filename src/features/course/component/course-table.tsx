@@ -32,51 +32,47 @@ export function CourseTable() {
 
   return (
     <div className="space-y-4">
-      <div className=" flex justify-between  px-8">
-        <div className="flex items-center gap-4">
-          <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("course_title", e.target.value)} className="max-w-sm" />
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
+          <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("course_title", e.target.value)} className="w-full sm:max-w-sm" />
 
           {/* Filter by Category */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("course_category_name", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="w-50">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="All Category" />
             </SelectTrigger>
             <SelectContent position="popper">
               <SelectGroup>
                 <SelectItem value="ALL">All Category</SelectItem>
-                {categoryOptions.map((category) => {
-                  return (
-                    <SelectItem value={category.value} key={category.value}>
-                      {category.label}
-                    </SelectItem>
-                  );
-                })}
+                {categoryOptions.map((category) => (
+                  <SelectItem value={category.value} key={category.value}>
+                    {category.label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
 
           {/* Filter by Field */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("course_field_name", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="w-50">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="All Field" />
             </SelectTrigger>
             <SelectContent position="popper">
               <SelectGroup>
                 <SelectItem value="ALL">All Field</SelectItem>
-                {fieldOptions.map((field) => {
-                  return (
-                    <SelectItem value={field.value} key={field.value}>
-                      {field.label}
-                    </SelectItem>
-                  );
-                })}
+                {fieldOptions.map((field) => (
+                  <SelectItem value={field.value} key={field.value}>
+                    {field.label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
 
           {/* Filter by Status */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("is_displayed", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="w-50">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent position="popper">
@@ -92,8 +88,7 @@ export function CourseTable() {
           </Select>
         </div>
 
-        {/* <CourseAddDialog /> */}
-        <Button size="sm" asChild>
+        <Button size="sm" asChild className="self-end shrink-0">
           <Link href="/content-website/courses/create">
             <PlusCircle /> Create Course
           </Link>

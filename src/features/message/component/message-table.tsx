@@ -27,11 +27,11 @@ export function MessageTable() {
   return (
     <div className="space-y-4">
       {/* Toolbar */}
-      <div className="flex items-center gap-4 h-9">
-        <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("sender_name", e.target.value || null)} className="max-w-xs h-9 text-sm" />
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
+        <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("sender_name", e.target.value || null)} className="w-full sm:max-w-xs h-9 text-sm" />
 
         <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("message_status", v !== "ALL" ? v : null)}>
-          <SelectTrigger className="h-9 text-sm">
+          <SelectTrigger className="w-full sm:w-40 h-9 text-sm">
             <SelectValue placeholder="Filter status" />
           </SelectTrigger>
           <SelectContent position="popper" className="text-sm">
@@ -47,7 +47,7 @@ export function MessageTable() {
         </Select>
 
         <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("subject", v !== "ALL" ? v : null)}>
-          <SelectTrigger className="h-9 text-sm">
+          <SelectTrigger className="w-full sm:w-40 h-9 text-sm">
             <SelectValue placeholder="Filter Subject" />
           </SelectTrigger>
           <SelectContent position="popper">

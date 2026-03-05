@@ -26,13 +26,13 @@ export function MitraTable() {
 
   return (
     <div className="space-y-4">
-      <div className=" flex justify-between  px-8">
-        <div className="flex items-center gap-4">
-          <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("mitra_name", e.target.value)} className="max-w-sm" />
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
+          <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("mitra_name", e.target.value)} className="w-full sm:max-w-sm" />
 
           {/* Filter by Business Field */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("business_field", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="w-50">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="All Field" />
             </SelectTrigger>
             <SelectContent position="popper">
@@ -49,7 +49,7 @@ export function MitraTable() {
 
           {/* Filter by Status */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("is_displayed", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="w-50">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent position="popper">

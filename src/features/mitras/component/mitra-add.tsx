@@ -91,7 +91,7 @@ export function MitraAddDialog() {
         name="mitraLogo"
         control={form.control}
         render={({ field, fieldState }) => (
-          <div className="md:col-span-2">
+          <div className="lg:col-span-2">
             <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start">
               <FieldLabel htmlFor="mitraLogo">Logo Mitra</FieldLabel>
               <input
@@ -127,7 +127,7 @@ export function MitraAddDialog() {
         name="mitraName"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="mitraName">Name</FieldLabel>
             <Input {...field} id="mitraName" placeholder="Masukan nama mitra..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -139,7 +139,7 @@ export function MitraAddDialog() {
         name="businessField"
         control={form.control}
         render={({ fieldState }) => (
-          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Business Field</FieldLabel>
             <FieldDescription>Ketik business field lalu tekan Enter</FieldDescription>
             <InputGroup>

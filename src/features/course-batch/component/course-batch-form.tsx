@@ -5,7 +5,7 @@ import * as React from "react";
 import { format } from "date-fns";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { PlusCircle } from "lucide-react";
+import { ClockIcon, PlusCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -19,6 +19,7 @@ import { CourseBatchInput, courseBatchInputSchema, CourseBatchStatus } from "../
 import { formatSnakeCaseToTitle } from "@/shared/utils/string";
 import { StatusColorCoursebatch } from "./columns";
 import { cn } from "@/shared/lib/cn";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
 
 // ================= PRICE HELPER =================
 function formatRupiah(value: number | undefined | null): string {
@@ -119,13 +120,13 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
         onSubmit(submissionData);
       })}
     >
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-x-4 gap-y-3">
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-4 gap-y-3">
         {/* Batch Name */}
         <Controller
           name="batchName"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-2 lg:col-span-2 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel>Batch Name</FieldLabel>
               <Input {...field} placeholder="Masukan nama batch..." aria-invalid={fieldState.invalid} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -138,7 +139,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           name="contributorId"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-1 lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel>Instruktur</FieldLabel>
               <Select value={field.value} onValueChange={field.onChange}>
                 <SelectTrigger className={fieldState.invalid ? "border-destructive" : ""}>
@@ -163,7 +164,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
             name="batchStatus"
             control={form.control}
             render={({ field, fieldState }) => (
-              <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+              <Field className="sm:col-span-1 lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
                 <FieldLabel>Status</FieldLabel>
                 <Select value={field.value} onValueChange={field.onChange}>
                   <SelectTrigger className={fieldState.invalid ? "border-destructive" : ""}>
@@ -188,7 +189,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           name="registrationUrl"
           control={form.control}
           render={({ field, fieldState }) => (
-            <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-2 lg:col-span-4 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel>Registration URL</FieldLabel>
               <Input {...field} placeholder="Masukan URL registrasi..." aria-invalid={fieldState.invalid} />
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -201,7 +202,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           name="registrationStart"
           control={form.control}
           render={({}) => (
-            <Field className="md:col-span-1 gap-1">
+            <Field className="sm:col-span-1 lg:col-span-2 gap-1">
               <FieldLabel>Periode Pendaftaran</FieldLabel>
               <RangeDatePicker
                 value={{
@@ -223,7 +224,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           name="startDate"
           control={form.control}
           render={({}) => (
-            <Field className="md:col-span-1 gap-1">
+            <Field className="sm:col-span-1 lg:col-span-2 gap-1">
               <FieldLabel>Periode Pelaksanaan</FieldLabel>
               <RangeDatePicker
                 value={{
@@ -245,20 +246,20 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           name="batchSession"
           control={form.control}
           render={({ fieldState }) => (
-            <Field className="md:col-span-2 flex-col" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-2 lg:col-span-4 flex-col" data-invalid={fieldState.invalid}>
               <Card className={cn("w-full", fieldState.invalid && "border-destructive")}>
                 <CardHeader>
                   <CardTitle className={cn("text-sm font-medium", fieldState.invalid && "text-destructive")}>Sessions</CardTitle>
                 </CardHeader>
                 <CardContent className="space-y-2">
                   {sessionFields.map((session, index) => (
-                    <div key={session.id} className="border rounded-md p-3 space-y-2 bg-muted/30">
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div key={session.id} className="border rounded-md p-4 space-y-3 bg-muted/30">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
                         <Controller
                           name={`batchSession.${index}.topic`}
                           control={form.control}
                           render={({ field, fieldState }) => (
-                            <Field data-invalid={fieldState.invalid}>
+                            <Field className="sm:col-span-2 lg:col-span-1" data-invalid={fieldState.invalid}>
                               <FieldLabel>Topic - {index + 1}</FieldLabel>
                               <Input {...field} placeholder="Masukan topik sesi..." aria-invalid={fieldState.invalid} />
                               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -284,7 +285,19 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel>Mulai</FieldLabel>
-                              <Input type="time" {...field} aria-invalid={fieldState.invalid} />
+                              <InputGroup>
+                                <InputGroupInput
+                                  type="time"
+                                  id={`start-time-${index}`}
+                                  {...field}
+                                  placeholder="Masukan waktu mulai..."
+                                  aria-invalid={fieldState.invalid}
+                                  className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                />
+                                <InputGroupAddon>
+                                  <ClockIcon size={16} />
+                                </InputGroupAddon>
+                              </InputGroup>
                               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                           )}
@@ -296,13 +309,25 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
                           render={({ field, fieldState }) => (
                             <Field data-invalid={fieldState.invalid}>
                               <FieldLabel>Selesai</FieldLabel>
-                              <Input type="time" {...field} aria-invalid={fieldState.invalid} />
+                              <InputGroup>
+                                <InputGroupInput
+                                  type="time"
+                                  id={`end-time-${index}`}
+                                  {...field}
+                                  placeholder="Masukan waktu selesai..."
+                                  aria-invalid={fieldState.invalid}
+                                  className="appearance-none [&::-webkit-calendar-picker-indicator]:hidden [&::-webkit-calendar-picker-indicator]:appearance-none"
+                                />
+                                <InputGroupAddon>
+                                  <ClockIcon size={16} />
+                                </InputGroupAddon>
+                              </InputGroup>
                               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
                             </Field>
                           )}
                         />
 
-                        <div className="md:col-span-2 flex justify-end">
+                        <div className="sm:col-span-2 lg:col-span-4 flex justify-end pt-2">
                           <Button type="button" variant="destructive" size="sm" onClick={() => removeSession(index)}>
                             Remove
                           </Button>
@@ -341,7 +366,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           name="batchPrice"
           control={form.control}
           render={({ fieldState }) => (
-            <Field className="md:col-span-2 flex-col" data-invalid={fieldState.invalid}>
+            <Field className="sm:col-span-2 lg:col-span-4 flex-col" data-invalid={fieldState.invalid}>
               <Card className={cn("w-full h-full", fieldState.invalid && "border-destructive")}>
                 <CardHeader>
                   <CardTitle className={cn("text-sm font-medium", fieldState.invalid && "text-destructive")}>Pricing</CardTitle>
@@ -367,7 +392,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
                     )}
                   />
 
-                  <div className="grid grid-cols-2 gap-3">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                     <Controller
                       name="batchPrice.discountType"
                       control={form.control}
@@ -377,6 +402,7 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
                           <Select
                             value={field.value || "NONE"}
                             onValueChange={(val) => {
+                              field.onChange(val);
                               if (val === "NONE") {
                                 form.setValue("batchPrice.discountType", undefined);
                                 form.setValue("batchPrice.discountValue", 0);

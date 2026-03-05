@@ -27,7 +27,7 @@ export function UpcomingCourses({ courses }: UpcomingCoursesProps) {
       <CardContent className="space-y-1">
         {courses.length ? (
           courses.map((course) => (
-            <div key={course.course_id} className="p-3 border rounded-md flex flex-col">
+            <div key={course.course_batch_name} className="p-3 border rounded-md flex flex-col">
               <div className="flex justify-between">
                 <p className="text-xs text-muted-foreground">Dimulai pada: {formatedDate(course.course_batch_start_date)}</p>
                 <Badge className="h-fit text-xs">{course.course_batch_status}</Badge>

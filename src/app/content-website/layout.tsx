@@ -7,7 +7,7 @@ export default function ContentWebsiteLayout({ children }: { children: React.Rea
     <SidebarProvider
       style={
         {
-          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--sidebar-width": "calc(var(--spacing) * 60)",
           "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
       }
