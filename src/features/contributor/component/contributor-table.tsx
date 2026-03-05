@@ -35,32 +35,30 @@ export function ContributorTable() {
 
   return (
     <div className="space-y-4">
-      <div className=" flex justify-between  px-8">
-        <div className="flex items-center gap-4">
-          <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("contributor_name", e.target.value)} className="max-w-sm" />
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
+          <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("contributor_name", e.target.value)} className="w-full sm:max-w-sm" />
 
           {/* Filter by Type */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("contributor_type", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="w-50">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="All Type" />
             </SelectTrigger>
             <SelectContent position="popper">
               <SelectGroup>
                 <SelectItem value="ALL">All Type</SelectItem>
-                {typeOptions.map((type) => {
-                  return (
-                    <SelectItem value={type.value} key={type.value}>
-                      {type.label}
-                    </SelectItem>
-                  );
-                })}
+                {typeOptions.map((type) => (
+                  <SelectItem value={type.value} key={type.value}>
+                    {type.label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>
 
           {/* Filter by Expertise */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("contributor_expertise", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="w-50">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="All Expertise" />
             </SelectTrigger>
             <SelectContent position="popper">
@@ -77,7 +75,7 @@ export function ContributorTable() {
 
           {/* Filter by Status */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("is_displayed", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="w-50">
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="All Status" />
             </SelectTrigger>
             <SelectContent position="popper">

@@ -84,7 +84,7 @@ export function UserAddDialog() {
         name="profile"
         control={form.control}
         render={({ field, fieldState }) => (
-          <div className="md:col-span-2">
+          <div className="lg:col-span-2">
             <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start">
               <FieldLabel htmlFor="profile">Profile</FieldLabel>
               <input
@@ -120,7 +120,7 @@ export function UserAddDialog() {
         name="fullName"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="full-name">Full Name</FieldLabel>
             <Input {...field} id="full-name" placeholder="Masukan nama lengkap..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -132,7 +132,7 @@ export function UserAddDialog() {
         name="username"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="username">Username</FieldLabel>
             <Input {...field} id="username" placeholder="Masukan username..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -144,7 +144,7 @@ export function UserAddDialog() {
         name="password"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="password">Password</FieldLabel>
             <Input {...field} id="password" type="password" placeholder="Masukan password..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -156,7 +156,7 @@ export function UserAddDialog() {
         name="confirmPassword"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel htmlFor="confirm-password">Confirm Password</FieldLabel>
             <Input {...field} id="confirm-password" type="password" placeholder="Konfirmasi password..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

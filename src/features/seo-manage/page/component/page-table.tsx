@@ -25,13 +25,12 @@ export function PageTable() {
 
   return (
     <div className="space-y-4">
-      <div className=" flex justify-between  px-8">
-        <div className="flex items-center gap-4">
-          {/* Search by Name: Mengisi filter array dengan id 'contributor_name' */}
-          <Input placeholder="Search by page name..." onChange={(e) => table.setColumnFilter("page_title", e.target.value)} className="max-w-sm" />
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
+          <Input placeholder="Search by page name..." onChange={(e) => table.setColumnFilter("page_title", e.target.value)} className="w-full sm:max-w-sm" />
 
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("seo_status", v !== "ALL" ? v : null)}>
-            <SelectTrigger className="h-9 text-sm">
+            <SelectTrigger className="w-full sm:w-40 h-9 text-sm">
               <SelectValue placeholder="Filter status" />
             </SelectTrigger>
             <SelectContent position="popper" className="text-sm">

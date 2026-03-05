@@ -83,7 +83,7 @@ export function TestimoniAddDialog() {
         control={form.control}
         render={({ field, fieldState }) => {
           return (
-            <div className="md:col-span-2 gap-1">
+            <div className="lg:col-span-2 gap-1">
               <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start">
                 <FieldLabel htmlFor="profile">Profile</FieldLabel>
 
@@ -132,7 +132,7 @@ export function TestimoniAddDialog() {
         name="authorName"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Name</FieldLabel>
             <Input {...field} placeholder="Masukan nama..." className="w-full" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -145,7 +145,7 @@ export function TestimoniAddDialog() {
         name="testimoniCategory"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Category</FieldLabel>
 
             <Select value={field.value} onValueChange={field.onChange}>
@@ -174,7 +174,7 @@ export function TestimoniAddDialog() {
         name="authorJobTitle"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Job Title</FieldLabel>
             <Input {...field} placeholder="Masukan job title..." className="w-full" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -187,7 +187,7 @@ export function TestimoniAddDialog() {
         name="authorCompanyName"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-1 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Company Name</FieldLabel>
             <Input {...field} placeholder="Masukan nama perusahaan..." className="w-full" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
@@ -199,7 +199,7 @@ export function TestimoniAddDialog() {
         name="testimoniContent"
         control={form.control}
         render={({ field, fieldState }) => (
-          <Field className="md:col-span-2 gap-1" data-invalid={fieldState.invalid}>
+          <Field className="lg:col-span-2 gap-1" data-invalid={fieldState.invalid}>
             <FieldLabel>Testimoni</FieldLabel>
             <Textarea {...field} placeholder="Masukan konten testimoni..." className="w-full min-h-20 h-32" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

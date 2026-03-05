@@ -12,9 +12,7 @@ import { CourseBatch, CourseBatchStatus } from "../type";
 import { CourseBatchDeleteDialog } from "./course-batch-delete";
 import { cn } from "@/shared/lib/cn";
 import { formatSnakeCaseToTitle } from "@/shared/utils/string";
-import { CourseBatchUpload } from "./course-batch-upload";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import Image from "next/image";
+import { CourseBatchPosterDialog } from "./course-batch-poster-dialog";
 
 export const StatusColorCoursebatch: Record<CourseBatchStatus, string> = {
   DRAFT: "bg-status-draft text-black hover:bg-status-draft",
@@ -40,17 +38,7 @@ export const columns = (courseId: string): ColumnDef<CourseBatch>[] => [
     accessorKey: "poster_url",
     header: "Cover",
     cell: ({ row }) => {
-      return (
-        <div className="min-w-36 items-center flex justify-center">
-          {row.original.poster_url === null ? (
-            <CourseBatchUpload courseId={courseId} batchId={row.original.course_batch_id} posterUrl={row.original.poster_url} />
-          ) : (
-            <AspectRatio ratio={4 / 2} className="bg-accent rounded-lg border">
-              <Image src={row.original.poster_url} alt={row.original.name} fill className="object-contain" />
-            </AspectRatio>
-          )}
-        </div>
-      );
+      return <CourseBatchPosterDialog courseBatch={row.original} />;
     },
   },
   {

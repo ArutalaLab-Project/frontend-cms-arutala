@@ -1,42 +1,58 @@
 "use client";
-import { CalendarIcon, ChevronDownIcon } from "lucide-react";
+import { CalendarIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { DateRange } from "react-day-picker";
-import { Button } from "../ui/button";
 import { Calendar } from "../ui/calendar";
 import { id as localeId } from "date-fns/locale";
 import { format } from "date-fns";
+
+import { cn } from "@/shared/lib/cn";
+
+import { InputGroup, InputGroupAddon, InputGroupInput } from "../ui/input-group";
 
 function formatDateId(date: Date): string {
   return format(date, "dd/MM/yyyy", { locale: localeId });
 }
 
-export function RangeDatePicker({ value, onChange }: { value?: DateRange; onChange: (value: DateRange | undefined) => void }) {
+export function RangeDatePicker({ value, onChange, placeholder = "Pilih rentang tanggal" }: { value?: DateRange; onChange: (value: DateRange | undefined) => void; placeholder?: string }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-start">
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {value?.from ? (value.to ? `${formatDateId(value.from)} - ${formatDateId(value.to)}` : formatDateId(value.from)) : "Pilih rentang tanggal"}
-        </Button>
+        <div className="cursor-pointer">
+          <InputGroup className="pointer-events-none">
+            <InputGroupInput
+              readOnly
+              placeholder={placeholder}
+              value={value?.from ? (value.to ? `${formatDateId(value.from)} - ${formatDateId(value.to)}` : formatDateId(value.from)) : ""}
+              className={cn(!value?.from && "text-muted-foreground", "cursor-pointer")}
+            />
+            <InputGroupAddon>
+              <CalendarIcon size={16} />
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
       </PopoverTrigger>
-      <PopoverContent className="w-auto p-0">
+      <PopoverContent className="w-auto p-0" align="start">
         <Calendar mode="range" locale={localeId} selected={value} onSelect={onChange} numberOfMonths={2} />
       </PopoverContent>
     </Popover>
   );
 }
 
-export function SingleDatePicker({ value, onChange }: { value?: Date; onChange: (date: Date | undefined) => void }) {
+export function SingleDatePicker({ value, onChange, placeholder = "Pilih tanggal" }: { value?: Date; onChange: (date: Date | undefined) => void; placeholder?: string }) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button variant="outline" className="w-full justify-between">
-          {value ? formatDateId(value) : "Pilih tanggal"}
-          <ChevronDownIcon size={16} />
-        </Button>
+        <div className="cursor-pointer">
+          <InputGroup className="pointer-events-none">
+            <InputGroupInput readOnly placeholder={placeholder} value={value ? formatDateId(value) : ""} className={cn(!value && "text-muted-foreground", "cursor-pointer")} />
+            <InputGroupAddon>
+              <CalendarIcon size={16} />
+            </InputGroupAddon>
+          </InputGroup>
+        </div>
       </PopoverTrigger>
-      <PopoverContent className="p-0">
+      <PopoverContent className="p-0" align="start">
         <Calendar mode="single" locale={localeId} selected={value} onSelect={onChange} />
       </PopoverContent>
     </Popover>

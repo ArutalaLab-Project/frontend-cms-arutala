@@ -7,39 +7,42 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { Contributor, UpdateContributorInput, updateContributorSchema } from "../type";
-import { useUpdateContributor } from "../hook";
 import { EntityDialog } from "@/components/shared/entity-dialog";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { useUploadCourseBatch } from "../hook";
+import { CourseBatch, CourseBatchUploadPosterInput, courseBatchUploadPosterInputSchema } from "../type";
+import { useParams } from "next/navigation";
+import { AspectRatio } from "@/components/ui/aspect-ratio";
 
-export function ContributorProfileDialog({ contributor }: { contributor: Contributor }) {
+export function CourseBatchPosterDialog({ courseBatch }: { courseBatch: CourseBatch }) {
   const [open, setOpen] = useState(false);
-  const [previewProfile, setPreviewProfile] = useState<string | null>(contributor.contributor_profile_url);
+  const [previewProfile, setPreviewProfile] = useState<string | null>(courseBatch.poster_url);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const params = useParams();
 
-  const { mutateAsync: updateContributor, isPending } = useUpdateContributor();
+  const courseId = params.courseId as string;
+  const { mutateAsync, isPending } = useUploadCourseBatch();
 
-  // We only care about profile in this dialog
-  const form = useForm<Pick<UpdateContributorInput, "profile">>({
-    resolver: zodResolver(updateContributorSchema.pick({ profile: true })),
+  const form = useForm<CourseBatchUploadPosterInput>({
+    resolver: zodResolver(courseBatchUploadPosterInputSchema),
     defaultValues: {
-      profile: undefined,
+      poster: undefined,
     },
   });
 
-  const handleUpdateProfile = async (values: Pick<UpdateContributorInput, "profile">) => {
-    if (!values.profile) {
+  const handleUpdateProfile = async (values: CourseBatchUploadPosterInput) => {
+    if (!values.poster) {
       toast.error("Silakan pilih foto profil terlebih dahulu");
       return;
     }
 
     const formData = new FormData();
-    formData.append("profile", values.profile);
+    formData.append("poster", values.poster);
 
     toast.promise(
-      updateContributor({
-        id: contributor.contributor_id,
-        data: formData,
+      mutateAsync({
+        courseId: courseId,
+        batchId: courseBatch.course_batch_id,
+        formData: formData,
       }),
       {
         loading: "Updating profile...",
@@ -54,39 +57,46 @@ export function ContributorProfileDialog({ contributor }: { contributor: Contrib
 
   useEffect(() => {
     return () => {
-      if (previewProfile && previewProfile !== contributor.contributor_profile_url) {
+      if (previewProfile && previewProfile !== courseBatch.poster_url) {
         URL.revokeObjectURL(previewProfile);
       }
     };
-  }, [previewProfile, contributor.contributor_profile_url]);
+  }, [previewProfile, courseBatch.poster_url]);
 
   return (
     <EntityDialog
       open={open}
       onOpenChange={setOpen}
       title="Update Foto Profil"
-      description="Pilih foto profil baru untuk contributor ini"
+      description="Pilih foto profil baru untuk author testimoni ini"
       isPending={isPending}
       saveLabel="Update Profile"
       onSubmit={form.handleSubmit(handleUpdateProfile)}
       className="sm:max-w-85 max-w-md!"
       contentClassName="!grid-cols-1"
       trigger={
-        <div className="cursor-pointer hover:opacity-80 transition-opacity">
-          <Avatar>
-            <AvatarImage src={contributor.contributor_profile_url || undefined} alt="user-profile" />
-            <AvatarFallback className="bg-primary-900 text-white">{contributor.contributor_name.charAt(0).toUpperCase()}</AvatarFallback>
-          </Avatar>
+        <div className="cursor-pointer hover:opacity-80 transition-opacity min-w-24 items-center flex justify-center">
+          {courseBatch.poster_url ? (
+            <div className="cursor-pointer hover:opacity-80 transition-opacity min-w-24 items-center flex justify-center">
+              <AspectRatio ratio={4 / 2} className="bg-accent rounded-lg border">
+                <Image src={courseBatch.poster_url} alt={courseBatch.name} fill className="object-contain" />
+              </AspectRatio>
+            </div>
+          ) : (
+            <Button variant="outline" size="sm">
+              Upload Poster
+            </Button>
+          )}
         </div>
       }
     >
       <Controller
-        name="profile"
+        name="poster"
         control={form.control}
         render={({ field, fieldState }) => (
           <div className="pt-4 pb-1">
-            <Field data-invalid={fieldState.invalid} className="w-full flex flex-col items-center gap-5">
-              <FieldLabel htmlFor="profile" className="sr-only">
+            <Field data-invalid={fieldState.invalid} className="w-full flex flex-col items-center gap-3">
+              <FieldLabel htmlFor="poster" className="sr-only">
                 Foto Profil
               </FieldLabel>
               <input
@@ -98,7 +108,7 @@ export function ContributorProfileDialog({ contributor }: { contributor: Contrib
                   const file = e.target.files?.[0];
                   if (!file) return;
                   field.onChange(file);
-                  if (previewProfile && previewProfile !== contributor.contributor_profile_url) {
+                  if (previewProfile && previewProfile !== courseBatch.poster_url) {
                     URL.revokeObjectURL(previewProfile);
                   }
                   setPreviewProfile(URL.createObjectURL(file));

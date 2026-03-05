@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { courseBatch, CourseBatchInput } from "../course-batch/type";
+import { CourseBatchSchema, CourseBatchInput } from "../course-batch/type";
 
 /* =========================================================
    ================== ENTITY / RESPONSE ====================
@@ -50,7 +50,7 @@ export const courseDetailSchema = z.object({
   ),
   is_displayed: z.boolean(),
 
-  courseBatch: z.array(courseBatch),
+  courseBatch: z.array(CourseBatchSchema),
 });
 
 export type CourseDetail = z.infer<typeof courseDetailSchema>;

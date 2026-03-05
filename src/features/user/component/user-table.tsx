@@ -20,27 +20,25 @@ export function UserTable() {
 
   return (
     <div className="space-y-4 ">
-      <div className=" flex justify-between px-8 ">
+      <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         {/* Toolbar */}
-        <div className="flex items-center gap-4 ">
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:flex-wrap">
           {/* Search by name */}
-          <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("full_name", e.target.value)} className="max-w-sm" />
+          <Input placeholder="Search by name..." onChange={(e) => table.setColumnFilter("full_name", e.target.value)} className="w-full sm:max-w-sm" />
 
           {/* Filter by role */}
           <Select defaultValue="ALL" onValueChange={(v) => table.setColumnFilter("role_name", v !== "ALL" ? v : null)}>
-            <SelectTrigger>
+            <SelectTrigger className="w-full sm:w-40">
               <SelectValue placeholder="Filter role" />
             </SelectTrigger>
             <SelectContent position="popper">
               <SelectGroup>
                 <SelectItem value="ALL">All Role</SelectItem>
-                {roleOptions.map((role) => {
-                  return (
-                    <SelectItem value={role.value} key={role.value}>
-                      {role.label}
-                    </SelectItem>
-                  );
-                })}
+                {roleOptions.map((role) => (
+                  <SelectItem value={role.value} key={role.value}>
+                    {role.label}
+                  </SelectItem>
+                ))}
               </SelectGroup>
             </SelectContent>
           </Select>

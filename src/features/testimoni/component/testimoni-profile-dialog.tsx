@@ -103,17 +103,18 @@ export function TestimoniProfileDialog({ testimoni }: { testimoni: Testimoni }) 
                   setPreviewProfile(URL.createObjectURL(file));
                 }}
               />
-              <Button type="button" variant="outline" className="w-full" onClick={() => fileInputRef.current?.click()}>
-                {previewProfile ? "Pilih Foto Lain" : "Upload Foto"}
-              </Button>
 
-              <div className="relative h-100 w-100 rounded-lg overflow-hidden border bg-muted shrink-0">
+              <div className="relative h-80 w-80 rounded-lg overflow-hidden border bg-muted shrink-0">
                 {previewProfile ? (
                   <Image src={previewProfile} alt="preview-profile" fill unoptimized className="object-contain p-2" />
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground italic text-sm">No image</div>
                 )}
               </div>
+
+              <Button type="button" variant="outline" className="w-full" onClick={() => fileInputRef.current?.click()}>
+                {previewProfile ? "Pilih Foto Lain" : "Upload Foto"}
+              </Button>
 
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>

@@ -91,8 +91,6 @@ export function DataTable<TData, TValue>({
   isLoading,
   pageSizeOptions = [8, 15, 30, 50],
 }: DataTableProps<TData, TValue>) {
-  "use no memo"; // eslint-disable-line
-
   const [rowSelection, setRowSelection] = React.useState({});
 
   const table = useReactTable({
@@ -146,7 +144,7 @@ export function DataTable<TData, TValue>({
   return (
     <div className="space-y-4">
       {/* TABLE */}
-      <div className="rounded-md border overflow-hidden">
+      <div className="rounded-md border overflow-x-auto">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((group) => (
@@ -181,7 +179,7 @@ export function DataTable<TData, TValue>({
       </div>
 
       {/* FOOTER */}
-      <div className="flex items-center justify-between px-2">
+      <div className="flex flex-wrap items-center justify-between gap-4 px-2">
         {/* PAGE SIZE */}
         <div className="flex items-center gap-2 h-2">
           <Label className="text-sm text-muted-foreground">Rows per page</Label>
@@ -201,11 +199,11 @@ export function DataTable<TData, TValue>({
         </div>
 
         {/* PAGE INFO + PAGINATION */}
-        <div className="flex items-center gap-6 whitespace-nowrap">
-          <Label className="text-xs text-muted-foreground">Total Data: {data.length}</Label>
+        <div className="flex items-center gap-4 whitespace-nowrap">
+          <Label className="text-xs text-muted-foreground hidden sm:inline">Total: {data.length}</Label>
 
           <Label className="text-xs text-muted-foreground">
-            Page {data.length === 0 ? 0 : currentPage + 1} of {pageCount}
+            {data.length === 0 ? 0 : currentPage + 1} / {pageCount}
           </Label>
 
           <Pagination>

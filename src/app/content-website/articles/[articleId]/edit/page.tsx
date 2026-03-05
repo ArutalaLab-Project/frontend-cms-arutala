@@ -62,7 +62,7 @@ export default function ArticleEditPage() {
 
   return (
     <div className="flex flex-1 flex-col">
-      <div className="p-4 lg:px-6 border-b bg-muted/20">
+      <div className="p-4  border-b mb-4 lg:px-6 bg-muted/20">
         <div className="flex items-center justify-around">
           <ArticleChangeStatusDialog article={articleDetail!} />
           <div className="flex items-center gap-2">
@@ -78,20 +78,20 @@ export default function ArticleEditPage() {
 
       <div className="flex-1">
         <Tabs defaultValue="editor" className="h-full flex flex-col">
-          <div className="px-4 border-b bg-background shrink-0">
-            <TabsList className="h-12 bg-transparent p-0 gap-6">
+          <div className="px-8 bg-background shrink-0">
+            <TabsList className="h-auto py-4 bg-transparent p-0 gap-3">
               <TabsTrigger
                 value="editor"
-                className="h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-2"
+                className="rounded-xl data-[state=active]:bg-accent-600 data-[state=active]:text-accent-100 hover:bg-accent-600/50 data-[state=active]:shadow-sm px-4 py-1.5 flex items-center justify-center gap-1.5 transition-all text-sm font-medium"
               >
-                <CodeIcon className="w-4 h-4 mr-2" />
+                <CodeIcon className="w-4 h-4" />
                 Editor
               </TabsTrigger>
               <TabsTrigger
                 value="preview"
-                className="h-full rounded-none border-b-2 border-transparent data-[state=active]:border-primary data-[state=active]:bg-transparent data-[state=active]:shadow-none px-2"
+                className="rounded-xl data-[state=active]:bg-accent-600 data-[state=active]:text-accent-100 hover:bg-accent-600/50 data-[state=active]:shadow-sm px-4 py-1.5 flex items-center justify-center gap-1.5 transition-all text-sm font-medium"
               >
-                <AppWindowIcon className="w-4 h-4 mr-2" />
+                <AppWindowIcon className="w-4 h-4" />
                 Preview
               </TabsTrigger>
             </TabsList>

@@ -41,33 +41,30 @@ export function EntityDialog({
   return (
     <AlertDialog open={open} onOpenChange={onOpenChange}>
       {trigger && <AlertDialogTrigger asChild>{trigger}</AlertDialogTrigger>}
-      <AlertDialogContent className={cn("sm:max-w-5xl max-h-max h-fit max-w-3xl!", className)}>
+      <AlertDialogContent className={cn("sm:max-w-5xl max-h-[90dvh] flex flex-col p-6 gap-4!", className)}>
         <AlertDialogHeader className="shrink-0">
           <AlertDialogTitle>{title}</AlertDialogTitle>
           <AlertDialogDescription>{description}</AlertDialogDescription>
         </AlertDialogHeader>
 
-        <form onSubmit={onSubmit} className="space-y-3">
-          <div className={cn("grid grid-cols-1 md:grid-cols-2 gap-x-2 gap-y-3 no-scrollbar -mx-4 max-h-max overflow-y-auto px-4", contentClassName)}>{children}</div>
+        <form onSubmit={onSubmit} className="flex flex-col flex-1 min-h-0 overflow-hidden">
+          <div className={cn("grid grid-cols-1 lg:grid-cols-2 gap-x-4 gap-y-4 px-1 py-1 overflow-y-auto overflow-x-hidden flex-1 no-scrollbar", contentClassName)}>{children}</div>
 
-          <AlertDialogFooter className="flex w-full justify-between">
-            <AlertDialogCancel asChild size="sm">
+          <AlertDialogFooter className="shrink-0 pt-4 flex w-full justify-between items-center sm:justify-between border-t mt-auto">
+            <AlertDialogCancel asChild>
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => {
-                  // form.reset();
                   onOpenChange(false);
                 }}
               >
                 {cancelLabel}
               </Button>
             </AlertDialogCancel>
-            {/* <AlertDialogAction asChild size="sm"> */}
             <Button type="submit" size="sm" disabled={isPending}>
               {isPending ? "Saving..." : saveLabel}
             </Button>
-            {/* </AlertDialogAction> */}
           </AlertDialogFooter>
         </form>
       </AlertDialogContent>
