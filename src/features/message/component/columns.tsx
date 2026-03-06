@@ -24,7 +24,7 @@ export const statusColorMessage: Record<MessageStatus, string> = {
   NEGOTIATION: "bg-status-negotiation text-white hover:bg-status-negotiation",
   VERBAL_COMMITMENT: "bg-status-verbal-commitment text-white hover:bg-status-verbal-commitment",
   CLOSED_WON: "bg-status-closed-won text-white hover:bg-status-closed-won",
-  CLOSED_LOSS: "bg-status-closed-loss text-white hover:bg-status-closed-loss",
+  CLOSED_LOST: "bg-status-closed-lost text-white hover:bg-status-closed-lost",
   ON_HOLD: "bg-status-on-hold text-black hover:bg-status-on-hold",
 };
 
