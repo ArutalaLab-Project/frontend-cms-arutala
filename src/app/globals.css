@@ -97,7 +97,7 @@
   --color-status-negotiation: var(--status-negotiation);
   --color-status-verbal-commitment: var(--status-verbal-commitment);
   --color-status-closed-won: var(--status-closed-won);
-  --color-status-closed-loss: var(--status-closed-loss);
+  --color-status-closed-lost: var(--status-closed-lost);
   --color-status-on-hold: var(--status-on-hold);
 
   --color-status-draft: var(--status-draft);
@@ -109,6 +109,12 @@
   --color-status-open: var(--status-open);
   --color-status-on-going: var(--status-on-going);
   --color-status-completed: var(--status-completed);
+
+  --color-subject-it-education: var(--subject-it-education);
+  --color-subject-resource: var(--subject-resource);
+  --color-subject-software-services: var(--subject-software-services);
+  --color-subject-partner: var(--subject-partner);
+  --color-subject-others: var(--subject-others);
 }
 
 :root {
@@ -166,7 +172,7 @@
   --status-negotiation: #6366f1;
   --status-verbal-commitment: #14b816;
   --status-closed-won: #22c55e;
-  --status-closed-loss: #ef4444;
+  --status-closed-lost: #ef4444;
   --status-on-hold: #facc15;
 
   /* Status Colors Articles  */
@@ -180,6 +186,12 @@
   --status-open: #22c55e;
   --status-on-going: #15803d;
   --status-completed: #3b82f6;
+
+  --subject-it-education: #0ea5e9;
+  --subject-resource: #22c55e;
+  --subject-software-services: #6366f1;
+  --subject-partner: #f59e0b;
+  --subject-others: #64748b;
 
   /* Theme Mappings (Revised for Professional Aesthetics) */
   --background: var(--neutral-50);

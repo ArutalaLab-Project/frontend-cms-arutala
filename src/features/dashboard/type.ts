@@ -12,13 +12,35 @@ export const overviewSchema = z.object({
         created_date: z.string(),
       }),
     ),
-    stats: z.array(
-      z.object({
-        month: z.string(),
-        sort_key: z.string(),
-        total: z.number(),
-      }),
-    ),
+    stats: z.object({
+      messageStats: z.array(
+        z.object({
+          total_leads: z.string(),
+          closed_won: z.string(),
+          closed_lost: z.string(),
+          conversion_rate: z.string(),
+        }),
+      ),
+      messageMonthly: z.array(
+        z.object({
+          month: z.string(),
+          sort_key: z.string(),
+          total: z.number(),
+        }),
+      ),
+      messageStatus: z.array(
+        z.object({
+          title: z.string(),
+          number: z.string(),
+        }),
+      ),
+      messageSubject: z.array(
+        z.object({
+          title: z.string(),
+          number: z.string(),
+        }),
+      ),
+    }),
   }),
   courses: z.object({
     upcoming: z.array(

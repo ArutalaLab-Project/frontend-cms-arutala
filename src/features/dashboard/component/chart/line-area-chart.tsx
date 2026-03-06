@@ -16,30 +16,31 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 type ChartProps = {
-  stats: {
+  data: {
     month: string;
     sort_key: string;
     total: number;
   }[];
 };
 
-export function ChartArea({ stats }: ChartProps) {
+export function LineAreaChart({ data }: ChartProps) {
+  const totalMessage = data.reduce((acc, item) => acc + item.total, 0);
   const chartData = React.useMemo(() => {
-    if (!stats?.length) return [];
+    if (!data?.length) return [];
 
-    const lastTwelveMonths = stats.slice(-12);
-
-    return lastTwelveMonths.map((item) => ({
+    return data.map((item) => ({
       date: item.month,
       total: item.total,
     }));
-  }, [stats]);
+  }, [data]);
 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Total Messages</CardTitle>
-        <CardDescription>Total messages received in the last 12 months</CardDescription>
+        <CardTitle>Leads per Month</CardTitle>
+        {/* <CardDescription> */}
+        {/* <strong>{totalMessage}</strong> messages received in the last 12 months */}
+        {/* </CardDescription> */}
       </CardHeader>
 
       <CardContent>
@@ -47,17 +48,7 @@ export function ChartArea({ stats }: ChartProps) {
           <AreaChart data={chartData}>
             <CartesianGrid vertical={false} />
 
-            <XAxis
-              dataKey="date"
-              tickLine={false}
-              axisLine={false}
-              tickMargin={8}
-              tickFormatter={(value) =>
-                new Date(value).toLocaleDateString("en-US", {
-                  month: "short",
-                })
-              }
-            />
+            <XAxis dataKey="date" tickLine={false} axisLine={false} tickMargin={8} />
 
             <ChartTooltip />
 
