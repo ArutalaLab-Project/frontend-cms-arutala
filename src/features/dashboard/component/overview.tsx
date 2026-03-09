@@ -20,6 +20,7 @@ export default function OverviewPage() {
   }
 
   const { stats } = data.messages;
+
   const messageStats = stats.messageStats[0] || {
     total_leads: "0",
     closed_won: "0",

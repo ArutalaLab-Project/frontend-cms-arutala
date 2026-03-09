@@ -6,6 +6,10 @@ import { cn } from "@/shared/lib/cn";
 import { formatedDate } from "@/shared/utils/date";
 import { formatSnakeCaseToTitle } from "@/shared/utils/string";
 import { Message, MessageStatus } from "@/features/message/type";
+import { generateWhatsAppMessage, generateWhatsAppNumber } from "@/shared/utils/whatsapp";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { IconBrandWhatsappFilled } from "@tabler/icons-react";
 
 export const statusColorMessage: Record<MessageStatus, string> = {
   NEW: "bg-status-new text-black hover:bg-status-new",
@@ -55,5 +59,20 @@ export const columns: ColumnDef<Message>[] = [
     header: "Status",
     enableColumnFilter: true,
     cell: ({ row }) => <Badge className={cn("text-shadow-2xs", statusColorMessage[row.original.message_status])}>{formatSnakeCaseToTitle(row.original.message_status)}</Badge>,
+  },
+  {
+    id: "actions",
+    header: "Action",
+    cell: ({ row }) => {
+      const WaPhone = generateWhatsAppNumber(row.original.sender_phone);
+      const message = generateWhatsAppMessage(row.original.sender_name);
+      return (
+        <Button size="icon-sm">
+          <Link href={`https://wa.me/${WaPhone}?text=${message}`} target="_blank" rel="noopener noreferrer">
+            <IconBrandWhatsappFilled />
+          </Link>
+        </Button>
+      );
+    },
   },
 ];

@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Area, AreaChart, CartesianGrid, XAxis } from "recharts";
 
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ChartContainer, ChartTooltip, type ChartConfig } from "@/components/ui/chart";
 
 export const description = "Monthly message statistics";
@@ -24,7 +24,6 @@ type ChartProps = {
 };
 
 export function LineAreaChart({ data }: ChartProps) {
-  const totalMessage = data.reduce((acc, item) => acc + item.total, 0);
   const chartData = React.useMemo(() => {
     if (!data?.length) return [];
 
@@ -38,9 +37,6 @@ export function LineAreaChart({ data }: ChartProps) {
     <Card>
       <CardHeader>
         <CardTitle>Leads per Month</CardTitle>
-        {/* <CardDescription> */}
-        {/* <strong>{totalMessage}</strong> messages received in the last 12 months */}
-        {/* </CardDescription> */}
       </CardHeader>
 
       <CardContent>

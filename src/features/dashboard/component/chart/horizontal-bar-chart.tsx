@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { Bar, BarChart, Cell, XAxis, YAxis } from "recharts";
+import { Bar, BarChart, CartesianGrid, Cell, LabelList, XAxis, YAxis } from "recharts";
 import { type ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from "@/components/ui/chart";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
@@ -72,7 +72,8 @@ export function HorizontalBarChart({ data }: { data?: { title: string; number: s
 
       <CardContent>
         <ChartContainer className="h-[350px] w-full" config={chartConfig}>
-          <BarChart accessibilityLayer data={mergedData} layout="vertical" margin={{ left: 10 }}>
+          <BarChart accessibilityLayer data={mergedData} layout="vertical" margin={{ right: 16 }}>
+            <CartesianGrid horizontal={false} />
             <YAxis axisLine={false} dataKey="title" tickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label} tickLine={false} tickMargin={10} type="category" width={160} />
             <XAxis dataKey="number" hide type="number" />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} cursor={false} />
@@ -80,6 +81,7 @@ export function HorizontalBarChart({ data }: { data?: { title: string; number: s
               {mergedData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.fill} />
               ))}
+              <LabelList className="fill-foreground" dataKey="number" fontSize={12} offset={8} position="right" />
             </Bar>
           </BarChart>
         </ChartContainer>
