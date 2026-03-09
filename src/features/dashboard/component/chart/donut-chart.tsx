@@ -14,9 +14,9 @@ const chartConfig = {
     label: "IT Education",
     color: "var(--color-subject-it-education)",
   },
-  resource: {
+  resources: {
     label: "Resource",
-    color: "var(--color-subject-resource)",
+    color: "var(--color-subject-resources)",
   },
   software_services: {
     label: "Software Services",
@@ -26,14 +26,13 @@ const chartConfig = {
     label: "Partner",
     color: "var(--color-subject-partner)",
   },
-  others: {
+  lainnya: {
     label: "Lainnya",
-    color: "var(--color-subject-others)",
+    color: "var(--color-subject-lainnya)",
   },
 } satisfies ChartConfig;
 
 export function DonutChart({ data }: { data?: { title: string; number: string }[] }) {
-  console.log(data);
   const mergedData = React.useMemo(() => {
     return Object.keys(chartConfig)
       .filter((key) => key !== "number")
@@ -47,14 +46,14 @@ export function DonutChart({ data }: { data?: { title: string; number: string }[
       });
   }, [data]);
 
-  console.log(mergedData);
+  console.log("mergedData", mergedData);
 
   return (
     <Card className="w-full h-full flex flex-col">
       <CardHeader>
         <CardTitle>Leads by Subject</CardTitle>
       </CardHeader>
-      <CardContent className="flex-1 flex items-center justify-center min-h-[400px]">
+      <CardContent className="flex-1 flex items-center justify-center min-h-[350px]">
         <ChartContainer className="w-full h-[350px]" config={chartConfig}>
           <ResponsiveContainer width="100%" height="100%">
             <PieChart>
@@ -64,7 +63,7 @@ export function DonutChart({ data }: { data?: { title: string; number: string }[
                   <Cell key={`cell-${index}`} fill={entry.fill} />
                 ))}
               </Pie>
-              <ChartLegend className="flex-wrap flex-col items-start pl-6 gap-2" content={<ChartLegendContent nameKey="title" />} />
+              <ChartLegend className="flex-wrap flex-col items-start pl-6 gap-1" content={<ChartLegendContent nameKey="title" />} />
             </PieChart>
           </ResponsiveContainer>
         </ChartContainer>

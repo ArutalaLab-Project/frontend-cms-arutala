@@ -3,7 +3,7 @@
 import { SimpleDataTable } from "@/components/shared/simple-data-table";
 import { Message, useMessages } from "@/features/message";
 import { columns } from "./column";
-import { isAfter, subMonths } from "date-fns";
+// import { isAfter, subMonths } from "date-fns";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 
 const getRowId = (row: Message) => row.message_id;
@@ -11,8 +11,9 @@ const getRowId = (row: Message) => row.message_id;
 export function RecentLeadTable() {
   const { data: messages, isLoading } = useMessages();
 
-  const oneMonthAgo = subMonths(new Date(), 1);
-  const filteredMessages = messages?.filter((message) => isAfter(new Date(message.created_date), oneMonthAgo)) ?? [];
+  // const oneMonthAgo = subMonths(new Date(), 1);
+  // const filteredMessages = messages?.filter((message) => isAfter(new Date(message.created_date), oneMonthAgo)) ?? [];
+  const filteredMessages = messages?.slice(0, 5);
 
   return (
     <Card>
@@ -20,7 +21,7 @@ export function RecentLeadTable() {
         <CardTitle>Latest Leads</CardTitle>
       </CardHeader>
       <CardContent>
-        <SimpleDataTable data={filteredMessages} columns={columns} getRowId={getRowId} isLoading={isLoading} />
+        <SimpleDataTable data={filteredMessages ?? []} columns={columns} getRowId={getRowId} isLoading={isLoading} />
       </CardContent>
     </Card>
   );

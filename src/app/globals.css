@@ -111,10 +111,10 @@
   --color-status-completed: var(--status-completed);
 
   --color-subject-it-education: var(--subject-it-education);
-  --color-subject-resource: var(--subject-resource);
+  --color-subject-resources: var(--subject-resources);
   --color-subject-software-services: var(--subject-software-services);
   --color-subject-partner: var(--subject-partner);
-  --color-subject-others: var(--subject-others);
+  --color-subject-lainnya: var(--subject-lainnya);
 }
 
 :root {
@@ -188,10 +188,10 @@
   --status-completed: #3b82f6;
 
   --subject-it-education: #0ea5e9;
-  --subject-resource: #22c55e;
+  --subject-resources: #22c55e;
   --subject-software-services: #6366f1;
   --subject-partner: #f59e0b;
-  --subject-others: #64748b;
+  --subject-lainnya: #64748b;
 
   /* Theme Mappings (Revised for Professional Aesthetics) */
   --background: var(--neutral-50);
