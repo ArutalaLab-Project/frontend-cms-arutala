@@ -72,7 +72,7 @@ export function HorizontalBarChart({ data }: { data?: { title: string; number: s
 
       <CardContent>
         <ChartContainer className="h-[350px] w-full" config={chartConfig}>
-          <BarChart accessibilityLayer data={mergedData} layout="vertical" margin={{ right: 16 }}>
+          <BarChart accessibilityLayer data={mergedData} layout="vertical" margin={{ right: 30 }}>
             <CartesianGrid horizontal={false} />
             <YAxis axisLine={false} dataKey="title" tickFormatter={(value) => chartConfig[value as keyof typeof chartConfig]?.label} tickLine={false} tickMargin={10} type="category" width={160} />
             <XAxis dataKey="number" hide type="number" />
