@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
+// import { Checkbox } from "@/components/ui/checkbox";
 import { IconListDetails } from "@tabler/icons-react";
 import { Article, ArticleStatusType } from "../type";
 import { ArticleDeleteDialog } from "./article-delete";
@@ -25,17 +25,17 @@ export const statusColorArticle: Record<ArticleStatusType, string> = {
 };
 
 export const columns: ColumnDef<Article>[] = [
-  {
-    id: "select",
-    header: ({ table }) => (
-      <Checkbox
-        checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
-        onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
-        aria-label="Select all"
-      />
-    ),
-    cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />,
-  },
+  // {
+  //   id: "select",
+  //   header: ({ table }) => (
+  //     <Checkbox
+  //       checked={table.getIsAllPageRowsSelected() || (table.getIsSomePageRowsSelected() && "indeterminate")}
+  //       onCheckedChange={(value) => table.toggleAllPageRowsSelected(!!value)}
+  //       aria-label="Select all"
+  //     />
+  //   ),
+  //   cell: ({ row }) => <Checkbox checked={row.getIsSelected()} onCheckedChange={(value) => row.toggleSelected(!!value)} aria-label="Select row" />,
+  // },
   {
     accessorKey: "article_cover_url",
     header: "Cover",

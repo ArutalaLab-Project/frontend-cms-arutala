@@ -21,7 +21,10 @@ export function SeoAddDialog() {
   const handleSubmit = async (values: SeoInput) => {
     toast.promise(mutateAsync({ pageId: pageId, body: values }), {
       loading: "Menambah SEO pada Page...",
-      success: () => "Menambah SEO berhasil",
+      success: () => {
+        form.reset();
+        return "Menambah SEO berhasil";
+      },
       error: (err) => err.message || "Failed to add SEO",
     });
     setOpen(false);
