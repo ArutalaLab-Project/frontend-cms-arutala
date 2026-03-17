@@ -7,86 +7,89 @@ import Image from "next/image";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Field, FieldError, FieldLabel } from "@/components/ui/field";
-import { UpdateMitraInput, Mitra, updateMitraSchema } from "../type";
-import { useUpdateMitra } from "../hook";
 import { EntityDialog } from "@/components/shared/entity-dialog";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { useParams } from "next/navigation";
 
-export function MitraLogoDialog({ mitra }: { mitra: Mitra }) {
+import { Seo, SeoCoverUpdateInput, updateSeoCoverSchema } from "../type";
+import { useUpdateSeoCover } from "../hook";
+import { IconPhotoEdit } from "@tabler/icons-react";
+
+export function SeoCoverDialog({ seo }: { seo: Seo }) {
   const [open, setOpen] = useState(false);
-  const [previewLogo, setPreviewLogo] = useState<string | null>(mitra.mitra_logo_url);
+  const [previewLogo, setPreviewLogo] = useState<string | null>(seo.seo_reference_image);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const params = useParams();
+  const pageId = params.pageId as string;
 
-  const { mutateAsync: updateMitra, isPending } = useUpdateMitra();
+  const { mutateAsync: updateSeoCover, isPending } = useUpdateSeoCover();
 
-  // We only care about mitraLogo in this dialog
-  const form = useForm<Pick<UpdateMitraInput, "mitraLogo">>({
-    resolver: zodResolver(updateMitraSchema.pick({ mitraLogo: true })),
+  const form = useForm<SeoCoverUpdateInput>({
+    resolver: zodResolver(updateSeoCoverSchema),
     defaultValues: {
-      mitraLogo: undefined,
+      referenceImage: undefined,
     },
   });
 
-  const handleUpdateLogo = async (values: Pick<UpdateMitraInput, "mitraLogo">) => {
-    if (!values.mitraLogo) {
-      toast.error("Silakan pilih logo terlebih dahulu");
+  const handleUpdateLogo = async (values: SeoCoverUpdateInput) => {
+    if (!values.referenceImage) {
+      toast.error("Silakan pilih cover terlebih dahulu");
       return;
     }
 
     const formData = new FormData();
-    formData.append("mitraLogo", values.mitraLogo);
+    formData.append("referenceImage", values.referenceImage);
 
     toast.promise(
-      updateMitra({
-        id: mitra.mitra_id,
-        data: formData,
+      updateSeoCover({
+        pageId,
+        seoId: seo.seo_id,
+        body: formData,
       }),
       {
-        loading: "Updating logo...",
+        loading: "Updating Cover SEO...",
         success: () => {
           setOpen(false);
-          return "Logo mitra berhasil diperbarui";
+          return "Cover SEO berhasil diperbarui";
         },
-        error: (err) => err.message || "Failed to update logo",
+        error: (err) => err.message || "Failed to update cover",
       },
     );
   };
 
   useEffect(() => {
     return () => {
-      if (previewLogo && previewLogo !== mitra.mitra_logo_url) {
+      if (previewLogo && previewLogo !== seo.seo_reference_image) {
         URL.revokeObjectURL(previewLogo);
       }
     };
-  }, [previewLogo, mitra.mitra_logo_url]);
+  }, [previewLogo, seo.seo_reference_image]);
 
   return (
     <EntityDialog
       open={open}
       onOpenChange={setOpen}
-      title="Update Logo Mitra"
-      description="Pilih file logo baru untuk mitra ini"
+      title="Update Cover SEO"
+      description="Pilih file cover baru untuk referensi SEO page ini"
       isPending={isPending}
-      saveLabel="Update Logo"
+      saveLabel="Update Cover"
       onSubmit={form.handleSubmit(handleUpdateLogo)}
       className="sm:max-w-md max-w-md!"
       contentClassName="!grid-cols-1"
       trigger={
-        <div className="w-full max-w-sm cursor-pointer hover:opacity-80 transition-opacity">
-          <AspectRatio ratio={4 / 2} className="bg-accent rounded-lg border overflow-hidden">
-            <Image src={mitra.mitra_logo_url!} alt={mitra.mitra_name} fill className="object-contain p-2" />
-          </AspectRatio>
+        <div className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground">
+          <IconPhotoEdit className="h-4 w-4" />
+          <span>Edit Cover Image</span>
         </div>
       }
     >
       <Controller
-        name="mitraLogo"
+        name="referenceImage"
         control={form.control}
         render={({ field, fieldState }) => (
           <div className="flex flex-col items-center gap-4 py-4">
             <Field data-invalid={fieldState.invalid} className="w-full flex flex-col items-center gap-3">
-              <FieldLabel htmlFor="mitraLogo" className="sr-only">
-                Logo Mitra
+              <FieldLabel htmlFor="referenceImage" className="sr-only">
+                Cover SEO
               </FieldLabel>
               <input
                 ref={fileInputRef}
@@ -97,7 +100,7 @@ export function MitraLogoDialog({ mitra }: { mitra: Mitra }) {
                   const file = e.target.files?.[0];
                   if (!file) return;
                   field.onChange(file);
-                  if (previewLogo && previewLogo !== mitra.mitra_logo_url) {
+                  if (previewLogo && previewLogo !== seo.seo_reference_image) {
                     URL.revokeObjectURL(previewLogo);
                   }
                   setPreviewLogo(URL.createObjectURL(file));
@@ -113,7 +116,7 @@ export function MitraLogoDialog({ mitra }: { mitra: Mitra }) {
               </div>
 
               <Button type="button" variant="outline" onClick={() => fileInputRef.current?.click()}>
-                {previewLogo ? "Pilih Logo Lain" : "Upload Logo"}
+                {previewLogo ? "Pilih Cover Lain" : "Upload Cover"}
               </Button>
 
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}

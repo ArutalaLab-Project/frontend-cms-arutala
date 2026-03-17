@@ -46,8 +46,6 @@ export function DonutChart({ data }: { data?: { title: string; number: string }[
       });
   }, [data]);
 
-  console.log("mergedData", mergedData);
-
   return (
     <Card className="w-full h-full flex flex-col">
       <CardHeader>

@@ -5,7 +5,6 @@ async function request<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
     credentials: "include",
     ...init,
   });
-  // console.log(res);
 
   const json: ApiResponse<T> = await res.json();
 
@@ -20,27 +19,31 @@ async function request<T>(input: RequestInfo, init?: RequestInit): Promise<T> {
 export const clientApi = {
   get: <T>(url: string) => request<T>(url),
 
-  post: <T>(url: string, body: BodyInit) =>
+  post: <T>(url: string, body: BodyInit, init?: RequestInit) =>
     request<T>(url, {
       method: "POST",
       body,
+      ...init,
     }),
 
-  patch: <T>(url: string, body: BodyInit) =>
+  patch: <T>(url: string, body: BodyInit, init?: RequestInit) =>
     request<T>(url, {
       method: "PATCH",
       body,
+      ...init,
     }),
 
-  put: <T>(url: string, body: BodyInit | null) =>
+  put: <T>(url: string, body: BodyInit | null, init?: RequestInit) =>
     request<T>(url, {
       method: "PUT",
       body,
+      ...init,
     }),
 
-  delete: <T>(url: string, body?: BodyInit) =>
+  delete: <T>(url: string, body?: BodyInit, init?: RequestInit) =>
     request<T>(url, {
       method: "DELETE",
       body,
+      ...init,
     }),
 };

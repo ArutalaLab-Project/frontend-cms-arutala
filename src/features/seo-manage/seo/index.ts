@@ -1,6 +1,7 @@
 // components
 export { SeoAddDialog } from "./component/seo-add";
-export { SeoEditDialog } from "./component/seo-edit";
+export { SeoEditDialog } from "./component/seo-edit-dialog";
+export { SeoCoverDialog } from "./component/seo-cover-dialog";
 export { SeoDeleteDialog } from "./component/seo-delete";
 
 // hooks
