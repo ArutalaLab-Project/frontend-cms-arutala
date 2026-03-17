@@ -7,7 +7,8 @@ const API_EXTERNAL = process.env.NEXT_API_EXTERNAL!;
 export async function serverFetch<T>(path: string, options: RequestInit = {}): Promise<T> {
   const cookieStore = await cookies();
   const accessToken = cookieStore.get("accessToken")?.value;
-  const isFormData = options.body instanceof FormData;
+  const isFormData =
+    options.body instanceof FormData || (options.body !== null && typeof options.body === "object" && (options.body as { constructor?: { name?: string } }).constructor?.name === "FormData");
 
   const res = await fetch(`${API_EXTERNAL}${path}`, {
     ...options,
@@ -23,6 +24,7 @@ export async function serverFetch<T>(path: string, options: RequestInit = {}): P
   // console.log(res);
 
   let json: ApiResponse<T>;
+  // let json;
 
   try {
     json = await res.json();

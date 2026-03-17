@@ -7,11 +7,12 @@ import z from "zod";
 export async function POST(req: NextRequest, context: { params: Promise<{ pageId: string }> }) {
   try {
     const { pageId } = await context.params;
-    const body = await req.json();
+    const body = await req.formData();
     await serverFetch<null>(`/pages/${pageId}/seo`, {
       method: "POST",
-      body: JSON.stringify(body),
+      body: body,
     });
+
     const response = NextResponse.json({
       success: true,
       data: null,
@@ -52,7 +53,6 @@ export async function GET(req: NextRequest, context: { params: Promise<{ pageId:
   try {
     const { pageId } = await context.params;
     const seo = await serverFetch<Seo>(`/pages/${pageId}/seo`);
-    // console.log(seo);
     return NextResponse.json({
       success: true,
       data: seo,

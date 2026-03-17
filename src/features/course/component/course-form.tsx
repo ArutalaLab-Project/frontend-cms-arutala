@@ -30,8 +30,6 @@ export function CourseForm({ initialData, onSubmit, formId = "course-form" }: Co
   const { data: coursesfield } = useCourseField();
   const { data: coursesbenefits } = useCourseBenefit();
 
-  console.log(initialData);
-
   const form = useForm<CourseInput>({
     resolver: zodResolver(courseInputSchema),
     values: initialData,

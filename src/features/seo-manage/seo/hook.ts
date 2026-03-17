@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Seo, SeoInput } from "./type";
-import { changeStatusSeo, createSeoInPage, deleteSeo, fetchSeo, updateDetailSeo } from "./api";
+import { Seo } from "./type";
+import { changeStatusSeo, createSeoInPage, deleteSeo, fetchSeo, updateDetailSeo, updateSeoCover } from "./api";
 
 export function useSeos(pageId: string) {
   return useQuery<Seo[]>({
@@ -12,7 +12,7 @@ export function useSeos(pageId: string) {
 export function useCreateSeo() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ pageId, body }: { pageId: string; body: SeoInput }) => createSeoInPage(pageId, body),
+    mutationFn: ({ pageId, body }: { pageId: string; body: FormData }) => createSeoInPage(pageId, body),
     onSuccess: (_, { pageId }) => {
       queryClient.invalidateQueries({ queryKey: ["seos", pageId] });
     },
@@ -31,7 +31,17 @@ export function useChangeStatusSeo() {
 export function useUpdateDetailSeo() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: ({ pageId, seoId, body }: { pageId: string; seoId: string; body: SeoInput }) => updateDetailSeo(pageId, seoId, body),
+    mutationFn: ({ pageId, seoId, body }: { pageId: string; seoId: string; body: FormData }) => updateDetailSeo(pageId, seoId, body),
+    onSuccess: (_, { pageId }) => {
+      queryClient.invalidateQueries({ queryKey: ["seos", pageId] });
+    },
+  });
+}
+
+export function useUpdateSeoCover() {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ pageId, seoId, body }: { pageId: string; seoId: string; body: FormData }) => updateSeoCover(pageId, seoId, body),
     onSuccess: (_, { pageId }) => {
       queryClient.invalidateQueries({ queryKey: ["seos", pageId] });
     },

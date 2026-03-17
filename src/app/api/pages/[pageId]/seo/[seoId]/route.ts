@@ -37,11 +37,21 @@ export async function PUT(req: NextRequest, context: { params: Promise<{ pageId:
 export async function PATCH(req: NextRequest, context: { params: Promise<{ pageId: string; seoId: string }> }) {
   try {
     const { pageId, seoId } = await context.params;
-    const body = await req.json();
-    await serverFetch(`/pages/${pageId}/seo/${seoId}`, {
-      method: "PATCH",
-      body: JSON.stringify(body),
-    });
+    const contentType = req.headers.get("content-type") || "";
+
+    if (contentType.includes("application/json")) {
+      const body = await req.json();
+      await serverFetch(`/pages/${pageId}/seo/${seoId}`, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      });
+    } else {
+      const body = await req.formData();
+      await serverFetch(`/pages/${pageId}/seo/${seoId}`, {
+        method: "PATCH",
+        body: body,
+      });
+    }
 
     return NextResponse.json({
       success: true,

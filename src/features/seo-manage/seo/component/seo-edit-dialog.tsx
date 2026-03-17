@@ -1,37 +1,37 @@
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { useEffect, useRef, useState } from "react";
-import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
+"use client";
+
+import { useEffect, useState } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Badge } from "@/components/ui/badge";
+import { IconEdit } from "@tabler/icons-react";
 import { toast } from "sonner";
-import { useCreateSeo } from "../hook";
-import { SeoInput, seoInputSchema } from "../type";
-import { PlusCircle } from "lucide-react";
+import { Input } from "@/components/ui/input";
+import { Field, FieldDescription, FieldError, FieldLabel } from "@/components/ui/field";
 import { Textarea } from "@/components/ui/textarea";
-import { useParams } from "next/navigation";
-import { EntityDialog } from "@/components/shared/entity-dialog";
-import Image from "next/image";
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { IconPlus, IconX } from "@tabler/icons-react";
-import { Badge } from "@/components/ui/badge";
-import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { EntityDialog } from "@/components/shared/entity-dialog";
+import { useParams } from "next/navigation";
 
-export function SeoAddDialog() {
+import { Seo, SeoUpdateInput, updateSeoSchema } from "../type";
+import { useUpdateDetailSeo } from "../hook";
+
+export function SeoEditDialog({ seo }: { seo: Seo }) {
   const [open, setOpen] = useState(false);
-  const { mutateAsync, isPending } = useCreateSeo();
-  const [previewImage, setPreviewImage] = useState<string | null>(null);
-  const fileInputRef = useRef<HTMLInputElement | null>(null);
   const params = useParams();
   const pageId = params.pageId as string;
-  const form = useForm<SeoInput>({
-    resolver: zodResolver(seoInputSchema),
+
+  const { mutateAsync: updateSeo, isPending } = useUpdateDetailSeo();
+
+  const form = useForm<SeoUpdateInput>({
+    resolver: zodResolver(updateSeoSchema),
     defaultValues: {
-      metaTitle: "",
-      metaDescription: "",
-      keyword: [],
-      type: "WEBSITE",
-      referenceImage: undefined,
+      metaTitle: seo.meta_title,
+      metaDescription: seo.meta_description,
+      keyword: seo.seo_keyword.map((k) => ({ value: k })),
+      type: seo.seo_type,
     },
   });
 
@@ -44,7 +44,18 @@ export function SeoAddDialog() {
     name: "keyword",
   });
 
-  const handleSubmit = async (values: SeoInput) => {
+  useEffect(() => {
+    if (open) {
+      form.reset({
+        metaTitle: seo.meta_title,
+        metaDescription: seo.meta_description,
+        keyword: seo.seo_keyword.map((k) => ({ value: k })),
+        type: seo.seo_type,
+      });
+    }
+  }, [open, seo, form]);
+
+  const handleUpdate = async (values: SeoUpdateInput) => {
     const formData = new FormData();
     formData.append("metaTitle", values.metaTitle);
     formData.append("metaDescription", values.metaDescription);
@@ -53,78 +64,41 @@ export function SeoAddDialog() {
       formData.append("keyword", item.value);
     }
 
-    if (values.referenceImage) {
-      formData.append("referenceImage", values.referenceImage);
-    }
+    // console.log("Mapped FormData payload sent to API");
 
-    toast.promise(mutateAsync({ pageId: pageId, body: formData }), {
-      loading: "Menambah SEO pada Page...",
-      success: () => {
-        form.reset();
-        return "Menambah SEO berhasil";
+    toast.promise(
+      updateSeo({
+        pageId,
+        seoId: seo.seo_id,
+        body: formData,
+      }),
+      {
+        loading: "Updating SEO metadata...",
+        success: () => {
+          setOpen(false);
+          return "SEO metadata berhasil diperbarui";
+        },
+        error: (err) => err.message || "Failed to update SEO",
       },
-      error: (err) => err.message || "Failed to add SEO",
-    });
-    setOpen(false);
+    );
   };
-
-  useEffect(() => {
-    return () => {
-      if (previewImage) URL.revokeObjectURL(previewImage);
-    };
-  }, [previewImage]);
 
   return (
     <EntityDialog
       open={open}
       onOpenChange={setOpen}
-      title="Add Seo in This Page"
-      description="Make changes here. Click save when you're done"
+      title="Edit SEO"
+      description="Perbarui informasi SEO page ini"
       isPending={isPending}
-      saveLabel="Create"
-      onSubmit={form.handleSubmit(handleSubmit)}
+      saveLabel="Update"
+      onSubmit={form.handleSubmit(handleUpdate)}
       trigger={
-        <Button size="sm">
-          Tambah SEO <PlusCircle />
-        </Button>
+        <div className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground data-[disabled]:pointer-events-none data-[disabled]:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground">
+          <IconEdit className="h-4 w-4" />
+          <span>Edit Metadata</span>
+        </div>
       }
     >
-      <Controller
-        name="referenceImage"
-        control={form.control}
-        render={({ field, fieldState }) => (
-          <div className="lg:col-span-2">
-            <Field data-invalid={fieldState.invalid} orientation="horizontal" className="grid grid-cols-1 md:grid-cols-[1fr,160px] gap-2 items-start">
-              <FieldLabel htmlFor="mitraLogo">Cover SEO</FieldLabel>
-              <input
-                ref={fileInputRef}
-                type="file"
-                accept="image/jpeg, image/png, image/webp"
-                className="hidden"
-                onChange={(e) => {
-                  const file = e.target.files?.[0];
-                  if (!file) return;
-                  field.onChange(file);
-                  if (previewImage) URL.revokeObjectURL(previewImage);
-                  setPreviewImage(URL.createObjectURL(file));
-                }}
-              />
-              <div className="flex flex-row items-center gap-4">
-                {previewImage ? (
-                  <div className="relative h-40 w-40 rounded-md overflow-hidden border">
-                    <Image src={previewImage} alt="mitra-logo" fill unoptimized className="object-contain" />
-                  </div>
-                ) : null}
-                <Button type="button" size="sm" variant="outline" onClick={() => fileInputRef.current?.click()}>
-                  {previewImage ? "Ganti Logo" : "Upload Logo"}
-                </Button>
-              </div>
-              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
-            </Field>
-          </div>
-        )}
-      />
-
       <Controller
         name="metaTitle"
         control={form.control}
@@ -136,6 +110,7 @@ export function SeoAddDialog() {
           </Field>
         )}
       />
+
       <Controller
         name="metaDescription"
         control={form.control}
@@ -199,9 +174,6 @@ export function SeoAddDialog() {
                     const trimmedValue = value.trim();
                     if (!trimmedValue) return;
                     append({ value: trimmedValue });
-                    // Clear the input using the ref from context if we had access,
-                    // but here we can just find it in the DOM or let InputGroupButton handle it.
-                    // Let's improve InputGroupButton to allow clearing.
                     const input = e.currentTarget.closest('[data-slot="input-group"]')?.querySelector("input");
                     if (input) input.value = "";
                   }}

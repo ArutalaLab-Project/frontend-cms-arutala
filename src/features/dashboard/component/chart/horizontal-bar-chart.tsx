@@ -62,7 +62,6 @@ export function HorizontalBarChart({ data }: { data?: { title: string; number: s
       });
   }, [data]);
 
-  console.log(mergedData);
   return (
     <Card>
       <CardHeader>
