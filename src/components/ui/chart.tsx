@@ -221,12 +221,16 @@ function ChartLegendContent({
     <div className={cn("flex items-center justify-center gap-4", verticalAlign === "top" ? "pb-3" : "pt-3", className)}>
       {payload
         .filter((item) => item.type !== "none")
-        .map((item) => {
-          const key = `${nameKey || item.dataKey || "value"}`;
-          const itemConfig = getPayloadConfigFromPayload(config, item, key);
+        .map((item, index) => {
+          const reactKey = typeof item.dataKey === "string" || typeof item.dataKey === "number" ? item.dataKey : `${item.value}-${index}`;
+
+          // 🧠 untuk config lookup (harus sesuai config key)
+          const configKey = `${nameKey || item.dataKey || "value"}`;
+
+          const itemConfig = getPayloadConfigFromPayload(config, item, configKey);
 
           return (
-            <div key={item.value} className={cn("[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3")}>
+            <div key={reactKey} className={cn("[&>svg]:text-muted-foreground flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3")}>
               {itemConfig?.icon && !hideIcon ? (
                 <itemConfig.icon />
               ) : (
