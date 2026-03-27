@@ -277,3 +277,13 @@
     @apply bg-background text-foreground;
   }
 }
+
+.codex-editor a {
+  color: var(--color-accent-600);
+  text-decoration: underline;
+  font-weight: normal;
+}
+
+.codex-editor a:hover {
+  color: var(--color-accent-700);
+}

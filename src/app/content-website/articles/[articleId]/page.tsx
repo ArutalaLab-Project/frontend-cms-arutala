@@ -30,6 +30,8 @@ export default function ArticleDetailPage() {
     return <SkeletonDetailCard />;
   }
 
+  console.log(mappedBlocks);
+
   return (
     <div className="flex flex-1 flex-col min-h-screen">
       <div className="p-4 lg:px-6 border-b bg-muted/20">
@@ -67,9 +69,7 @@ export default function ArticleDetailPage() {
           <Separator />
 
           {/* Article Content */}
-          <div className="bg-background rounded-lg border p-2 lg:p-8 shadow-sm">
-            {mappedBlocks ? <ArticlePreview blocks={mappedBlocks} /> : <div className="text-center py-10 text-muted-foreground">No content blocks available.</div>}
-          </div>
+          <div className="bg-background rounded-lg border p-2 lg:p-8 shadow-sm">{mappedBlocks ? <ArticlePreview blocks={mappedBlocks} /> : <div className="text-center py-10 text-muted-foreground">No content blocks available.</div>}</div>
         </div>
       </div>
     </div>

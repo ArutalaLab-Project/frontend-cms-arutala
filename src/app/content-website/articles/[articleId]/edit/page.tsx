@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import type { OutputBlockData, OutputData } from "@editorjs/editorjs";
-import { ArticleEditor, ArticlePreview, useArticleDetail, useUpdateArticle, ArticleChangeStatusDialog } from "@/features/article";
+import { ArticleEditor, ArticlePreview, useArticleDetail, useUpdateArticle } from "@/features/article";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { AppWindowIcon, CodeIcon } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,8 +11,8 @@ import { toast } from "sonner";
 import { useParams, useRouter } from "next/navigation";
 import { mapEditorBlocks, handleUploadImage } from "@/shared/utils/editor";
 import { ContentBlockType } from "@/features/article/type";
-import { AspectRatio } from "@/components/ui/aspect-ratio";
-import Image from "next/image";
+// import { AspectRatio } from "@/components/ui/aspect-ratio";
+// import Image from "next/image";
 import { SkeletonDetailCard } from "@/components/shared/skeleton-card-detail";
 
 export default function ArticleEditPage() {
@@ -63,17 +63,17 @@ export default function ArticleEditPage() {
   return (
     <div className="flex flex-1 flex-col">
       <div className="p-4  border-b mb-4 lg:px-6 bg-muted/20">
-        <div className="flex items-center justify-around">
-          <ArticleChangeStatusDialog article={articleDetail!} />
-          <div className="flex items-center gap-2">
-            <Button variant="outline" size="sm" onClick={() => router.push(`/content-website/articles/${articleId}`)}>
-              Cancel
-            </Button>
-            <Button size="sm" onClick={handleSave} disabled={isUpdating}>
-              {isUpdating ? "Saving..." : "Save Changes"}
-            </Button>
-          </div>
+        {/* <div className="flex items-center justify-around"> */}
+        {/* <ArticleChangeStatusDialog article={articleDetail!} /> */}
+        <div className="flex justify-end gap-2">
+          <Button variant="outline" size="sm" onClick={() => router.push(`/content-website/articles/${articleId}`)}>
+            Cancel
+          </Button>
+          <Button size="sm" onClick={handleSave} disabled={isUpdating}>
+            {isUpdating ? "Saving..." : "Save Changes"}
+          </Button>
         </div>
+        {/* </div> */}
       </div>
 
       <div className="flex-1">
@@ -111,7 +111,7 @@ export default function ArticleEditPage() {
 
             <TabsContent value="preview" className=" m-0 p-4 lg:p-6 bg-muted/5">
               <div className="max-w-full mx-auto space-y-6">
-                <Card>
+                {/* <Card>
                   <CardHeader className="border-b bg-muted/10 py-4">
                     <CardTitle className="text-sm font-medium">Header Preview</CardTitle>
                   </CardHeader>
@@ -129,15 +129,13 @@ export default function ArticleEditPage() {
                       )}
                     </div>
                   </CardContent>
-                </Card>
+                </Card> */}
 
                 <Card>
                   <CardHeader className="border-b bg-muted/10 py-4">
-                    <CardTitle className="text-sm font-medium">Content Preview</CardTitle>
+                    <CardTitle className="text-sm font-medium">Article Content Preview</CardTitle>
                   </CardHeader>
-                  <CardContent className="p-6 lg:p-8">
-                    {mappedBlocks ? <ArticlePreview blocks={mappedBlocks} /> : <div className="text-center py-10 text-muted-foreground">Start writing to see preview.</div>}
-                  </CardContent>
+                  <CardContent className="p-6 lg:p-8">{mappedBlocks ? <ArticlePreview blocks={mappedBlocks} /> : <div className="text-center py-10 text-muted-foreground">Start writing to see preview.</div>}</CardContent>
                 </Card>
               </div>
             </TabsContent>

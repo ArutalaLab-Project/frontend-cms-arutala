@@ -2,13 +2,12 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 // import { Checkbox } from "@/components/ui/checkbox";
-import { IconListDetails } from "@tabler/icons-react";
+import { IconListDetails, IconWorldSearch } from "@tabler/icons-react";
 import { Article, ArticleStatusType } from "../type";
 import { ArticleDeleteDialog } from "./article-delete";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
 import Image from "next/image";
 import { formatedDate } from "@/shared/utils/date";
-import { ButtonGroup } from "@/components/ui/button-group";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
@@ -16,6 +15,8 @@ import { ArticleCoverAddDialog } from "./article-cover-add";
 import { ArticleChangeStatusDialog } from "./article-change-status";
 import { cn } from "@/shared/lib/cn";
 import { formatSnakeCaseToTitle } from "@/shared/utils/string";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
+import { MoreVertical } from "lucide-react";
 
 export const statusColorArticle: Record<ArticleStatusType, string> = {
   DRAFT: "bg-status-draft text-black hover:bg-status-draft",
@@ -82,29 +83,55 @@ export const columns: ColumnDef<Article>[] = [
     ),
     filterFn: "arrIncludes",
   },
-  {
-    id: "seo_manage",
-    accessorKey: "article_page_id",
-    header: "SEO Detail",
-    cell: ({ row }) => (
-      <Button size="sm" variant="link" asChild>
-        <Link href={`/general/seo-manage/${row.original.article_page_id}`}>Manage SEO</Link>
-      </Button>
-    ),
-  },
+  // {
+  //   id: "seo_manage",
+  //   accessorKey: "article_page_id",
+  //   header: "SEO Detail",
+  //   cell: ({ row }) => (
+  //     <Button size="sm" variant="link" asChild>
+  //       <Link href={`/general/seo-manage/${row.original.article_page_id}`}>Manage SEO</Link>
+  //     </Button>
+  //   ),
+  // },
   {
     id: "actions",
     header: "Action",
     cell: ({ row }) => (
-      <ButtonGroup>
-        <ArticleChangeStatusDialog article={row.original} />
-        <Button size="icon-sm" variant="outline" asChild>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="icon-sm" variant="outline">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-45">
           <Link href={`/content-website/articles/${row.original.article_id}`}>
-            <IconListDetails />
+            <div className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground hover:bg-accent">
+              <IconListDetails className="size-4 shrink-0" />
+              <span>Detail Article</span>
+            </div>
           </Link>
-        </Button>
-        <ArticleDeleteDialog articleId={row.original.article_id} />
-      </ButtonGroup>
+
+          <Link href={`/general/seo-manage/${row.original.article_page_id}`}>
+            <div className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground hover:bg-accent">
+              <IconWorldSearch className="size-4 shrink-0" />
+              <span>Manage SEO</span>
+            </div>
+          </Link>
+
+          <ArticleChangeStatusDialog article={row.original} />
+
+          <ArticleDeleteDialog articleId={row.original.article_id} />
+        </DropdownMenuContent>
+      </DropdownMenu>
+      // <ButtonGroup>
+      //   <ArticleChangeStatusDialog article={row.original} />
+      //   <Button size="icon-sm" variant="outline" asChild>
+      //     <Link href={`/content-website/articles/${row.original.article_id}`}>
+      //       <IconListDetails />
+      //     </Link>
+      //   </Button>
+      //   <ArticleDeleteDialog articleId={row.original.article_id} />
+      // </ButtonGroup>
     ),
   },
 ];
