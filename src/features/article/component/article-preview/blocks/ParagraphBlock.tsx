@@ -13,5 +13,5 @@ interface ParagraphBlockProps {
 export function ParagraphBlock({ data }: ParagraphBlockProps) {
   const { text } = data;
 
-  return <p className="text-base sm:text-lg text-[var(--color-neutral-700)] leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: text }} />;
+  return <p className="text-base sm:text-lg text-(--color-neutral-700) leading-relaxed mb-4 codex-editor" dangerouslySetInnerHTML={{ __html: text }} />;
 }

@@ -4,16 +4,17 @@ import { ColumnDef } from "@tanstack/react-table";
 // import { Checkbox } from "@/components/ui/checkbox";
 import { Badge } from "@/components/ui/badge";
 import { Course } from "../type";
-import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
+// import { ButtonGroup, ButtonGroupSeparator } from "@/components/ui/button-group";
 import { CourseDeleteDialog } from "./course-delete";
-import { IconListDetails } from "@tabler/icons-react";
+import { IconListDetails, IconWorldSearch } from "@tabler/icons-react";
 import { Button } from "@/components/ui/button";
-import { PlusCircle, Calendar } from "lucide-react";
+import { PlusCircle, Calendar, MoreVertical } from "lucide-react";
 import { formatedDate } from "@/shared/utils/date";
 import { cn } from "@/shared/lib/cn";
 import { StatusColorCoursebatch } from "@/features/course-batch/component/columns";
 import { formatSnakeCaseToTitle } from "@/shared/utils/string";
 import Link from "next/link";
+import { DropdownMenu, DropdownMenuContent, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 
 export const columns: ColumnDef<Course>[] = [
   // {
@@ -106,15 +107,44 @@ export const columns: ColumnDef<Course>[] = [
     id: "actions",
     header: "Action",
     cell: ({ row }) => (
-      <ButtonGroup>
-        <Button variant="outline" size="icon-sm" asChild>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button size="icon-sm" variant="outline">
+            <MoreVertical className="h-4 w-4" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end" className="w-45">
           <Link href={`/content-website/courses/${row.original.course_id}`}>
-            <IconListDetails />
+            <div className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground hover:bg-accent">
+              <IconListDetails className="size-4 shrink-0" />
+              <span>Detail Course</span>
+            </div>
           </Link>
-        </Button>
-        <ButtonGroupSeparator />
-        <CourseDeleteDialog courseId={row.original.course_id} />
-      </ButtonGroup>
+
+          <Link href={`/general/seo-manage/${row.original.course_page_id}`}>
+            <div className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground hover:bg-accent">
+              <IconWorldSearch className="size-4 shrink-0" />
+              <span>Manage SEO</span>
+            </div>
+          </Link>
+
+          <CourseDeleteDialog courseId={row.original.course_id} />
+        </DropdownMenuContent>
+      </DropdownMenu>
+      // <ButtonGroup>
+      //   <Button variant="outline" size="sm" asChild>
+      //     <Link href={`/content-website/courses/${row.original.course_id}`}>
+      //       <IconWorldSearch className="size-4" />
+      //     </Link>
+      //   </Button>
+      //   <Button variant="outline" size="icon-sm" asChild>
+      //     <Link href={`/content-website/courses/${row.original.course_id}`}>
+      //       <IconListDetails />
+      //     </Link>
+      //   </Button>
+      //   <ButtonGroupSeparator />
+      //   <CourseDeleteDialog courseId={row.original.course_id} />
+      // </ButtonGroup>
     ),
   },
 ];

@@ -12,6 +12,7 @@ import { CourseBatchSchema, CourseBatchInput } from "../course-batch/type";
  */
 export const courseSchema = z.object({
   course_id: z.string(),
+  course_page_id: z.string(),
   course_title: z.string(),
   course_description: z.string(),
   course_headline: z.string(),

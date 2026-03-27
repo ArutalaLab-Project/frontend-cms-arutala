@@ -59,9 +59,13 @@ export function ArticleChangeStatusDialog({ article }: { article: Article }) {
     <AlertDialog open={open} onOpenChange={setOpen}>
       {/* Trigger */}
       <AlertDialogTrigger asChild>
-        <Button size="sm" variant="secondary">
+        <div className="w-full relative flex cursor-pointer select-none items-center gap-2 rounded-sm px-2 py-1.5 text-sm outline-none transition-colors focus:bg-accent focus:text-accent-foreground hover:bg-accent">
+          <IconStatusChange className="shrink-0 size-4" />
+          <span>Change Status</span>
+        </div>
+        {/* <Button size="sm" variant="secondary">
           Change Status <IconStatusChange />
-        </Button>
+        </Button> */}
       </AlertDialogTrigger>
 
       {/* Content */}
