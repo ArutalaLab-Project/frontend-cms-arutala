@@ -1,6 +1,18 @@
-import { AlertDialog, AlertDialogTrigger, AlertDialogContent, AlertDialogHeader, AlertDialogTitle, AlertDialogFooter, AlertDialogCancel, AlertDialogAction, AlertDialogDescription, AlertDialogMedia } from "@/components/ui/alert-dialog";
+import {
+  AlertDialog,
+  AlertDialogTrigger,
+  AlertDialogContent,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogFooter,
+  AlertDialogCancel,
+  AlertDialogAction,
+  AlertDialogDescription,
+  AlertDialogMedia,
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 import { TrashIcon } from "lucide-react";
+import { ReactNode } from "react";
 import { toast } from "sonner";
 
 interface DeleteDialogProps<TVariables> {
@@ -14,6 +26,7 @@ interface DeleteDialogProps<TVariables> {
   loadingMessage?: string;
   successMessage?: string;
   errorMessage?: string;
+  trigger?: ReactNode;
 }
 
 export function DeleteDialog<TVariables>({
@@ -25,6 +38,11 @@ export function DeleteDialog<TVariables>({
   loadingMessage = "Menghapus data...",
   successMessage = "Data berhasil dihapus",
   errorMessage = "Gagal menghapus data",
+  trigger = (
+    <Button variant="destructive" size="icon-sm">
+      <TrashIcon />
+    </Button>
+  ),
 }: DeleteDialogProps<TVariables>) {
   const handleDelete = async () => {
     toast.promise(onDelete(variables), {
@@ -37,9 +55,10 @@ export function DeleteDialog<TVariables>({
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant="destructive" size="icon-sm">
+        {trigger}
+        {/* <Button variant="destructive" size="icon-sm">
           <TrashIcon />
-        </Button>
+        </Button> */}
       </AlertDialogTrigger>
 
       <AlertDialogContent size="sm">

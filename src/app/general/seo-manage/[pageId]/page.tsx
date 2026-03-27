@@ -113,9 +113,9 @@ export default function SeoManageDetailPage() {
                         </div>
                         <SeoEditDialog seo={seo} />
                         <SeoCoverDialog seo={seo} />
-                        <div className="px-2 py-1.5">
-                          <SeoDeleteDialog pageId={pageId} seoId={seo.seo_id} />
-                        </div>
+                        {/* <div className="px-2 py-1.5"> */}
+                        <SeoDeleteDialog pageId={pageId} seoId={seo.seo_id} />
+                        {/* </div> */}
                       </DropdownMenuContent>
                     </DropdownMenu>
                   </ItemActions>

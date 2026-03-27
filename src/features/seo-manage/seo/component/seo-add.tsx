@@ -60,6 +60,7 @@ export function SeoAddDialog() {
     toast.promise(mutateAsync({ pageId: pageId, body: formData }), {
       loading: "Menambah SEO pada Page...",
       success: () => {
+        setPreviewImage(null);
         form.reset();
         return "Menambah SEO berhasil";
       },
