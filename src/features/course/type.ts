@@ -127,14 +127,6 @@ export const courseCategory = z.object({
 export type CourseCategory = z.infer<typeof courseCategory>;
 export const coursesCategories = z.array(courseCategory);
 
-export const courseField = z.object({
-  id: z.string(),
-  field: z.string(),
-});
-
-export type CourseField = z.infer<typeof courseField>;
-export const coursesFields = z.array(courseField);
-
 export const courseBenefit = z.object({
   id: z.string(),
   title: z.string(),
