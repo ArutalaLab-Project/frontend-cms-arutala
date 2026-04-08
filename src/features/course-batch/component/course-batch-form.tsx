@@ -20,6 +20,8 @@ import { formatSnakeCaseToTitle } from "@/shared/utils/string";
 import { StatusColorCoursebatch } from "./columns";
 import { cn } from "@/shared/lib/cn";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/components/ui/input-group";
+import { ContributorAddDialog } from "@/features/contributor/component/contributor-add";
+import { IconPlus } from "@tabler/icons-react";
 
 // ================= PRICE HELPER =================
 function formatRupiah(value: number | undefined | null): string {
@@ -141,18 +143,27 @@ export function CourseBatchForm({ initialData, onSubmit, formId = "course-batch-
           render={({ field, fieldState }) => (
             <Field className="sm:col-span-1 lg:col-span-1 gap-1" data-invalid={fieldState.invalid}>
               <FieldLabel>Instruktur</FieldLabel>
-              <Select value={field.value} onValueChange={field.onChange}>
-                <SelectTrigger className={fieldState.invalid ? "border-destructive" : ""}>
-                  <SelectValue placeholder="Pilih instruktur..." />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  {contributors?.map((c) => (
-                    <SelectItem key={c.contributor_id} value={c.contributor_id}>
-                      {c.contributor_name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <div className="flex gap-2 items-center w-full">
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger className={fieldState.invalid ? "border-destructive" : ""}>
+                    <SelectValue placeholder="Pilih instruktur..." />
+                  </SelectTrigger>
+                  <SelectContent position="popper">
+                    {contributors?.map((c) => (
+                      <SelectItem key={c.contributor_id} value={c.contributor_id}>
+                        {c.contributor_name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+                <ContributorAddDialog
+                  trigger={
+                    <Button size="icon-sm" variant="secondary">
+                      <IconPlus />
+                    </Button>
+                  }
+                />
+              </div>
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}

@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState, useEffect, ReactNode } from "react";
 import { Controller, useFieldArray, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { PlusCircle } from "lucide-react";
@@ -17,7 +17,11 @@ import { EntityDialog } from "@/components/shared/entity-dialog";
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/components/ui/input-group";
 import { IconPlus, IconX } from "@tabler/icons-react";
 
-export function ContributorAddDialog() {
+interface ContributorAddDialogProps {
+  trigger?: ReactNode;
+}
+
+export function ContributorAddDialog({ trigger }: ContributorAddDialogProps) {
   const [open, setOpen] = useState(false);
   const [previewProfile, setPreviewProfile] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -90,9 +94,11 @@ export function ContributorAddDialog() {
       onSubmit={form.handleSubmit(handleCreate)}
       className="sm:max-w-3xl max-w-xl!"
       trigger={
-        <Button size="sm">
-          Tambah Contributor <PlusCircle />
-        </Button>
+        trigger ?? (
+          <Button size="sm">
+            Tambah Contributor <PlusCircle />
+          </Button>
+        )
       }
     >
       <Controller

@@ -1,5 +1,15 @@
 // lib/sidebar/sidebar.config.ts
-import { IconArticle, IconChalkboardTeacher, IconDashboard, IconDeviceImacCode, IconHeartHandshake, IconMessage2, IconMessageCircleUser, IconUserSquareRounded, IconWorldSearch } from "@tabler/icons-react";
+import {
+  IconArticle,
+  IconChalkboardTeacher,
+  IconDashboard,
+  IconDeviceImacCode,
+  IconHeartHandshake,
+  IconMessage2,
+  IconMessageCircleUser,
+  IconUserSquareRounded,
+  IconWorldSearch,
+} from "@tabler/icons-react";
 
 export type Role = "ADMIN" | "SUPER_ADMIN";
 
@@ -33,9 +43,12 @@ export const navGeneral = [
 export const navContentWebsite = [
   {
     title: "Course",
-    url: "/content-website/courses",
     icon: IconDeviceImacCode,
     roles: ["ADMIN", "SUPER_ADMIN"],
+    items: [
+      { title: "Course", url: "/content-website/courses" },
+      { title: "Course Field", url: "/content-website/courses/course-field" },
+    ],
   },
   {
     title: "Contributors",

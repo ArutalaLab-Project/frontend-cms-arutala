@@ -12,10 +12,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { useCourseCategory, useCourseField, useCourseBenefit } from "@/features/course/hook";
+import { useCourseCategory, useCourseBenefit } from "@/features/course/hook";
 import { PlusCircle } from "lucide-react";
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { cn } from "@/shared/lib/cn";
+import { useCourseField } from "@/features/course-field/hook";
 
 interface CourseFormProps {
   initialData?: CourseInput;

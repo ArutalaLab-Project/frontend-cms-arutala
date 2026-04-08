@@ -1,6 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { Course, CourseBenefit, CourseCategory, CourseDetail, CourseField, CourseInput } from "./type";
-import { createCourse, deleteCourse, fetchCourseBenefit, fetchCourseById, fetchCourseCategory, fetchCourseField, fetchCourses, updateCourse } from "./api";
+import { Course, CourseBenefit, CourseCategory, CourseDetail, CourseInput } from "./type";
+import { createCourse, deleteCourse, fetchCourseBenefit, fetchCourseById, fetchCourseCategory, fetchCourses, updateCourse } from "./api";
 
 export function useCourses() {
   return useQuery<Course[]>({
@@ -24,12 +24,6 @@ export function useCourseCategory() {
   });
 }
 
-export function useCourseField() {
-  return useQuery<CourseField[]>({
-    queryKey: ["coursesfield"],
-    queryFn: fetchCourseField,
-  });
-}
 export function useCourseBenefit() {
   return useQuery<CourseBenefit[]>({
     queryKey: ["coursesbenefits"],

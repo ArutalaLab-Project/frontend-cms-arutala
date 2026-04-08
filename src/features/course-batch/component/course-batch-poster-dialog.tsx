@@ -15,7 +15,7 @@ import { AspectRatio } from "@/components/ui/aspect-ratio";
 
 export function CourseBatchPosterDialog({ courseBatch }: { courseBatch: CourseBatch }) {
   const [open, setOpen] = useState(false);
-  const [previewProfile, setPreviewProfile] = useState<string | null>(courseBatch.poster_url);
+  const [previewPoster, setPreviewPoster] = useState<string | null>(courseBatch.poster_url);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
   const params = useParams();
 
@@ -31,7 +31,7 @@ export function CourseBatchPosterDialog({ courseBatch }: { courseBatch: CourseBa
 
   const handleUpdateProfile = async (values: CourseBatchUploadPosterInput) => {
     if (!values.poster) {
-      toast.error("Silakan pilih foto profil terlebih dahulu");
+      toast.error("Silakan pilih poster terlebih dahulu");
       return;
     }
 
@@ -45,32 +45,32 @@ export function CourseBatchPosterDialog({ courseBatch }: { courseBatch: CourseBa
         formData: formData,
       }),
       {
-        loading: "Updating profile...",
+        loading: "Updating poster...",
         success: () => {
           setOpen(false);
-          return "Foto profil berhasil diperbarui";
+          return "poster berhasil diperbarui";
         },
-        error: (err) => err.message || "Failed to update profile",
+        error: (err) => err.message || "Failed to update poster",
       },
     );
   };
 
   useEffect(() => {
     return () => {
-      if (previewProfile && previewProfile !== courseBatch.poster_url) {
-        URL.revokeObjectURL(previewProfile);
+      if (previewPoster && previewPoster !== courseBatch.poster_url) {
+        URL.revokeObjectURL(previewPoster);
       }
     };
-  }, [previewProfile, courseBatch.poster_url]);
+  }, [previewPoster, courseBatch.poster_url]);
 
   return (
     <EntityDialog
       open={open}
       onOpenChange={setOpen}
-      title="Update Foto Profil"
-      description="Pilih foto profil baru untuk author testimoni ini"
+      title="Update Poster"
+      description="Pilih poster untuk batch ini"
       isPending={isPending}
-      saveLabel="Update Profile"
+      saveLabel="Update Poster"
       onSubmit={form.handleSubmit(handleUpdateProfile)}
       className="sm:max-w-85 max-w-md!"
       contentClassName="!grid-cols-1"
@@ -97,7 +97,7 @@ export function CourseBatchPosterDialog({ courseBatch }: { courseBatch: CourseBa
           <div className="pt-4 pb-1">
             <Field data-invalid={fieldState.invalid} className="w-full flex flex-col items-center gap-3">
               <FieldLabel htmlFor="poster" className="sr-only">
-                Foto Profil
+                poster
               </FieldLabel>
               <input
                 ref={fileInputRef}
@@ -108,23 +108,23 @@ export function CourseBatchPosterDialog({ courseBatch }: { courseBatch: CourseBa
                   const file = e.target.files?.[0];
                   if (!file) return;
                   field.onChange(file);
-                  if (previewProfile && previewProfile !== courseBatch.poster_url) {
-                    URL.revokeObjectURL(previewProfile);
+                  if (previewPoster && previewPoster !== courseBatch.poster_url) {
+                    URL.revokeObjectURL(previewPoster);
                   }
-                  setPreviewProfile(URL.createObjectURL(file));
+                  setPreviewPoster(URL.createObjectURL(file));
                 }}
               />
 
               <div className="relative h-80 w-80 rounded-lg overflow-hidden border bg-muted shrink-0">
-                {previewProfile ? (
-                  <Image src={previewProfile} alt="preview-profile" fill unoptimized className="object-contain p-2" />
+                {previewPoster ? (
+                  <Image src={previewPoster} alt="preview-profile" fill unoptimized className="object-contain p-2" />
                 ) : (
                   <div className="flex items-center justify-center h-full text-muted-foreground italic text-sm">No image</div>
                 )}
               </div>
 
               <Button type="button" variant="outline" className="w-full" onClick={() => fileInputRef.current?.click()}>
-                {previewProfile ? "Pilih Foto Lain" : "Upload Foto"}
+                {previewPoster ? "Pilih Poster Lain" : "Upload Poster"}
               </Button>
 
               {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
