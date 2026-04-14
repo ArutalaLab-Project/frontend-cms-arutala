@@ -9,24 +9,25 @@ import { Field, FieldError, FieldLabel } from "@/components/ui/field";
 import { EntityDialog } from "@/components/shared/entity-dialog";
 import { IconListDetails } from "@tabler/icons-react";
 import { CourseField, UpdateCourseFieldInput, updateCourseFieldSchema } from "../type";
+import { useUpdateCourseField } from "../hook";
 
 export function CourseFieldEditDialog({ courseField }: { courseField: CourseField }) {
   const [open, setOpen] = useState(false);
+  const { mutateAsync: updateCourseField, isPending } = useUpdateCourseField();
 
   const form = useForm<UpdateCourseFieldInput>({
     resolver: zodResolver(updateCourseFieldSchema),
-    defaultValues: { field: "" },
+    defaultValues: { fieldName: "" },
   });
 
   useEffect(() => {
     if (open) {
-      form.reset({ field: courseField.field });
+      form.reset({ fieldName: courseField.field });
     }
   }, [open, courseField, form]);
 
   const handleUpdate = async (values: UpdateCourseFieldInput) => {
-    // TODO: integrate API
-    console.log("update course field:", courseField.id, values);
+    await updateCourseField({ id: courseField.id, payload: values });
     setOpen(false);
   };
 
@@ -36,7 +37,7 @@ export function CourseFieldEditDialog({ courseField }: { courseField: CourseFiel
       onOpenChange={setOpen}
       title="Edit Course Field"
       description="Perbarui nama bidang course di bawah ini."
-      isPending={false}
+      isPending={isPending}
       saveLabel="Update"
       onSubmit={form.handleSubmit(handleUpdate)}
       className="sm:max-w-md"
@@ -47,12 +48,12 @@ export function CourseFieldEditDialog({ courseField }: { courseField: CourseFiel
       }
     >
       <Controller
-        name="field"
+        name="fieldName"
         control={form.control}
         render={({ field, fieldState }) => (
           <Field className="col-span-2 gap-1" data-invalid={fieldState.invalid}>
-            <FieldLabel htmlFor="field-edit">Nama Bidang</FieldLabel>
-            <Input {...field} id="field-edit" placeholder="Masukan nama bidang..." aria-invalid={fieldState.invalid} autoComplete="off" />
+            <FieldLabel htmlFor="fieldName">Nama Bidang</FieldLabel>
+            <Input {...field} id="fieldName" placeholder="Masukan nama bidang..." aria-invalid={fieldState.invalid} autoComplete="off" />
             {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
           </Field>
         )}

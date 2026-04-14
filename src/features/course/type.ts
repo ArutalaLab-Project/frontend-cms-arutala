@@ -127,15 +127,6 @@ export const courseCategory = z.object({
 export type CourseCategory = z.infer<typeof courseCategory>;
 export const coursesCategories = z.array(courseCategory);
 
-export const courseBenefit = z.object({
-  id: z.string(),
-  title: z.string(),
-  description: z.string(),
-});
-
-export type CourseBenefit = z.infer<typeof courseBenefit>;
-export const coursesBenefit = z.array(courseBenefit);
-
 /* =========================================================
    ================= UTIL MAPPING ==========================
    ========================================================= */

@@ -48,6 +48,7 @@ export const navContentWebsite = [
     items: [
       { title: "Course", url: "/content-website/courses" },
       { title: "Course Field", url: "/content-website/courses/course-field" },
+      { title: "Course Benefit", url: "/content-website/courses/course-benefit" },
     ],
   },
   {

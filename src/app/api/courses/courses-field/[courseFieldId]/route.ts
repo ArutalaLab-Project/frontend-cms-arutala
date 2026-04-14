@@ -1,17 +1,37 @@
-import { CourseField } from "@/features/course-field";
 import { ApiError } from "@/server/errors/api-error";
 import { serverFetch } from "@/server/http/server-fetch";
 import { NextRequest, NextResponse } from "next/server";
 import z from "zod";
 
-export async function GET() {
+export async function PUT(req: NextRequest, context: { params: Promise<{ courseFieldId: string }> }) {
   try {
-    const coursesCategory = await serverFetch<CourseField[]>("/courses/courses-field");
+    const { courseFieldId } = await context.params;
+    const body = await req.json();
+
+    const payload = {
+      fieldName: body.field || body.fieldName,
+    };
+
+    await serverFetch(`/courses/courses-field/${courseFieldId}`, {
+      method: "PUT",
+      body: JSON.stringify(payload),
+    });
+
     return NextResponse.json({
       success: true,
-      data: coursesCategory,
+      data: null,
     });
   } catch (error) {
+    if (error instanceof z.ZodError) {
+      return NextResponse.json(
+        {
+          success: false,
+          message: error.cause,
+        },
+        { status: 400 },
+      );
+    }
+
     if (error instanceof ApiError) {
       return NextResponse.json(
         {
@@ -32,34 +52,18 @@ export async function GET() {
   }
 }
 
-export async function POST(req: NextRequest) {
+export async function DELETE(req: NextRequest, context: { params: Promise<{ courseFieldId: string }> }) {
   try {
-    const body = await req.json();
-
-    const payload = {
-      fieldName: body.field || body.fieldName,
-    };
-
-    await serverFetch<null>("/courses/courses-field", {
-      method: "POST",
-      body: JSON.stringify(payload),
+    const { courseFieldId } = await context.params;
+    await serverFetch(`/courses/courses-field/${courseFieldId}`, {
+      method: "DELETE",
     });
-    const response = NextResponse.json({
+
+    return NextResponse.json({
       success: true,
       data: null,
     });
-    return response;
   } catch (error) {
-    if (error instanceof z.ZodError) {
-      return NextResponse.json(
-        {
-          success: false,
-          message: error.cause,
-        },
-        { status: 400 },
-      );
-    }
-
     if (error instanceof ApiError) {
       return NextResponse.json(
         {

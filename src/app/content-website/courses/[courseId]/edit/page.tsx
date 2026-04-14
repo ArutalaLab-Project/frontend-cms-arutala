@@ -3,7 +3,7 @@
 import { use, useMemo } from "react";
 import { Separator } from "@/components/ui/separator";
 import { CourseForm } from "@/features/course/component/course-form";
-import { useCourseDetail, useUpdateCourse, useCourseCategory, useCourseBenefit } from "@/features/course/hook";
+import { useCourseDetail, useUpdateCourse, useCourseCategory } from "@/features/course/hook";
 import { CourseInput } from "@/features/course/type";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
@@ -11,6 +11,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { Button } from "@/components/ui/button";
 import { IconCircleArrowLeft } from "@tabler/icons-react";
 import { useCourseField } from "@/features/course-field/hook";
+import { useCourseBenefit } from "@/features/course-benefits";
 
 export default function CourseEditPage({ params }: { params: Promise<{ courseId: string }> }) {
   const { courseId } = use(params);

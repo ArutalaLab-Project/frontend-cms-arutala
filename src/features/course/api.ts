@@ -1,5 +1,5 @@
 import { clientApi } from "@/shared/lib/http/client-api";
-import { Course, CourseBenefit, CourseCategory, CourseDetail, CourseInput } from "./type";
+import { Course, CourseCategory, CourseDetail, CourseInput } from "./type";
 
 export async function fetchCourses(): Promise<Course[]> {
   return clientApi.get<Course[]>("/api/courses");
@@ -11,10 +11,6 @@ export async function fetchCourseById(courseId: string) {
 
 export async function fetchCourseCategory(): Promise<CourseCategory[]> {
   return clientApi.get<CourseCategory[]>("/api/courses/courses-category");
-}
-
-export async function fetchCourseBenefit(): Promise<CourseBenefit[]> {
-  return clientApi.get<CourseBenefit[]>("/api/courses/courses-benefit");
 }
 
 export async function createCourse(payload: CourseInput) {
